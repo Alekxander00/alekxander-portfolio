@@ -1,0 +1,81 @@
+:root {
+  --color-bg-primary: #0a0a0a;
+  --color-bg-secondary: #111111;
+  --color-text-primary: #f0f0f0;
+  --color-text-secondary: #b0b0b0;
+  --color-accent-neon-green: #00ff88;
+  --color-accent-neon-cyan: #00c9a7;
+  --color-accent-neon-magenta: #ff00ff;
+  --color-accent-neon-blue: #0088ff;
+  
+  --font-primary: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  --font-secondary: 'Courier New', 'Monaco', monospace;
+  --font-retro: 'Press Start 2P', 'Courier New', monospace;
+  
+  --border-glow: 1px solid rgba(0, 255, 136, 0.3);
+  --box-shadow-glow: 0 0 10px rgba(0, 255, 136, 0.5);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  font-family: var(--font-primary);
+  line-height: 1.6;
+  overflow-x: hidden;
+  position: relative;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+    linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+  background-size: 100% 4px, 6px 100%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.3;
+  animation: scanlines 8s linear infinite;
+}
+
+@keyframes scanlines {
+  0% { background-position: 0 0, 0 0; }
+  100% { background-position: 0 100%, 0 0; }
+}
+
+::selection {
+  background-color: var(--color-accent-neon-green);
+  color: var(--color-bg-primary);
+}
+
+/* Scrollbar personalizada */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-accent-neon-cyan);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent-neon-magenta);
+}

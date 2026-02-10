@@ -1,0 +1,663 @@
+.home-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5rem 2rem 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.home-hero {
+  max-width: 1200px;
+  width: 100%;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.5rem;
+}
+
+.hero-title-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.hero-title {
+  font-size: clamp(2.5rem, 8vw, 5rem);
+  letter-spacing: 4px;
+  margin: 0;
+  position: relative;
+}
+
+.hero-title.glitching {
+  animation: violent-glitch 0.2s infinite;
+}
+
+@keyframes violent-glitch {
+  0% { transform: translate(0); }
+  20% { transform: translate(-2px, 2px); }
+  40% { transform: translate(-2px, -2px); }
+  60% { transform: translate(2px, 2px); }
+  80% { transform: translate(2px, -2px); }
+  100% { transform: translate(0); }
+}
+
+.title-underline {
+  width: 200px;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--color-accent-neon-green),
+    var(--color-accent-neon-cyan),
+    transparent
+  );
+  animation: underline-glow 3s ease-in-out infinite;
+  position: relative;
+  overflow: hidden;
+}
+
+.title-underline::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.8),
+    transparent
+  );
+  animation: shine 3s ease-in-out infinite;
+}
+
+@keyframes shine {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+@keyframes underline-glow {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+
+.hero-subtitle {
+  margin-top: 1rem;
+}
+
+.subtitle-text {
+  font-family: var(--font-secondary);
+  font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+  color: var(--color-text-secondary);
+  letter-spacing: 1px;
+  line-height: 1.6;
+}
+
+/* Concepts Container */
+.concepts-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.concepts-selector {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.concept-tab {
+  background: transparent;
+  border: 1px solid;
+  border-radius: 20px;
+  padding: 0.75rem 1.5rem;
+  font-family: var(--font-secondary);
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.concept-tab:hover {
+  color: var(--color-text-primary);
+  border-color: rgba(var(--concept-color-rgb), 0.5);
+  background: rgba(var(--concept-color-rgb), 0.05);
+}
+
+.concept-tab.active {
+  color: var(--concept-color);
+  border-color: var(--concept-color);
+  background: rgba(var(--concept-color-rgb), 0.1);
+}
+
+.tab-icon {
+  font-size: 1rem;
+  font-family: var(--font-retro);
+}
+
+.tab-title {
+  font-weight: 500;
+}
+
+.tab-indicator {
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 3px;
+  background: var(--concept-color);
+  border-radius: 2px;
+  animation: pulse 2s infinite;
+}
+
+/* Concept Display */
+.concepts-display {
+  position: relative;
+  min-height: 200px;
+}
+
+.concept-content {
+  position: relative;
+  z-index: 2;
+}
+
+.concept-title-container {
+  margin-bottom: 1.5rem;
+}
+
+.concept-title {
+  font-family: var(--font-primary);
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  display: inline-block;
+  position: relative;
+}
+
+.title-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--concept-color);
+  filter: blur(15px);
+  opacity: 0.3;
+  z-index: -1;
+}
+
+.concept-line {
+  width: 100px;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    var(--concept-color),
+    transparent
+  );
+}
+
+.concept-description-wrapper {
+  min-height: 120px;
+  position: relative;
+}
+
+.concept-description {
+  font-family: var(--font-primary);
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: var(--color-text-secondary);
+  margin-bottom: 1rem;
+}
+
+.typing-cursor {
+  display: inline-block;
+  width: 2px;
+  background-color: var(--concept-color);
+  margin-left: 2px;
+  animation: blink 0.7s infinite;
+}
+
+.concept-status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  opacity: 0;
+  animation: fadeIn 0.5s ease forwards;
+  animation-delay: 0.5s;
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+  background-color: var(--concept-color);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+.status-text {
+  font-family: var(--font-secondary);
+  font-size: 0.8rem;
+  color: var(--color-text-secondary);
+  letter-spacing: 1px;
+}
+
+.concept-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 2rem;
+}
+
+.concept-nav-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--color-text-secondary);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1.2rem;
+}
+
+.concept-nav-btn:hover {
+  color: var(--concept-color);
+  border-color: var(--concept-color);
+  transform: scale(1.1);
+}
+
+.concept-indicators {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.concept-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.concept-indicator:hover {
+  transform: scale(1.2);
+}
+
+.concept-indicator.active {
+  transform: scale(1.2);
+  box-shadow: 0 0 10px var(--concept-color);
+}
+
+/* Concept Backdrop */
+.concept-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.backdrop-grid {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 20px 20px;
+  opacity: 0.3;
+}
+
+.backdrop-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 300px;
+  height: 300px;
+  transform: translate(-50%, -50%);
+  filter: blur(60px);
+  border-radius: 50%;
+  transition: background-color 0.5s ease;
+}
+
+/* Manifesto */
+.hero-manifesto {
+  max-width: 600px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.manifesto-text {
+  font-family: var(--font-primary);
+  font-size: clamp(1.1rem, 2vw, 1.4rem);
+  color: var(--color-accent-neon-cyan);
+  font-style: italic;
+  line-height: 1.6;
+  position: relative;
+  padding: 2rem;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  border: 1px solid rgba(0, 255, 255, 0.1);
+}
+
+.manifesto-text::before,
+.manifesto-text::after {
+  content: '»';
+  position: absolute;
+  color: var(--color-accent-neon-magenta);
+  font-size: 2rem;
+  opacity: 0.7;
+}
+
+.manifesto-text::before {
+  top: 10px;
+  left: 10px;
+}
+
+.manifesto-text::after {
+  bottom: 10px;
+  right: 10px;
+  transform: rotate(180deg);
+}
+
+/* Navegación */
+.hero-navigation {
+  margin-top: 3rem;
+  width: 100%;
+}
+
+.navigation-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.navigation-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 2rem;
+  text-decoration: none;
+  color: var(--color-text-primary);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  display: block;
+  text-align: left;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.6s ease forwards;
+  animation-delay: var(--delay, 0s);
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.navigation-card:hover {
+  border-color: var(--card-color);
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.4),
+    0 0 0 1px var(--card-color),
+    0 0 40px rgba(var(--card-color-rgb), 0.3);
+}
+
+.card-inner {
+  position: relative;
+  z-index: 2;
+}
+
+.card-icon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  font-family: var(--font-retro);
+  transition: transform 0.3s ease;
+}
+
+.navigation-card:hover .card-icon {
+  transform: scale(1.2) rotate(10deg);
+}
+
+.card-title {
+  font-family: var(--font-primary);
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--color-text-primary);
+  position: relative;
+  display: inline-block;
+}
+
+.card-title::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--card-color);
+  transition: width 0.3s ease;
+}
+
+.navigation-card:hover .card-title::after {
+  width: 100%;
+}
+
+.card-description {
+  font-family: var(--font-primary);
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--color-text-secondary);
+  margin-bottom: 2rem;
+}
+
+.card-arrow {
+  position: absolute;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  width: 40px;
+  height: 40px;
+  background: rgba(var(--card-color-rgb), 0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.arrow-icon {
+  font-size: 1.2rem;
+  color: var(--card-color);
+  transition: transform 0.3s ease;
+}
+
+.navigation-card:hover .card-arrow {
+  background: rgba(var(--card-color-rgb), 0.2);
+  transform: rotate(45deg);
+}
+
+.navigation-card:hover .arrow-icon {
+  transform: rotate(-45deg);
+}
+
+.card-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(var(--card-color-rgb), 0.1),
+    transparent 50%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.navigation-card:hover .card-glow {
+  opacity: 1;
+}
+
+.card-noise {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='1' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.02'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.navigation-card:hover .card-noise {
+  opacity: 1;
+}
+
+/* Footer */
+.hero-footer {
+  margin-top: 4rem;
+}
+
+.footer-tagline {
+  font-family: var(--font-secondary);
+  font-size: 0.9rem;
+  letter-spacing: 2px;
+  color: var(--color-text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.pulse-dots {
+  display: flex;
+  gap: 4px;
+}
+
+.pulse-dots span {
+  display: block;
+  width: 6px;
+  height: 6px;
+  background-color: var(--color-accent-neon-green);
+  border-radius: 50%;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+.pulse-dots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.pulse-dots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+/* Animations */
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+@keyframes pulse {
+  0%, 60%, 100% {
+    transform: scale(1);
+    opacity: 0.3;
+  }
+  30% {
+    transform: scale(1.5);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .home-page {
+    padding: 4rem 1rem 1rem;
+  }
+  
+  .concepts-container {
+    padding: 1.5rem;
+    margin: 1.5rem auto;
+  }
+  
+  .concept-title {
+    font-size: 1.5rem;
+  }
+  
+  .concept-description {
+    font-size: 1rem;
+  }
+  
+  .concepts-selector {
+    gap: 0.25rem;
+  }
+  
+  .concept-tab {
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+  }
+  
+  .concept-nav-btn {
+    width: 35px;
+    height: 35px;
+  }
+  
+  .navigation-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .navigation-card {
+    padding: 1.5rem;
+  }
+  
+  .hero-content {
+    gap: 2rem;
+  }
+}
