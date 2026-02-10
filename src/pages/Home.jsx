@@ -15,19 +15,19 @@ const Home = () => {
   const concepts = [
     {
       title: "Autonomía",
-      description: "Saber cuándo algo no encaja contigo y permitirte elegir otro camino, incluso si es menos evidente, conservando un margen propio dentro de un sistema que siempre empuja a decidir por ti.",
+      description: "Tomar decisiones propias sin delegarlas al sistema, avanzar sin depender de promesas externas y sostener el rumbo incluso cuando hacerlo implica ir más lento o más solo.",
       color: "#00ff88",
       icon: "⟠"
     },
     {
       title: "Adaptabilidad",
-      description: "Moverte con los cambios sin perder el eje, aprender nuevas herramientas y lenguajes sin borrar lo que ya eres, entendiendo que evolucionar no implica empezar de cero.",
+      description: "Responder al cambio sin quebrarse, ajustarse a entornos inestables y seguir en movimiento cuando el contexto obliga a replantear la forma, pero no la intención.",
       color: "#00ffff",
       icon: "⟣"
     },
     {
       title: "Autenticidad",
-      description: "Crear y decidir desde una voz propia, cuidando los detalles que te representan, sin ajustarte del todo a lo que funciona para otros, pero no se siente correcto para ti.",
+      description: "Permanecer fiel a quién eres y a lo que representas, sin venderte ni diluirte, incluso cuando el entorno recompensa más la apariencia que la coherencia.",
       color: "#ff00ff",
       icon: "⟡"
     }

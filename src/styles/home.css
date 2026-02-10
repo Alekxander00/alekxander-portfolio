@@ -615,49 +615,209 @@
   to { opacity: 1; }
 }
 
-/* Responsive */
+/* home.css - Responsive */
+
+@media (max-width: 1024px) {
+  .home-page {
+    padding: 4rem 1.5rem 1.5rem;
+  }
+
+  .navigation-grid {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .concepts-container {
+    max-width: 90%;
+    padding: 1.5rem;
+  }
+
+  .concept-title {
+    font-size: 1.8rem;
+  }
+
+  .manifesto-text {
+    padding: 1.5rem;
+    font-size: clamp(1rem, 1.8vw, 1.2rem);
+  }
+}
+
 @media (max-width: 768px) {
   .home-page {
     padding: 4rem 1rem 1rem;
   }
-  
+
+  .hero-content {
+    gap: 2rem;
+  }
+
+  .hero-title {
+    font-size: clamp(2rem, 8vw, 3.5rem);
+    letter-spacing: 3px;
+  }
+
+  .title-underline {
+    width: 150px;
+  }
+
+  .subtitle-text {
+    font-size: clamp(0.85rem, 1.5vw, 1rem);
+  }
+
   .concepts-container {
     padding: 1.5rem;
     margin: 1.5rem auto;
   }
-  
-  .concept-title {
-    font-size: 1.5rem;
-  }
-  
-  .concept-description {
-    font-size: 1rem;
-  }
-  
+
   .concepts-selector {
-    gap: 0.25rem;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
   }
-  
+
   .concept-tab {
     padding: 0.5rem 1rem;
     font-size: 0.8rem;
   }
-  
+
+  .concept-title {
+    font-size: 1.5rem;
+  }
+
+  .concept-description {
+    font-size: 1rem;
+    line-height: 1.6;
+    min-height: 150px;
+  }
+
   .concept-nav-btn {
     width: 35px;
     height: 35px;
+    font-size: 1rem;
   }
-  
+
+  .manifesto-text {
+    padding: 1.25rem;
+    font-size: 1.1rem;
+    line-height: 1.5;
+  }
+
   .navigation-grid {
     grid-template-columns: 1fr;
     gap: 1.5rem;
+    max-width: 100%;
   }
-  
+
   .navigation-card {
     padding: 1.5rem;
   }
-  
-  .hero-content {
-    gap: 2rem;
+
+  .card-title {
+    font-size: 1.5rem;
+  }
+
+  .card-description {
+    font-size: 0.95rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .card-arrow {
+    width: 35px;
+    height: 35px;
+  }
+
+  .arrow-icon {
+    font-size: 1rem;
+  }
+
+  .hero-footer {
+    margin-top: 3rem;
+  }
+
+  .footer-tagline {
+    flex-direction: column;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+  }
+
+  .pulse-dots span {
+    width: 5px;
+    height: 5px;
+  }
+}
+
+@media (max-width: 480px) {
+  .home-page {
+    padding: 3.5rem 0.8rem 0.8rem;
+  }
+
+  .hero-title {
+    font-size: clamp(1.8rem, 7vw, 3rem);
+    letter-spacing: 2px;
+  }
+
+  .title-underline {
+    width: 120px;
+  }
+
+  .concepts-container {
+    padding: 1.25rem;
+    margin: 1.25rem auto;
+  }
+
+  .concepts-selector {
+    gap: 0.25rem;
+  }
+
+  .concept-tab {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.75rem;
+  }
+
+  .concept-title {
+    font-size: 1.3rem;
+  }
+
+  .concept-description {
+    font-size: 0.95rem;
+    min-height: 130px;
+  }
+
+  .concept-nav {
+    margin-top: 1.5rem;
+  }
+
+  .concept-indicators {
+    gap: 0.25rem;
+  }
+
+  .concept-indicator {
+    width: 6px;
+    height: 6px;
+  }
+
+  .manifesto-text {
+    padding: 1rem;
+    font-size: 1rem;
+  }
+
+  .manifesto-text::before,
+  .manifesto-text::after {
+    font-size: 1.5rem;
+  }
+
+  .navigation-card {
+    padding: 1.25rem;
+  }
+
+  .card-icon {
+    font-size: 2rem;
+  }
+
+  .card-title {
+    font-size: 1.3rem;
+  }
+
+  .card-description {
+    font-size: 0.9rem;
   }
 }
