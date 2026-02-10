@@ -1,19 +1,41 @@
 :root {
-  --color-bg-primary: #0a0a0a;
-  --color-bg-secondary: #111111;
-  --color-text-primary: #f0f0f0;
-  --color-text-secondary: #b0b0b0;
-  --color-accent-neon-green: #00ff88;
-  --color-accent-neon-cyan: #00c9a7;
-  --color-accent-neon-magenta: #ff00ff;
-  --color-accent-neon-blue: #0088ff;
+  /* Nueva paleta inspirada en Twilight Princess/Akira */
+  --color-bg-primary: #0a0a14;
+  --color-bg-secondary: #1a1a2e;
+  --color-bg-tertiary: #2a2a4e;
   
+  --color-text-primary: #f0f0ff;
+  --color-text-secondary: #b0b0e0;
+  --color-text-tertiary: #8888cc;
+  
+  /* Colores acento inspirados en Twilight Princess (dorados/anaranjados) y Akira (rojos) */
+  --color-accent-gold: #ffcc00;
+  --color-accent-orange: #ff8800;
+  --color-accent-red: #ff3366;
+  --color-accent-purple: #9966ff;
+  --color-accent-blue: #3399ff;
+  
+  /* Gradientes característicos */
+  --gradient-gold: linear-gradient(135deg, #ffcc00, #ff8800);
+  --gradient-red: linear-gradient(135deg, #ff3366, #cc0066);
+  --gradient-purple: linear-gradient(135deg, #9966ff, #6600cc);
+  --gradient-blue: linear-gradient(135deg, #3399ff, #0066cc);
+  
+  /* Sombras y efectos de luz */
+  --shadow-glow-gold: 0 0 15px rgba(255, 204, 0, 0.5);
+  --shadow-glow-red: 0 0 15px rgba(255, 51, 102, 0.5);
+  --shadow-glow-purple: 0 0 15px rgba(153, 102, 255, 0.5);
+  --shadow-glow-blue: 0 0 15px rgba(51, 153, 255, 0.5);
+  
+  /* Bordes */
+  --border-thin: 1px solid rgba(255, 204, 0, 0.3);
+  --border-glow: 1px solid rgba(255, 204, 0, 0.6);
+  
+  /* Tipografía */
   --font-primary: 'Inter', 'Segoe UI', system-ui, sans-serif;
-  --font-secondary: 'Courier New', 'Monaco', monospace;
-  --font-retro: 'Press Start 2P', 'Courier New', monospace;
-  
-  --border-glow: 1px solid rgba(0, 255, 136, 0.3);
-  --box-shadow-glow: 0 0 10px rgba(0, 255, 136, 0.5);
+  --font-secondary: 'Rajdhani', 'Courier New', monospace;
+  --font-retro: 'Orbitron', 'Press Start 2P', monospace;
+  --font-japanese: 'Noto Sans JP', sans-serif;
 }
 
 * {
@@ -33,8 +55,14 @@ body {
   line-height: 1.6;
   overflow-x: hidden;
   position: relative;
+  background-image: 
+    radial-gradient(circle at 10% 20%, rgba(26, 26, 46, 0.7) 0%, transparent 20%),
+    radial-gradient(circle at 90% 80%, rgba(42, 42, 78, 0.5) 0%, transparent 20%),
+    radial-gradient(circle at 50% 50%, rgba(255, 204, 0, 0.05) 0%, transparent 30%);
+  background-attachment: fixed;
 }
 
+/* Efecto de scanlines más sutil */
 body::before {
   content: '';
   position: fixed;
@@ -42,46 +70,88 @@ body::before {
   left: 0;
   width: 100%;
   height: 100%;
-  background: 
-    linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
-    linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-  background-size: 100% 4px, 6px 100%;
+  background: linear-gradient(rgba(18, 16, 16, 0.05) 50%, rgba(0, 0, 0, 0.1) 50%);
+  background-size: 100% 4px;
   pointer-events: none;
   z-index: 9999;
-  opacity: 0.3;
-  animation: scanlines 8s linear infinite;
+  opacity: 0.15;
+  mix-blend-mode: overlay;
+  animation: scanlines 12s linear infinite;
 }
 
 @keyframes scanlines {
-  0% { background-position: 0 0, 0 0; }
-  100% { background-position: 0 100%, 0 0; }
+  0% { background-position: 0 0; }
+  100% { background-position: 0 100%; }
+}
+
+/* Efecto de partículas sutiles en el fondo */
+body::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(1px 1px at 20% 30%, rgba(255, 204, 0, 0.3) 1px, transparent 2px),
+    radial-gradient(1px 1px at 40% 70%, rgba(255, 51, 102, 0.3) 1px, transparent 2px),
+    radial-gradient(1px 1px at 60% 40%, rgba(153, 102, 255, 0.3) 1px, transparent 2px),
+    radial-gradient(1px 1px at 80% 80%, rgba(51, 153, 255, 0.3) 1px, transparent 2px),
+    radial-gradient(1px 1px at 30% 90%, rgba(255, 204, 0, 0.3) 1px, transparent 2px);
+  background-size: 200px 200px;
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0.1;
 }
 
 ::selection {
-  background-color: var(--color-accent-neon-green);
+  background-color: var(--color-accent-gold);
   color: var(--color-bg-primary);
+  text-shadow: none;
 }
 
-/* Scrollbar personalizada */
+/* Scrollbar personalizada con estilo metálico */
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 12px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--color-bg-secondary);
+  background: linear-gradient(to bottom, var(--color-bg-secondary), var(--color-bg-primary));
+  border-left: 1px solid rgba(255, 204, 0, 0.2);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--color-accent-neon-cyan);
-  border-radius: 5px;
+  background: var(--gradient-gold);
+  border-radius: 6px;
+  border: 2px solid var(--color-bg-secondary);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-accent-neon-magenta);
+  background: var(--gradient-orange);
+  box-shadow: var(--shadow-glow-gold);
 }
 
-/* global.css - Responsive */
+/* Estilos para textos japoneses/inspiración Akira */
+.japanese-text {
+  font-family: var(--font-japanese);
+  font-weight: 500;
+}
 
+/* Animación de brillo para elementos importantes */
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.8; box-shadow: 0 0 10px rgba(255, 204, 0, 0.5); }
+  50% { opacity: 1; box-shadow: 0 0 20px rgba(255, 204, 0, 0.8); }
+}
+
+/* Efecto de distorsión sutil (inspiración FLCL) */
+@keyframes subtle-distortion {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  25% { transform: scale(1.01) rotate(0.1deg); }
+  50% { transform: scale(1) rotate(-0.1deg); }
+  75% { transform: scale(0.99) rotate(0.05deg); }
+}
+
+/* Media queries para responsive */
 @media (max-width: 768px) {
   body {
     font-size: 16px;
@@ -89,53 +159,264 @@ body::before {
   }
 
   body::before {
-    background-size: 100% 3px, 4px 100%;
-    opacity: 0.2;
+    background-size: 100% 3px;
+    opacity: 0.1;
   }
 
   ::-webkit-scrollbar {
-    width: 6px;
-  }
-
-  h1 {
-    font-size: 2rem;
-    line-height: 1.2;
-  }
-
-  h2 {
-    font-size: 1.5rem;
-    line-height: 1.3;
-  }
-
-  h3 {
-    font-size: 1.25rem;
-    line-height: 1.4;
+    width: 8px;
   }
 }
 
-@media (max-width: 480px) {
-  body {
-    font-size: 15px;
-  }
+/* Notificaciones de Easter Eggs */
+.easter-egg-notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 99999;
+  animation: slideInRight 0.5s ease forwards;
+}
 
-  h1 {
-    font-size: 1.75rem;
-  }
+.notification-content {
+  background: linear-gradient(135deg, rgba(26, 26, 46, 0.95), rgba(42, 42, 78, 0.9));
+  border: 2px solid var(--color-accent-gold);
+  border-radius: 12px;
+  padding: 1rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  backdrop-filter: blur(10px);
+  box-shadow: 
+    0 10px 30px rgba(0, 0, 0, 0.5),
+    0 0 20px rgba(255, 204, 0, 0.3);
+  max-width: 400px;
+  transform: translateX(120%);
+  animation: slideInRight 0.5s ease forwards;
+}
 
-  h2 {
-    font-size: 1.35rem;
-  }
-
-  h3 {
-    font-size: 1.15rem;
+@keyframes slideInRight {
+  to {
+    transform: translateX(0);
   }
 }
 
-/* Ajustes para tablets en orientación horizontal */
-@media (min-width: 769px) and (max-width: 1024px) and (orientation: landscape) {
-  .home-page,
-  .about-page,
-  .references-page {
-    padding-top: 6rem;
+.notification-icon {
+  font-size: 2rem;
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px);
+  }
+  60% {
+    transform: translateY(-5px);
   }
 }
+
+.notification-text {
+  font-family: var(--font-secondary);
+  color: var(--color-text-primary);
+  font-size: 0.9rem;
+  line-height: 1.4;
+  white-space: pre-line;
+}
+
+/* Trifuerza completa */
+.triforce-complete {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  z-index: 99998;
+  pointer-events: none;
+  animation: triforceReveal 1s ease forwards;
+}
+
+@keyframes triforceReveal {
+  0% {
+    transform: translate(-50%, -50%) scale(0) rotate(0deg);
+    opacity: 0;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.2) rotate(180deg);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1) rotate(360deg);
+    opacity: 1;
+  }
+}
+
+.triforce-svg {
+  filter: drop-shadow(0 0 30px rgba(255, 204, 0, 0.8));
+}
+
+/* Efecto Konami */
+.konami-active .triangle-background {
+  filter: hue-rotate(90deg) brightness(1.2);
+}
+
+.konami-active .hero-title {
+  animation: rainbow 3s linear infinite;
+}
+
+@keyframes rainbow {
+  0% { filter: hue-rotate(0deg); }
+  100% { filter: hue-rotate(360deg); }
+}
+
+
+/* Efecto FLCL - Notas musicales */
+.flcl-effect {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9996;
+  background: linear-gradient(45deg, 
+    transparent 30%, 
+    rgba(153, 102, 255, 0.1) 50%, 
+    transparent 70%
+  );
+  animation: flclWave 2s linear infinite;
+  mix-blend-mode: screen;
+}
+
+@keyframes flclWave {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* Efecto Tears of the Kingdom */
+.totk-effect {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9996;
+  background: 
+    radial-gradient(circle at 50% 50%, transparent 30%, rgba(255, 204, 0, 0.1) 70%),
+    repeating-conic-gradient(
+      from 0deg,
+      transparent 0deg 10deg,
+      rgba(255, 136, 0, 0.05) 10deg 20deg
+    );
+  animation: totkRotate 20s linear infinite;
+}
+
+@keyframes totkRotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Portal de Akira */
+.akira-portal {
+  position: fixed;
+  width: 200px;
+  height: 200px;
+  pointer-events: none;
+  z-index: 9996;
+  animation: portalPulse 0.5s ease-in-out infinite alternate;
+}
+
+.akira-portal::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 51, 102, 0.8) 0%,
+    rgba(204, 0, 102, 0.6) 30%,
+    rgba(153, 0, 76, 0.4) 50%,
+    transparent 70%
+  );
+  border-radius: 50%;
+  animation: portalSpin 3s linear infinite;
+}
+
+.akira-portal::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 150%;
+  height: 150%;
+  background: radial-gradient(
+    circle,
+    transparent 40%,
+    rgba(255, 51, 102, 0.2) 70%,
+    transparent 100%
+  );
+  border-radius: 50%;
+  animation: portalExpand 2s ease-in-out infinite alternate;
+}
+
+@keyframes portalPulse {
+  0% { transform: translate(-50%, -50%) scale(1); }
+  100% { transform: translate(-50%, -50%) scale(1.1); }
+}
+
+@keyframes portalSpin {
+  0% { transform: translate(-50%, -50%) rotate(0deg); }
+  100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+@keyframes portalExpand {
+  0% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+  100% { transform: translate(-50%, -50%) scale(1.3); opacity: 0; }
+}
+
+/* Indicador de tecla Z presionada */
+.z-key-indicator {
+  position: fixed;
+  bottom: 100px;
+  right: 20px;
+  background: rgba(255, 204, 0, 0.2);
+  border: 2px solid rgba(255, 204, 0, 0.5);
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-retro);
+  font-size: 1.5rem;
+  color: var(--color-accent-gold);
+  z-index: 9997;
+  backdrop-filter: blur(10px);
+  animation: pulse 2s infinite;
+}
+
+/* Progress bar para la tecla Z */
+.z-progress {
+  position: fixed;
+  bottom: 170px;
+  right: 20px;
+  width: 60px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+  z-index: 9997;
+}
+
+.z-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #ffcc00, #ff8800);
+  border-radius: 2px;
+  transition: width 0.1s linear;
+}
+

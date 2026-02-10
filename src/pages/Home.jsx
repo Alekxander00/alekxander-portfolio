@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import CRTFilter from '../components/CRTFilter';
 import GlitchText from '../components/GlitchText';
 import ParticleBackground from '../components/ParticleBackground';
+import TriangleBackground from '../components/TriangleBackground';
 import '../styles/home.css';
 
 const Home = () => {
@@ -151,7 +152,7 @@ const Home = () => {
 
   return (
     <div className="home-page">
-      <ParticleBackground />
+      <TriangleBackground />
       <CRTFilter intensity="low">
         <main className="home-hero">
           <div className="hero-content">
