@@ -152,7 +152,7 @@ const Home = () => {
 
   return (
     <div className="home-page">
-      {/* <TriangleBackground /> */}
+      <TriangleBackground />
       <CRTFilter intensity="low">
         <main className="home-hero">
           <div className="hero-content">
