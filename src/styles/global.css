@@ -255,19 +255,6 @@ body::after {
   filter: drop-shadow(0 0 30px rgba(255, 204, 0, 0.8));
 }
 
-.triangle-background {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
-  pointer-events: none;
-  will-change: transform;
-  transform: translateZ(0);
-  backface-visibility: hidden;
-}
-
 /* Efecto Konami */
 .konami-active .triangle-background {
   filter: hue-rotate(90deg) brightness(1.2);
