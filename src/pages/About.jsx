@@ -16,7 +16,7 @@ const About = () => {
               Más allá del código, dentro de la creación
             </div>
           </div>
-          
+
           <div className="about-content">
             <section className="about-section">
               <div className="section-header">
@@ -26,19 +26,13 @@ const About = () => {
                 </h2>
                 <div className="section-line"></div>
               </div>
-              
+
               <div className="section-content">
                 <p className="about-paragraph">
-                  Soy <span className="highlight">Ingeniero en Multimedia</span> con experiencia como desarrollador fullstack, 
-                  pero mi verdadera pasión reside en la intersección entre la tecnología y la expresión creativa.
+                  Soy <span className="highlight">Ingeniero en Multimedia</span> con experiencia como desarrollador fullstack, pero mi verdadera pasión reside en la intersección entre la tecnología y la expresión creativa, y no me defino por una sola herramienta o lenguaje, sino por la forma en que conecto <span className="highlight">código, imagen, sonido y experiencia</span> para crear narrativas digitales que trascienden lo meramente funcional.
                 </p>
-                
-                <p className="about-paragraph">
-                  No me defino por una sola herramienta o lenguaje, sino por la forma en que conecto 
-                  <span className="highlight"> código, imagen, sonido y experiencia</span> para crear narrativas digitales 
-                  que trascienden lo meramente funcional.
-                </p>
-                
+
+
                 <div className="profile-tags">
                   <span className="tag">Desarrollo Web</span>
                   <span className="tag">Experiencias Interactivas</span>
@@ -48,7 +42,7 @@ const About = () => {
                 </div>
               </div>
             </section>
-            
+
             <section className="about-section">
               <div className="section-header">
                 <h2 className="section-title">
@@ -57,14 +51,14 @@ const About = () => {
                 </h2>
                 <div className="section-line"></div>
               </div>
-              
+
               <div className="section-content">
                 <p className="about-paragraph">
-                  Mi trabajo se centra en el desarrollo de <span className="highlight">experiencias digitales interactivas </span> 
-                   que combinan precisión técnica con intención artística. Creo en la tecnología como medio expresivo, 
+                  Mi trabajo se centra en el desarrollo de <span className="highlight">experiencias digitales interactivas </span>
+                  que combinan precisión técnica con intención artística. Creo en la tecnología como medio expresivo,
                   no como fin en sí mismo.
                 </p>
-                
+
                 <div className="approach-grid">
                   <div className="approach-item">
                     <div className="approach-icon">⟢</div>
@@ -73,7 +67,7 @@ const About = () => {
                       Uso del código para contar historias y crear mundos inmersivos
                     </p>
                   </div>
-                  
+
                   <div className="approach-item">
                     <div className="approach-icon">⟣</div>
                     <h3 className="approach-title">Estética Digital</h3>
@@ -81,7 +75,7 @@ const About = () => {
                       Exploración de lenguajes visuales del internet y la cultura digital
                     </p>
                   </div>
-                  
+
                   <div className="approach-item">
                     <div className="approach-icon">⟠</div>
                     <h3 className="approach-title">Interacción Sensorial</h3>

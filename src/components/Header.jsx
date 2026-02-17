@@ -10,7 +10,6 @@ const Header = () => {
   const navItems = [
     { path: '/', label: 'Inicio' },
     { path: '/about', label: 'Sobre mí' },
-    { path: '/references', label: 'Referentes' },
   ];
 
   return (
