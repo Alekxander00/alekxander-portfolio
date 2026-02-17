@@ -140,14 +140,6 @@ const Home = () => {
       icon: "⟣",
       delay: "0.1s"
     },
-    {
-      title: "Referentes",
-      path: "/references",
-      description: "Descubre las mentes creativas que dan forma a mi visión, desde pioneros del videojuego hasta artistas digitales vanguardistas.",
-      color: "#00ffff",
-      icon: "⟠",
-      delay: "0.2s"
-    }
   ];
 
   return (
