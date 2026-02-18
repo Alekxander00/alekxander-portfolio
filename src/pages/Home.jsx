@@ -2,8 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import CRTFilter from '../components/CRTFilter';
 import GlitchText from '../components/GlitchText';
-import ParticleBackground from '../components/ParticleBackground';
-import TriangleBackground from '../components/TriangleBackground';
+import TriangleBackground from '../components/TriangleBackground'; // Solo este fondo
 import '../styles/home.css';
 
 const Home = () => {
@@ -138,6 +137,14 @@ const Home = () => {
       description: "Explora mi enfoque creativo, formación en ingeniería multimedia y visión interdisciplinaria donde la tecnología se encuentra con la narrativa.",
       color: "#00ff88",
       icon: "⟣",
+      delay: "0.1s"
+    },
+    {
+      title: "Mis proyectos",
+      path: "/projects",
+      description: "Explora mi enfoque creativo, formación en ingeniería multimedia y visión interdisciplinaria donde la tecnología se encuentra con la narrativa.",
+      color: "#ff5100",
+      icon: "⚡",
       delay: "0.1s"
     },
   ];
