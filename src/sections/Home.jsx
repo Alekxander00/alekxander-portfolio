@@ -1,30 +1,59 @@
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import LogoImage from '../components/ui/LogoImage';
 import { lettersData } from '../constants/categories';
-import Particles from '../components/ui/Particles'; // lo crearemos después
+import Particles from '../components/ui/Particles';
+import LetterExplosion from '../components/ui/LetterExplosion';
+import DarknessOverlay from '../components/ui/DarknessOverlay';
 
 export default function Home() {
   const navigate = useNavigate();
   const [breakingIndex, setBreakingIndex] = useState(null);
-  const [showFlash, setShowFlash] = useState(false);
+  const [explosion, setExplosion] = useState({ active: false, position: { x: 0, y: 0 } });
+  const [darkness, setDarkness] = useState({ active: false, position: { x: 0, y: 0 } });
+  const [targetCategory, setTargetCategory] = useState(null);
 
-  const handleLetterClick = (item) => {
+  const handleLetterClick = (item, event) => {
+    const { clientX, clientY } = event; // posición exacta del clic
     setBreakingIndex(item.index);
-    setShowFlash(true);
-    // Después de la animación de ruptura (400ms), navegamos
-    setTimeout(() => {
-      navigate(`/category/${item.category}`);
-    }, 400);
+    setTargetCategory(item.category);
+    setExplosion({ active: true, position: { x: clientX, y: clientY } });
+    setDarkness({ active: true, position: { x: clientX, y: clientY } });
+  };
+
+  const handleExplosionComplete = () => {
+    setExplosion({ active: false, position: { x: 0, y: 0 } });
+    // La oscuridad ya se encargará de navegar al terminar
+  };
+
+  const handleDarknessComplete = () => {
+    setDarkness({ active: false, position: { x: 0, y: 0 } });
+    if (targetCategory) {
+      navigate(`/category/${targetCategory}`);
+    }
   };
 
   return (
     <div className="relative w-full h-screen flex items-center justify-center bg-black overflow-hidden">
-      {/* Fondo de partículas */}
+      {/* Fondo de partículas (estático) */}
       <Particles />
 
-      
+      {/* Oscuridad que crece desde el clic */}
+      {darkness.active && (
+        <DarknessOverlay
+          position={darkness.position}
+          onComplete={handleDarknessComplete}
+        />
+      )}
+
+      {/* Explosión de líneas */}
+      {explosion.active && (
+        <LetterExplosion
+          position={explosion.position}
+          onComplete={handleExplosionComplete}
+        />
+      )}
 
       {/* Logo de fondo con círculo interactivo */}
       <div className="absolute inset-0 flex items-center justify-center">
@@ -55,14 +84,8 @@ export default function Home() {
               scale: 1.1,
               transition: { duration: 0.2 }
             }}
-            // Animación de "ruptura" al hacer clic
-            animate={breakingIndex === item.index ? {
-              scale: [1, 1.5, 0],
-              rotate: [0, 10, -10, 0],
-              opacity: [1, 1, 0],
-              transition: { duration: 0.4 }
-            } : {}}
-            onClick={() => handleLetterClick(item)}
+            animate={breakingIndex === item.index ? { opacity: 0, transition: { duration: 0.1 } } : {}}
+            onClick={(e) => handleLetterClick(item, e)}
           >
             {item.letter}
           </motion.span>
