@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import LogoImage from '../components/ui/LogoImage';
 import DarknessOverlay from '../components/ui/DarknessOverlay';
+import ConstellationWater from '../components/ui/ConstellationWater';
 
 export default function About() {
   const navigate = useNavigate();
@@ -21,6 +22,8 @@ export default function About() {
 
   return (
     <div className="min-h-screen bg-black text-white p-4 sm:p-8">
+      
+
       {darkness.active && (
         <DarknessOverlay
           position={darkness.position}
@@ -36,7 +39,7 @@ export default function About() {
       <div className="max-w-3xl mx-auto pt-16 sm:pt-20">
         <h1 className="text-3xl sm:text-4xl md:text-5xl font-trajan mb-4 sm:mb-6">Sobre Mí</h1>
         <p className="text-base sm:text-lg text-gray-300">
-          Aquí va tu biografía, estudios, habilidades, etc. Este texto debe ser responsive también. Puedes agregar más contenido y se ajustará automáticamente.
+          WIP
         </p>
         {/* ... más contenido */}
       </div>
