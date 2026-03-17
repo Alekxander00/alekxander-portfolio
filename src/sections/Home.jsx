@@ -99,15 +99,16 @@ export default function Home() {
       </motion.div>
 
       <motion.div
-        className="flex gap-2 sm:gap-3 md:gap-4 text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-trajan z-20 flex-wrap justify-center px-2 sm:px-4"
+        className="flex gap-1 sm:gap-2 md:gap-3 lg:gap-4 z-20 flex-nowrap overflow-x-auto justify-center px-2 sm:px-4"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
+        style={{ scrollbarWidth: 'none' }} /* Oculta scrollbar en Firefox */
       >
         {lettersData.map((item) => (
           <motion.span
             key={item.index}
-            className="cursor-pointer inline-block"
+            className="cursor-pointer inline-block font-trajan text-[clamp(1.8rem,7vw,3.5rem)] sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-9xl"
             variants={letterVariants}
             whileHover={{
               textShadow: '0 0 20px rgba(255,255,255,0.8), 0 0 40px rgba(100,150,255,0.5)',

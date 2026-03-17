@@ -11,9 +11,8 @@ export default function ConstellationWater({ clickPosition, clickId }) {
     const ctx = canvas.getContext('2d');
     let width, height;
 
-    // Parámetros de estrellas
-    const NUM_STARS = 120;
-    const CONNECTION_DISTANCE = 150; // píxeles
+    // Parámetros de estrellas (fijos, pero podríamos hacerlos responsivos si es necesario)
+    const NUM_STARS = 100; // Reducido ligeramente para móvil (antes 120)
 
     // Generar estrellas solo una vez
     if (starsRef.current.length === 0) {
@@ -94,7 +93,7 @@ export default function ConstellationWater({ clickPosition, clickId }) {
     const draw = () => {
       ctx.clearRect(0, 0, width, height);
 
-      // Actualizar ondas (expandir y desvanecer)
+      // Actualizar ondas
       wavesRef.current = wavesRef.current.filter(wave => {
         wave.radius += 5;
         wave.life *= 0.98;
@@ -111,15 +110,18 @@ export default function ConstellationWater({ clickPosition, clickId }) {
         speed: s.speed,
       }));
 
-      // --- DIBUJO NORMAL (constelaciones) ---
+      // ** Distancia de conexión responsiva: 12% del ancho, máximo 150px **
+      const connectionDistance = Math.min(150, width * 0.12);
+
+      // --- DIBUJO NORMAL ---
       // Líneas
       for (let i = 0; i < starPositions.length; i++) {
         for (let j = i + 1; j < starPositions.length; j++) {
           const dx = starPositions[i].x - starPositions[j].x;
           const dy = starPositions[i].y - starPositions[j].y;
           const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < CONNECTION_DISTANCE) {
-            const brightness = 0.3 * (1 - dist / CONNECTION_DISTANCE) * (0.8 + 0.2 * Math.sin(time + i + j));
+          if (dist < connectionDistance) {
+            const brightness = 0.3 * (1 - dist / connectionDistance) * (0.8 + 0.2 * Math.sin(time + i + j));
             drawLine(
               starPositions[i].x, starPositions[i].y,
               starPositions[j].x, starPositions[j].y,
@@ -135,28 +137,25 @@ export default function ConstellationWater({ clickPosition, clickId }) {
         drawStar(p.x, p.y, brightness);
       });
 
-      // --- REFLEJO EN EL AGUA (copia invertida con ondas) ---
+      // --- REFLEJO ---
       ctx.save();
-      ctx.globalAlpha = 0.5; // opacidad global del reflejo (se combina con la de las líneas)
-      // Reflejo de líneas
+      ctx.globalAlpha = 0.5;
       for (let i = 0; i < starPositions.length; i++) {
         for (let j = i + 1; j < starPositions.length; j++) {
           const dx = starPositions[i].x - starPositions[j].x;
           const dy = starPositions[i].y - starPositions[j].y;
           const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < CONNECTION_DISTANCE) {
-            const brightness = 0.3 * (1 - dist / CONNECTION_DISTANCE) * (0.8 + 0.2 * Math.sin(time + i + j));
-            // Coordenadas reflejadas: Y invertida y ondulada
+          if (dist < connectionDistance) {
+            const brightness = 0.3 * (1 - dist / connectionDistance) * (0.8 + 0.2 * Math.sin(time + i + j));
             const x1 = starPositions[i].x;
             const y1 = height - starPositions[i].y + Math.sin(x1 * 0.01 + time * 2) * 12;
             const x2 = starPositions[j].x;
             const y2 = height - starPositions[j].y + Math.sin(x2 * 0.01 + time * 2.2) * 12;
-            drawLine(x1, y1, x2, y2, brightness * 0.5); // opacidad reducida
+            drawLine(x1, y1, x2, y2, brightness * 0.5);
           }
         }
       }
 
-      // Reflejo de estrellas
       starPositions.forEach((p, index) => {
         const brightness = 0.7 + 0.3 * Math.sin(time * starsRef.current[index].speed + starsRef.current[index].phase);
         const x = p.x;
@@ -176,7 +175,6 @@ export default function ConstellationWater({ clickPosition, clickId }) {
     };
   }, []);
 
-  // Efecto separado para añadir ondas cuando hay clics
   useEffect(() => {
     if (clickPosition) {
       wavesRef.current.push({
