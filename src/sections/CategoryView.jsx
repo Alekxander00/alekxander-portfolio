@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { motion, useAnimation } from 'framer-motion';
+import { motion, useAnimation, AnimatePresence } from 'framer-motion';
 import LogoImage from '../components/ui/LogoImage';
 import { validCategories } from '../constants/categories';
 import { projects } from '../constants/projects';
@@ -15,23 +15,9 @@ export default function CategoryView() {
   const [selectedProjectId, setSelectedProjectId] = useState(null);
   const [clickPosition, setClickPosition] = useState(null);
   const [clickCount, setClickCount] = useState(0);
-  const [exitPosition, setExitPosition] = useState({ x: 0, y: 0 });
+  const [exitPosition, setExitPosition] = useState({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
   const [isRevealed, setIsRevealed] = useState(false);
 
-  // Variante dinámica: recibe la posición y define el clipPath
-  const overlayVariants = {
-    hidden: (pos) => ({
-      clipPath: `circle(150% at ${pos.x}px ${pos.y}px)`,
-      backgroundColor: 'black',
-    }),
-    visible: {
-      clipPath: `circle(0% at var(--x) var(--y))`,
-      backgroundColor: 'black',
-      transition: { duration: 0.8, ease: [0.76, 0, 0.24, 1] },
-    },
-  };
-
-  // Prevenir scroll cuando el detalle está abierto
   useEffect(() => {
     if (selectedProjectId) {
       document.body.style.overflow = 'hidden';
@@ -43,7 +29,6 @@ export default function CategoryView() {
     };
   }, [selectedProjectId]);
 
-  // Reiniciar todo al cambiar de categoría
   useEffect(() => {
     if (!validCategories.includes(categoryName)) {
       navigate('/');
@@ -54,7 +39,6 @@ export default function CategoryView() {
     setExitPosition({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
 
     const animateSequence = async () => {
-      // Configuración inicial: título oculto, centrado, escala grande
       await controls.set({
         opacity: 0,
         scale: 3,
@@ -67,7 +51,6 @@ export default function CategoryView() {
         textAlign: 'center',
       });
 
-      // Flash brillante
       await controls.start({
         opacity: 1,
         scale: 2.5,
@@ -75,10 +58,8 @@ export default function CategoryView() {
         transition: { duration: 0.3 },
       });
 
-      // Pausa en el centro
       await new Promise((resolve) => setTimeout(resolve, 600));
 
-      // Movimiento hacia el header
       await controls.start({
         scale: 1,
         textShadow: '0 0 20px rgba(255,255,255,0.5)',
@@ -92,7 +73,6 @@ export default function CategoryView() {
         transition: { duration: 0.7 },
       });
 
-      // Obtener la posición final del título
       const titleElement = document.getElementById('category-title');
       if (titleElement) {
         const rect = titleElement.getBoundingClientRect();
@@ -102,7 +82,6 @@ export default function CategoryView() {
         });
       }
 
-      // Esperar un frame para asegurar que el DOM se actualizó
       await new Promise((resolve) => requestAnimationFrame(resolve));
       setIsRevealed(true);
     };
@@ -124,32 +103,29 @@ export default function CategoryView() {
       className="relative w-full min-h-screen bg-black overflow-x-hidden"
       onClick={handleBackgroundClick}
     >
-      {/* Fondo de constelaciones */}
       <div className="fixed inset-0 z-0 pointer-events-none">
         <ConstellationWater clickPosition={clickPosition} clickId={clickCount} />
       </div>
 
-      {/* Overlay con variante dinámica (se contrae desde la posición del título) */}
       <motion.div
-  animate={{
-    clipPath: isRevealed
-      ? `circle(0% at ${exitPosition.x}px ${exitPosition.y}px)`
-      : `circle(150% at ${exitPosition.x}px ${exitPosition.y}px)`,
-    backgroundColor: 'black',
-  }}
-  transition={{ duration: isRevealed ? 0.8 : 0 }} // Sin transición al inicio
-  style={{
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '100%',
-    zIndex: 20,
-    pointerEvents: 'none',
-  }}
-/>
+        animate={{
+          clipPath: isRevealed
+            ? `circle(0% at ${exitPosition.x}px ${exitPosition.y}px)`
+            : `circle(150% at ${exitPosition.x}px ${exitPosition.y}px)`,
+          backgroundColor: 'black',
+        }}
+        transition={{ duration: isRevealed ? 0.8 : 0 }}
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          zIndex: 20,
+          pointerEvents: 'none',
+        }}
+      />
 
-      {/* Logo para abrir el menú */}
       <div
         className="absolute top-4 left-4 w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 z-30 cursor-pointer"
         onClick={handleLogoClick}
@@ -157,7 +133,6 @@ export default function CategoryView() {
         <LogoImage opacity={1} size="w-full h-full" />
       </div>
 
-      {/* Título animado */}
       <motion.h1
         id="category-title"
         animate={controls}
@@ -171,7 +146,6 @@ export default function CategoryView() {
         {categoryName}
       </motion.h1>
 
-      {/* Grid de proyectos (siempre presente, pero inicialmente oculto por el overlay) */}
       <div className="container mx-auto pt-24 sm:pt-28 md:pt-32 px-4 pb-8 relative z-10">
         {filteredProjects.length === 0 ? (
           <p className="text-center text-gray-400">Próximamente más proyectos...</p>
@@ -182,7 +156,7 @@ export default function CategoryView() {
                 key={project.id}
                 layoutId={`project-${project.id}`}
                 onClick={() => setSelectedProjectId(project.id)}
-                className="bg-gray-800 rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 cursor-pointer"
+                className="relative rounded-lg overflow-hidden shadow-lg hover:shadow-2xl cursor-pointer"
                 whileHover={{ scale: 1.02 }}
               >
                 <img
@@ -190,9 +164,11 @@ export default function CategoryView() {
                   alt={project.title}
                   className="w-full h-48 object-cover"
                 />
-                <div className="p-4">
-                  <h3 className="text-xl font-semibold mb-2">{project.title}</h3>
-                  <p className="text-gray-400 text-sm">{project.description}</p>
+                <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-transparent to-black/80" />
+                <div className="absolute bottom-0 left-0 right-0 p-4">
+                  <h3 className="text-white text-xl font-trajan text-center drop-shadow-lg">
+                    {project.title}
+                  </h3>
                 </div>
               </motion.div>
             ))}
@@ -200,67 +176,79 @@ export default function CategoryView() {
         )}
       </div>
 
-      {/* Detalle expandido del proyecto (opcional) */}
-       {/* Detalle del proyecto expandido */}
       <AnimatePresence>
         {selectedProject && (
           <>
-            {/* Overlay oscuro */}
+            {/* Overlay semitransparente con blur */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setSelectedProjectId(null)}
-              className="fixed inset-0 bg-black bg-opacity-80 z-40"
+              className="fixed inset-0 z-40"
+              style={{
+                backgroundColor: 'rgba(0, 0, 0, 0.6)',
+                backdropFilter: 'blur(12px)',
+              }}
             />
-            {/* Tarjeta expandida */}
+            {/* Contenido expandido (sin fondo adicional) */}
             <motion.div
               layoutId={`project-${selectedProject.id}`}
-              className="fixed inset-4 md:inset-10 z-50 bg-gray-900 rounded-lg overflow-auto p-6"
+              className="fixed inset-4 md:inset-10 z-50 overflow-auto p-6"
               onClick={(e) => e.stopPropagation()}
             >
               <button
                 onClick={() => setSelectedProjectId(null)}
-                className="absolute top-4 right-4 text-white text-2xl hover:text-gray-300 z-10"
+                className="absolute top-4 right-4 text-white text-2xl hover:text-gray-300 z-10 drop-shadow-lg"
               >
                 ✕
               </button>
-              <div className="max-w-4xl mx-auto">
-                <h2 className="text-3xl font-trajan mb-4">{selectedProject.title}</h2>
-                <img
-                  src={selectedProject.image}
-                  alt={selectedProject.title}
-                  className="w-full max-h-96 object-contain mb-4 rounded"
-                />
-                <p className="text-gray-300 mb-6">{selectedProject.description}</p>
-                
-                <h3 className="text-2xl font-trajan mb-4">Proceso de creación</h3>
-                {selectedProject.processImages && selectedProject.processImages.length > 0 ? (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="max-w-5xl mx-auto text-white">
+                <h2 className="text-4xl font-trajan mb-6 text-center md:text-left drop-shadow-lg">
+                  {selectedProject.title}
+                </h2>
+
+                <div className="flex flex-col md:flex-row gap-6 mb-8">
+                  <div className="md:w-1/2">
+                    <img
+                      src={selectedProject.image}
+                      alt={selectedProject.title}
+                      className="w-full rounded-lg shadow-2xl"
+                    />
+                  </div>
+                  <div className="md:w-1/2">
+                    <p className="text-gray-100 text-lg leading-relaxed drop-shadow-md">
+                      {selectedProject.description}
+                    </p>
+                    {selectedProject.link && (
+                      <div className="mt-4">
+                        <a
+                          href={selectedProject.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition shadow-lg"
+                        >
+                          Ver proyecto en vivo
+                        </a>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <h3 className="text-3xl font-trajan mb-4 drop-shadow-lg">Proceso de creación</h3>
+                {selectedProject.processImages?.length > 0 ? (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-fr">
                     {selectedProject.processImages.map((img, idx) => (
                       <img
                         key={idx}
                         src={img}
-                        alt={`Proceso ${idx + 1}`}
-                        className="w-full rounded-lg border border-gray-700"
+                        alt={`Paso ${idx + 1}`}
+                        className="w-full rounded-lg shadow-2xl hover:shadow-3xl transition-shadow"
                       />
                     ))}
                   </div>
                 ) : (
-                  <p className="text-gray-500">No hay imágenes del proceso disponibles.</p>
-                )}
-                
-                {selectedProject.link && (
-                  <div className="mt-6">
-                    <a
-                      href={selectedProject.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded transition"
-                    >
-                      Ver proyecto en vivo
-                    </a>
-                  </div>
+                  <p className="text-gray-300">No hay imágenes del proceso disponibles.</p>
                 )}
               </div>
             </motion.div>
