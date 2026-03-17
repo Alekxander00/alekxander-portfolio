@@ -1,18 +1,17 @@
 import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import LogoImage from '../components/ui/LogoImage';
 import { lettersData } from '../constants/categories';
 import LetterExplosion from '../components/ui/LetterExplosion';
-import DarknessOverlay from '../components/ui/DarknessOverlay';
 import ConstellationWater from '../components/ui/ConstellationWater';
+import { useNavigation } from '../contexts/NavigationContext';
+import { useMenu } from '../contexts/MenuContext';
 
 export default function Home() {
-  const navigate = useNavigate();
+  const { navigateWithDarkness } = useNavigation();
+  const { setIsOpen } = useMenu();
   const [breakingIndex, setBreakingIndex] = useState(null);
   const [explosion, setExplosion] = useState({ active: false, position: { x: 0, y: 0 } });
-  const [darkness, setDarkness] = useState({ active: false, position: { x: 0, y: 0 } });
-  const [targetCategory, setTargetCategory] = useState(null);
   const [clickPosition, setClickPosition] = useState(null);
   const [clickCount, setClickCount] = useState(0);
 
@@ -20,14 +19,14 @@ export default function Home() {
     event.stopPropagation();
     const { clientX, clientY } = event;
     setBreakingIndex(item.index);
-    setTargetCategory(item.category);
     setExplosion({ active: true, position: { x: clientX, y: clientY } });
-    setDarkness({ active: true, position: { x: clientX, y: clientY } });
+    // Iniciar oscuridad inmediatamente desde el punto de clic
+    navigateWithDarkness(`/category/${item.category}`, event);
   };
 
   const handleLogoClick = (event) => {
     event.stopPropagation();
-    navigate('/about');
+    setIsOpen(true);
   };
 
   const handleBackgroundClick = (event) => {
@@ -38,13 +37,6 @@ export default function Home() {
 
   const handleExplosionComplete = () => {
     setExplosion({ active: false, position: { x: 0, y: 0 } });
-  };
-
-  const handleDarknessComplete = () => {
-    setDarkness({ active: false, position: { x: 0, y: 0 } });
-    if (targetCategory) {
-      navigate(`/category/${targetCategory}`);
-    }
   };
 
   const containerVariants = {
@@ -73,23 +65,10 @@ export default function Home() {
       className="relative w-full h-screen flex items-center justify-center bg-black overflow-hidden"
       onClick={handleBackgroundClick}
     >
-      {/* Fondo de constelaciones */}
       <div className="absolute inset-0 z-0 pointer-events-none">
-        <ConstellationWater
-          clickPosition={clickPosition}
-          clickId={clickCount}
-        />
+        <ConstellationWater clickPosition={clickPosition} clickId={clickCount} />
       </div>
 
-      {/* Oscuridad que crece desde el clic */}
-      {darkness.active && (
-        <DarknessOverlay
-          position={darkness.position}
-          onComplete={handleDarknessComplete}
-        />
-      )}
-
-      {/* Explosión de líneas */}
       {explosion.active && (
         <LetterExplosion
           position={explosion.position}
@@ -97,7 +76,6 @@ export default function Home() {
         />
       )}
 
-      {/* Logo de fondo con animación de aparición */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -107,7 +85,7 @@ export default function Home() {
         <div className="relative w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 lg:w-[500px] lg:h-[500px] pointer-events-auto">
           <LogoImage opacity={0.15} size="w-full h-full" />
           <div
-            className="absolute w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-white/30 cursor-pointer animate-pulse"
+            className="absolute w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 rounded-full bg-white/30 cursor-pointer animate-pulse"
             style={{
               top: '65.2%',
               left: '65.5%',
@@ -115,14 +93,13 @@ export default function Home() {
               boxShadow: '0 0 15px rgba(255,255,255,0.8)',
             }}
             onClick={handleLogoClick}
-            title="Ir a Sobre mí"
+            title="Abrir menú"
           />
         </div>
       </motion.div>
 
-      {/* Nombre con animación escalonada - responsive */}
       <motion.div
-        className="flex flex-wrap justify-center gap-2 sm:gap-4 px-2 z-20"
+        className="flex gap-2 sm:gap-3 md:gap-4 text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-trajan z-20 flex-wrap justify-center px-2 sm:px-4"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
@@ -130,7 +107,7 @@ export default function Home() {
         {lettersData.map((item) => (
           <motion.span
             key={item.index}
-            className="cursor-pointer inline-block text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-trajan"
+            className="cursor-pointer inline-block"
             variants={letterVariants}
             whileHover={{
               textShadow: '0 0 20px rgba(255,255,255,0.8), 0 0 40px rgba(100,150,255,0.5)',

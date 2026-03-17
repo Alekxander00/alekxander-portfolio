@@ -10,7 +10,7 @@ export default function ExplosionParticles({ containerId, position, onComplete }
   useEffect(() => {
     const timer = setTimeout(() => {
       onComplete();
-    }, 400); // Duración de la explosión
+    }, 200); // Duración de la explosión
     return () => clearTimeout(timer);
   }, [onComplete]);
 
@@ -35,7 +35,7 @@ export default function ExplosionParticles({ containerId, position, onComplete }
         fpsLimit: 60,
         particles: {
           number: {
-            value: 40,
+            value: 15,
             density: { enable: false },
           },
           color: { value: "#ffffff" },
@@ -71,7 +71,7 @@ export default function ExplosionParticles({ containerId, position, onComplete }
           },
           move: {
             enable: true,
-            speed: 10,
+            speed: 50,
             direction: "none",
             random: true,
             straight: false,
@@ -92,7 +92,7 @@ export default function ExplosionParticles({ containerId, position, onComplete }
             y: (position.y / window.innerHeight) * 100,
           },
           rate: {
-            quantity: 40,
+            quantity: 15,
             delay: 0,
           },
           size: {
