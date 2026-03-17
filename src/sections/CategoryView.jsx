@@ -201,7 +201,72 @@ export default function CategoryView() {
       </div>
 
       {/* Detalle expandido del proyecto (opcional) */}
-      {/* ... mantén aquí tu código del detalle si lo tienes ... */}
+       {/* Detalle del proyecto expandido */}
+      <AnimatePresence>
+        {selectedProject && (
+          <>
+            {/* Overlay oscuro */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setSelectedProjectId(null)}
+              className="fixed inset-0 bg-black bg-opacity-80 z-40"
+            />
+            {/* Tarjeta expandida */}
+            <motion.div
+              layoutId={`project-${selectedProject.id}`}
+              className="fixed inset-4 md:inset-10 z-50 bg-gray-900 rounded-lg overflow-auto p-6"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                onClick={() => setSelectedProjectId(null)}
+                className="absolute top-4 right-4 text-white text-2xl hover:text-gray-300 z-10"
+              >
+                ✕
+              </button>
+              <div className="max-w-4xl mx-auto">
+                <h2 className="text-3xl font-trajan mb-4">{selectedProject.title}</h2>
+                <img
+                  src={selectedProject.image}
+                  alt={selectedProject.title}
+                  className="w-full max-h-96 object-contain mb-4 rounded"
+                />
+                <p className="text-gray-300 mb-6">{selectedProject.description}</p>
+                
+                <h3 className="text-2xl font-trajan mb-4">Proceso de creación</h3>
+                {selectedProject.processImages && selectedProject.processImages.length > 0 ? (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {selectedProject.processImages.map((img, idx) => (
+                      <img
+                        key={idx}
+                        src={img}
+                        alt={`Proceso ${idx + 1}`}
+                        className="w-full rounded-lg border border-gray-700"
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-gray-500">No hay imágenes del proceso disponibles.</p>
+                )}
+                
+                {selectedProject.link && (
+                  <div className="mt-6">
+                    <a
+                      href={selectedProject.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded transition"
+                    >
+                      Ver proyecto en vivo
+                    </a>
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
