@@ -2,7 +2,7 @@ export const projects = [
   {
     id: 1,
     title: "Proyecto de Animación 1",
-    description: "Breve descripción del proyecto de animación.",
+    description: "WIP.",
     image: "/images/proyecto1.jpg",
     category: "Animation",
     processImages: ["/images/proceso1-1.jpg", "/images/proceso1-2.jpg"],
@@ -11,7 +11,7 @@ export const projects = [
   {
     id: 2,
     title: "App Web con React",
-    description: "Descripción del proyecto de desarrollo.",
+    description: "WIP.",
     image: "/images/proyecto2.jpg",
     category: "Logic",
     processImages: [],

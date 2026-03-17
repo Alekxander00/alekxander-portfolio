@@ -21,7 +21,7 @@ export default function About() {
       <div className="max-w-3xl mx-auto pt-16 sm:pt-20">
         <h1 className="text-4xl sm:text-5xl font-trajan mb-6">Sobre Mí</h1>
         <p className="text-base sm:text-lg text-gray-300">
-          Aquí va tu biografía, estudios, habilidades, etc.
+          Soy un apasionado de la animación y el desarrollo web, siempre buscando nuevas formas de combinar creatividad y tecnología. En este portafolio encontrarás una selección de mis proyectos más recientes, desde animaciones hasta aplicaciones web. Cada proyecto refleja mi compromiso con la calidad y la innovación. ¡Gracias por visitar mi portafolio!
         </p>
       </div>
     </div>
