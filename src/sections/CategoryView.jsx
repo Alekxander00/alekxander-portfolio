@@ -1,5 +1,6 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, useAnimation, AnimatePresence } from 'framer-motion';
 import LogoImage from '../components/ui/LogoImage';
 import { validCategories } from '../constants/categories';
@@ -17,6 +18,7 @@ export default function CategoryView() {
   const [clickCount, setClickCount] = useState(0);
   const [exitPosition, setExitPosition] = useState({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
   const [isRevealed, setIsRevealed] = useState(false);
+  const [zoomedImage, setZoomedImage] = useState(null);
 
   useEffect(() => {
     if (selectedProjectId) {
@@ -191,7 +193,7 @@ export default function CategoryView() {
                 backdropFilter: 'blur(12px)',
               }}
             />
-            {/* Contenido expandido (sin fondo adicional) */}
+            {/* Contenido expandido */}
             <motion.div
               layoutId={`project-${selectedProject.id}`}
               className="fixed inset-4 md:inset-10 z-50 overflow-auto p-6"
@@ -203,58 +205,111 @@ export default function CategoryView() {
               >
                 ✕
               </button>
-              <div className="max-w-5xl mx-auto text-white">
-                <h2 className="text-4xl font-trajan mb-6 text-center md:text-left drop-shadow-lg">
+              <div className="max-w-6xl mx-auto text-white">
+                <h2 className="text-4xl md:text-5xl font-trajan mb-8 text-center md:text-left drop-shadow-lg">
                   {selectedProject.title}
                 </h2>
 
-                <div className="flex flex-col md:flex-row gap-6 mb-8">
-                  <div className="md:w-1/2">
+                {/* Fila principal: imagen + descripción */}
+                <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 mb-12">
+                  {/* Imagen principal */}
+                  <div
+                    className="lg:w-2/5 cursor-pointer group"
+                    onClick={() => setZoomedImage(selectedProject.image)}
+                  >
                     <img
                       src={selectedProject.image}
                       alt={selectedProject.title}
-                      className="w-full rounded-lg shadow-2xl"
+                      className="w-full rounded-xl shadow-2xl transition-transform duration-300 group-hover:scale-[1.02]"
                     />
                   </div>
-                  <div className="md:w-1/2">
-                    <p className="text-gray-100 text-lg leading-relaxed drop-shadow-md">
-                      {selectedProject.description}
-                    </p>
+
+                  {/* Descripción */}
+                  <div className="lg:w-3/5">
+                    <div className="prose prose-invert prose-lg max-w-none">
+                      <div className="whitespace-pre-line text-gray-200 text-base md:text-lg leading-relaxed">
+                        {selectedProject.description}
+                      </div>
+                    </div>
                     {selectedProject.link && (
-                      <div className="mt-4">
+                      <div className="mt-8">
                         <a
                           href={selectedProject.link}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition shadow-lg"
+                          className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg transition shadow-lg"
                         >
-                          Ver proyecto en vivo
+                          Ver proyecto en vivo →
                         </a>
                       </div>
                     )}
                   </div>
                 </div>
 
-                <h3 className="text-3xl font-trajan mb-4 drop-shadow-lg">Proceso de creación</h3>
+                {/* Separador decorativo */}
+                <div className="w-24 h-px bg-white/20 mx-auto lg:mx-0 my-8"></div>
+
+                {/* Proceso de creación */}
+                <h3 className="text-3xl md:text-4xl font-trajan mb-6 drop-shadow-lg inline-block border-b-2 border-white/30 pb-2">
+                  Proceso de creación
+                </h3>
+
                 {selectedProject.processImages?.length > 0 ? (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-fr">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
                     {selectedProject.processImages.map((img, idx) => (
-                      <img
+                      <div
                         key={idx}
-                        src={img}
-                        alt={`Paso ${idx + 1}`}
-                        className="w-full rounded-lg shadow-2xl hover:shadow-3xl transition-shadow"
-                      />
+                        className="group cursor-pointer"
+                        onClick={() => setZoomedImage(img)}
+                      >
+                        <div className="overflow-hidden rounded-xl shadow-2xl">
+                          <img
+                            src={img}
+                            alt={`Paso ${idx + 1}`}
+                            className="w-full h-56 object-cover transition-transform duration-300 group-hover:scale-105"
+                          />
+                        </div>
+                        
+                      </div>
                     ))}
                   </div>
                 ) : (
-                  <p className="text-gray-300">No hay imágenes del proceso disponibles.</p>
+                  <p className="text-gray-400 mt-4">No hay imágenes del proceso disponibles.</p>
                 )}
               </div>
             </motion.div>
           </>
         )}
       </AnimatePresence>
+
+      {/* Modal de zoom con Portal */}
+      {zoomedImage &&
+        createPortal(
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setZoomedImage(null)}
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-sm"
+          >
+            <motion.img
+              src={zoomedImage}
+              alt="Zoom"
+              className="max-w-[90vw] max-h-[90vh] object-contain rounded-lg shadow-2xl"
+              initial={{ scale: 0.8 }}
+              animate={{ scale: 1 }}
+              exit={{ scale: 0.8 }}
+              onClick={(e) => e.stopPropagation()}
+            />
+            <button
+              onClick={() => setZoomedImage(null)}
+              className="absolute top-4 right-4 text-white text-3xl hover:text-gray-300"
+            >
+              ✕
+            </button>
+          </motion.div>,
+          document.body
+        )}
     </div>
   );
 }
