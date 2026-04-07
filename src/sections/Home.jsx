@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { useState } from 'react';
 import LogoImage from '../components/ui/LogoImage';
 import { lettersData } from '../constants/categories';
+import { projects } from '../constants/projects'; // ← Importar proyectos
 import LetterExplosion from '../components/ui/LetterExplosion';
 import ConstellationWater from '../components/ui/ConstellationWater';
 import { useNavigation } from '../contexts/NavigationContext';
@@ -15,12 +16,16 @@ export default function Home() {
   const [clickPosition, setClickPosition] = useState(null);
   const [clickCount, setClickCount] = useState(0);
 
+  // Función para verificar si una categoría tiene proyectos
+  const categoryHasProjects = (category) => {
+    return projects.some(project => project.category === category);
+  };
+
   const handleLetterClick = (item, event) => {
     event.stopPropagation();
     const { clientX, clientY } = event;
     setBreakingIndex(item.index);
     setExplosion({ active: true, position: { x: clientX, y: clientY } });
-    // Iniciar oscuridad inmediatamente desde el punto de clic
     navigateWithDarkness(`/category/${item.category}`, event);
   };
 
@@ -103,24 +108,35 @@ export default function Home() {
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        style={{ scrollbarWidth: 'none' }} /* Oculta scrollbar en Firefox */
+        style={{ scrollbarWidth: 'none' }}
       >
-        {lettersData.map((item) => (
-          <motion.span
-            key={item.index}
-            className="cursor-pointer inline-block font-trajan text-[clamp(1.8rem,7vw,3.5rem)] sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-9xl"
-            variants={letterVariants}
-            whileHover={{
-              textShadow: '0 0 20px rgba(255,255,255,0.8), 0 0 40px rgba(100,150,255,0.5)',
-              scale: 1.1,
-              transition: { duration: 0.2 },
-            }}
-            animate={breakingIndex === item.index ? { opacity: 0, transition: { duration: 0.1 } } : {}}
-            onClick={(e) => handleLetterClick(item, e)}
-          >
-            {item.letter}
-          </motion.span>
-        ))}
+        {lettersData.map((item) => {
+          const hasProjects = categoryHasProjects(item.category);
+          return (
+            <motion.span
+              key={item.index}
+              className={`cursor-pointer inline-block font-trajan text-[clamp(1.8rem,7vw,3.5rem)] sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-9xl ${
+                hasProjects ? 'pulse-glow' : ''
+              }`}
+              variants={letterVariants}
+              whileHover={{
+                textShadow: '0 0 20px rgba(255,255,255,0.9), 0 0 40px rgba(100,150,255,0.7)',
+                scale: 1.1,
+                transition: { duration: 0.2 },
+              }}
+              animate={breakingIndex === item.index ? { opacity: 0, transition: { duration: 0.1 } } : {}}
+              onClick={(e) => handleLetterClick(item, e)}
+              style={{
+                textShadow: hasProjects
+                  ? '0 0 8px rgba(255,255,255,0.8), 0 0 15px rgba(255,255,255,0.5)'
+                  : '0 0 2px rgba(255,255,255,0.2)',
+                color: hasProjects ? '#ffffff' : '#777777',
+              }}
+            >
+              {item.letter}
+            </motion.span>
+          );
+        })}
       </motion.div>
     </div>
   );

@@ -20,6 +20,61 @@ export default function CategoryView() {
   const [isRevealed, setIsRevealed] = useState(false);
   const [zoomedImage, setZoomedImage] = useState(null);
 
+  // Función para formatear la descripción: títulos, listas, párrafos
+  const formatDescription = (text) => {
+    if (!text) return null;
+
+    const lines = text.split('\n');
+    const elements = [];
+    let i = 0;
+
+    while (i < lines.length) {
+      const line = lines[i];
+      const trimmed = line.trim();
+
+      // Detectar títulos con === TÍTULO ===
+      const titleMatch = trimmed.match(/^={3,}\s*(.+?)\s*={3,}$/);
+      if (titleMatch) {
+        const titleText = titleMatch[1];
+        elements.push(
+          <h3
+            key={i}
+            className="text-xl md:text-2xl font-trajan text-white border-b border-white/30 pb-2 mt-6 mb-4"
+          >
+            {titleText}
+          </h3>
+        );
+        i++;
+        continue;
+      }
+
+      // Detectar listas que empiezan con • o -
+      if (trimmed.startsWith('•') || trimmed.startsWith('-')) {
+        const listItems = [];
+        while (i < lines.length && (lines[i].trim().startsWith('•') || lines[i].trim().startsWith('-'))) {
+          const itemText = lines[i].trim().substring(1).trim();
+          listItems.push(<li key={i} className="ml-5 mb-1 text-white">{itemText}</li>);
+          i++;
+        }
+        elements.push(<ul key={`list-${i}`} className="list-disc text-white space-y-1 my-2">{listItems}</ul>);
+        continue;
+      }
+
+      // Línea vacía -> separador vertical
+      if (trimmed === '') {
+        elements.push(<div key={i} className="h-3"></div>);
+        i++;
+        continue;
+      }
+
+      // Párrafo normal
+      elements.push(<p key={i} className="mb-2 leading-relaxed text-white">{line}</p>);
+      i++;
+    }
+
+    return elements;
+  };
+
   useEffect(() => {
     if (selectedProjectId) {
       document.body.style.overflow = 'hidden';
@@ -195,86 +250,81 @@ export default function CategoryView() {
             />
             {/* Contenido expandido */}
             <motion.div
-              layoutId={`project-${selectedProject.id}`}
-              className="fixed inset-4 md:inset-10 z-50 overflow-auto p-6"
-              onClick={(e) => e.stopPropagation()}
-            >
+  layoutId={`project-${selectedProject.id}`}
+  className="fixed inset-4 md:inset-10 z-50 overflow-auto p-4 md:p-6 custom-scroll"
+  onClick={(e) => e.stopPropagation()}
+>
               <button
                 onClick={() => setSelectedProjectId(null)}
                 className="absolute top-4 right-4 text-white text-2xl hover:text-gray-300 z-10 drop-shadow-lg"
               >
                 ✕
               </button>
-              <div className="max-w-6xl mx-auto text-white">
-                <h2 className="text-4xl md:text-5xl font-trajan mb-8 text-center md:text-left drop-shadow-lg">
+              <div className="max-w-4xl mx-auto text-white">
+                <h2 className="text-3xl md:text-5xl font-trajan mb-6 text-center drop-shadow-lg">
                   {selectedProject.title}
                 </h2>
 
-                {/* Fila principal: imagen + descripción */}
-                <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 mb-12">
-                  {/* Imagen principal */}
+                {/* Imagen principal centrada */}
+                <div className="flex justify-center mb-8">
                   <div
-                    className="lg:w-2/5 cursor-pointer group"
+                    className="cursor-pointer group max-w-2xl w-full"
                     onClick={() => setZoomedImage(selectedProject.image)}
                   >
                     <img
                       src={selectedProject.image}
                       alt={selectedProject.title}
-                      className="w-full rounded-xl shadow-2xl transition-transform duration-300 group-hover:scale-[1.02]"
+                      className="w-full rounded-xl shadow-2xl transition-transform duration-300 group-hover:scale-[1.02] border border-white/10"
                     />
-                  </div>
-
-                  {/* Descripción */}
-                  <div className="lg:w-3/5">
-                    <div className="prose prose-invert prose-lg max-w-none">
-                      <div className="whitespace-pre-line text-gray-200 text-base md:text-lg leading-relaxed">
-                        {selectedProject.description}
-                      </div>
-                    </div>
-                    {selectedProject.link && (
-                      <div className="mt-8">
-                        <a
-                          href={selectedProject.link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg transition shadow-lg"
-                        >
-                          Ver proyecto en vivo →
-                        </a>
-                      </div>
-                    )}
                   </div>
                 </div>
 
-                {/* Separador decorativo */}
-                <div className="w-24 h-px bg-white/20 mx-auto lg:mx-0 my-8"></div>
-
-                {/* Proceso de creación */}
-                <h3 className="text-3xl md:text-4xl font-trajan mb-6 drop-shadow-lg inline-block border-b-2 border-white/30 pb-2">
-                  Proceso de creación
-                </h3>
-
-                {selectedProject.processImages?.length > 0 ? (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
-                    {selectedProject.processImages.map((img, idx) => (
-                      <div
-                        key={idx}
-                        className="group cursor-pointer"
-                        onClick={() => setZoomedImage(img)}
-                      >
-                        <div className="overflow-hidden rounded-xl shadow-2xl">
-                          <img
-                            src={img}
-                            alt={`Paso ${idx + 1}`}
-                            className="w-full h-56 object-cover transition-transform duration-300 group-hover:scale-105"
-                          />
-                        </div>
-                        
-                      </div>
-                    ))}
+                {/* Descripción a ancho completo con formato */}
+                <div className="prose prose-invert prose-sm md:prose-base max-w-none mb-6">
+                  <div className="text-gray-200 text-sm md:text-base leading-relaxed bg-black/30 p-5 md:p-6 rounded-xl border border-white/10">
+                    {formatDescription(selectedProject.description)}
                   </div>
-                ) : (
-                  <p className="text-gray-400 mt-4">No hay imágenes del proceso disponibles.</p>
+                </div>
+
+                {/* Enlace al proyecto (si existe) */}
+{selectedProject.link && (
+  <div className="flex justify-center mt-6 mb-8">
+    <a
+      href={selectedProject.link}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="inline-block px-6 py-2.5 rounded-lg border border-white/60 text-white font-semibold transition-all duration-300 hover:border-white hover:text-white hover:shadow-[0_0_12px_rgba(255,255,255,0.5)]"
+    >
+       {selectedProject.buttonText || "Ver proyecto →"}
+    </a>
+  </div>
+)}
+
+                {/* Screenshots (solo si hay) */}
+                {selectedProject.processImages && selectedProject.processImages.length > 0 && (
+                  <>
+                    <div className="w-24 h-px bg-white/20 mx-auto my-8"></div>
+                    <h3 className="text-2xl md:text-3xl font-trajan mb-5 text-center text-white">
+                      Screenshots
+                    </h3>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-5">
+                      {selectedProject.processImages.map((img, idx) => (
+                        <div
+                          key={idx}
+                          className="group cursor-pointer"
+                          onClick={() => setZoomedImage(img)}
+                        >
+                          <div className="overflow-hidden rounded-xl shadow-2xl">
+                            <img
+                              src={img}
+                              alt={`Captura ${idx + 1}`}
+                              className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
+                            />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </>
                 )}
               </div>
             </motion.div>
