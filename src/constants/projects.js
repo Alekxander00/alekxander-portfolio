@@ -158,7 +158,7 @@ Control: Teclado + ratón / Mando Xbox/PlayStation
 
 === ESTADO ===
 🔄 En desarrollo activo. Fase 1 (Mundo 1) en progreso. Todos los sistemas base están implementados y jugables. El diseño completo está documentado en un GDD de 14 secciones.`,
-  image: "/images/MuseoEmociones_Placeholder.png", // ← Cambia por una captura de Unity o arte conceptual cuando tengas
+  image: "/images/Museo.png", // ← Cambia por una captura de Unity o arte conceptual cuando tengas
   category: "Experience",  // O "Experience" si prefieres, pero "Kode" ya tiene proyectos similares
   processImages: [], // Aquí puedes añadir capturas del editor de Unity, diagramas de mecánicas, etc.
   link: "", // Si tienes un repositorio de GitHub o una build jugable, pon el enlace aquí
