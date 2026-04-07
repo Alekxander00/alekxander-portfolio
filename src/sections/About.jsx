@@ -72,8 +72,8 @@ export default function About() {
           </p>
           <p className="text-base md:text-lg leading-relaxed mb-4">
             Mi trabajo se centra en la <span className="text-white font-semibold">calidad hacia el usuario</span>: cada interacción debe ser fluida, cada animación debe contar algo, 
-            y cada detalle debe tener una razón de ser. Me obsesiona la <span className="text-white font-semibold">interactividad</span> y la <span className="text-white font-semibold">expresividad </span> 
-            porque creo que el software puede ser funcional y, al mismo tiempo, emocionante. <span className="text-white font-semibold">"Es peligroso ir solo"</span>, por eso valoro tanto el trabajo en equipo y las comunidades.
+            y cada detalle debe tener una razón de ser. Me obsesiona la <span className="text-white font-semibold">interactividad</span> y la <span className="text-white font-semibold">expresividad</span> 
+            porque creo que el software puede ser funcional y, al mismo tiempo, emocionante.
           </p>
           <p className="text-base md:text-lg leading-relaxed">
             Desde sistemas complejos de <span className="text-white font-semibold">movimiento en 3D</span> hasta interfaces web elegantes, busco que cada proyecto tenga 
@@ -123,6 +123,39 @@ export default function About() {
             </a>
           </div>
           <p className="text-gray-400 text-sm mt-4">*Ambos en formato PDF, una página cada uno.</p>
+        </motion.div>
+
+        {/* Bloque de redes sociales */}
+        <motion.div variants={itemVariants} className="text-center mt-10">
+          <h2 className="text-2xl md:text-3xl font-trajan mb-6">Conéctate conmigo</h2>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <a
+              href="https://www.instagram.com/alekxander____/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-lg border border-white/60 text-white font-semibold transition-all duration-300 hover:border-white hover:shadow-[0_0_12px_rgba(255,255,255,0.5)]"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect>
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line>
+              </svg>
+              Instagram
+            </a>
+            <a
+              href="https://www.linkedin.com/in/alekxander-ordo%C3%B1ez-2797133b7/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-lg border border-white/60 text-white font-semibold transition-all duration-300 hover:border-white hover:shadow-[0_0_12px_rgba(255,255,255,0.5)]"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                <rect width="4" height="12" x="2" y="9"></rect>
+                <circle cx="4" cy="4" r="2"></circle>
+              </svg>
+              LinkedIn
+            </a>
+          </div>
         </motion.div>
 
         <motion.div
