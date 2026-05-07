@@ -162,6 +162,69 @@ Control: Teclado + ratón / Mando Xbox/PlayStation
   category: "Experience",  // O "Experience" si prefieres, pero "Kode" ya tiene proyectos similares
   processImages: [], // Aquí puedes añadir capturas del editor de Unity, diagramas de mecánicas, etc.
   link: "", // Si tienes un repositorio de GitHub o una build jugable, pon el enlace aquí
+},
+{
+  id: 15,
+  title: "Kinet - Experiencia Web Interactiva en React",
+  description: `Proyecto de diseño y desarrollo frontend para una empresa ficticia llamada Kinet, enfocada en comunicación interactiva y branding generativo. La web fue concebida como una pieza de marca y no como una landing convencional: una experiencia visual inmersiva, modular y preparada para mostrar proyectos reales dentro de un laboratorio interactivo.
+
+=== OBJETIVO DEL PROYECTO ===
+Diseñar una web que comunicara el valor de Kinet desde la propia experiencia de navegación. La meta no era solo “explicar servicios”, sino demostrar cómo una marca puede verse, sentirse y moverse de forma distinta mediante interacción, ritmo visual y una dirección gráfica clara.
+
+=== CONCEPTO GENERAL ===
+La página mezcla lenguaje editorial, composición experimental y comportamiento interactivo. Se construyó como un recorrido de marca inspirado en estudios digitales como MakeMePulse y Active Theory, manteniendo una experiencia usable, clara y adaptable para mostrar trabajos reales.
+
+=== CARACTERÍSTICAS IMPLEMENTADAS ===
+• Hero inmersivo con composición tipográfica de alto impacto
+• Fondo interactivo en canvas con líneas dinámicas que reaccionan al mouse
+• Soundtrack generativo integrado con Web Audio API
+• Reacción visual del fondo al audio (graves, medios, agudos y pulsos)
+• Cursor personalizado contextual para reforzar interacción
+• Header flotante tipo dock con identidad visual propia
+• Sección narrativa tipo “story engine” para explicar el valor de la marca
+• Módulo “lab” preparado para mostrar proyectos reales, renders, videos o demos
+• Cierre/contacto con copy adaptado a tono de marca
+• Arquitectura modular para cambiar contenido sin rehacer la UI
+
+=== PROCESO DE DISEÑO Y DESARROLLO ===
+1. Investigación visual y conceptual:
+Se definió una dirección inspirada en experiencias web experimentales, evitando plantillas tradicionales y buscando una identidad más cercana a una instalación digital que a una página corporativa estándar.
+
+2. Sistema visual:
+Se trabajó con la paleta #180F2A, #FFFFFF y #C6FF34, junto con tipografía Poppins + Urbanist. Se ajustó la jerarquía para que el sitio mantuviera personalidad sin perder legibilidad.
+
+3. Arquitectura modular:
+El contenido se separó de la interfaz mediante archivos de datos en JavaScript, permitiendo reemplazar proyectos, textos y módulos de forma sencilla desde una sola fuente.
+
+4. Interactividad:
+Se desarrollaron efectos propios como cursor custom, backdrop en canvas, movimiento reactivo al puntero y una capa de audio generativo conectada al fondo.
+
+5. Iteración y pulido:
+Se corrigieron problemas de tipografía, ritmo visual, espaciado, copy, jerarquía y deploy, afinando la experiencia hasta que la página se sintiera más única y coherente con la propuesta de la marca.
+
+=== TECNOLOGÍAS ===
+Framework: React
+Bundler: Vite
+Estilos: CSS Modules
+Interacción visual: Canvas API
+Audio: Web Audio API
+Lenguaje: JavaScript
+
+=== APRENDIZAJES / ENFOQUE TÉCNICO ===
+• Construcción de interfaces de marca no convencionales sin sacrificar usabilidad
+• Separación entre contenido y presentación para escalabilidad
+• Integración de audio reactivo con elementos visuales en tiempo real
+• Diseño de módulos reutilizables para portafolio y storytelling
+• Resolución de problemas de deploy y limpieza de repositorio para producción
+
+=== ESTADO ===
+✅ Proyecto funcional y terminado como experiencia conceptual de marca.
+✅ Preparado para recibir proyectos reales dentro del módulo de laboratorio.
+✅ Deploy-ready para producción.`,
+  image: "/images/Kinet.png",
+  category: "Experience",
+  processImages: [],
+  link: "https://kinet-web.vercel.app/"
 }
-  // ... resto de proyectos
+
 ];
