@@ -13,9 +13,9 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Clase para la fuente Trajan Pro (cuando la tengas) */
+/* Clase para la fuente Trajan Pro / Cinzel cinemática */
 .font-trajan {
-  font-family: 'Trajan Pro', serif;
+  font-family: 'Cinzel Decorative', 'Cinzel', 'Trajan Pro', serif;
 }
 
 @keyframes softPulse {

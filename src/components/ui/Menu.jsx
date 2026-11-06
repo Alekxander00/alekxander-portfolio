@@ -4,13 +4,22 @@ import { useMenu } from '../../contexts/MenuContext';
 import { lettersData } from '../../constants/categories';
 import LogoImage from './LogoImage';
 
-export default function Menu() {
+export default function Menu({ onSelectCategory }) {
   const { isOpen, setIsOpen } = useMenu();
   const { navigateWithDarkness } = useNavigation();
 
   const handleItemClick = (path, event) => {
     setIsOpen(false);
     navigateWithDarkness(path, event);
+  };
+
+  const handleCategoryClick = (category, event) => {
+    setIsOpen(false);
+    if (onSelectCategory) {
+      onSelectCategory(category);
+    } else {
+      navigateWithDarkness(`/?category=${category}`, event);
+    }
   };
 
   return (
@@ -23,24 +32,26 @@ export default function Menu() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setIsOpen(false)}
-            className="fixed inset-0 bg-black bg-opacity-70 z-40"
+            className="fixed inset-0 bg-black/80 z-[9998]"
           />
-          {/* Panel del menú con gradiente de izquierda a derecha */}
+          {/* Panel del menú */}
           <motion.div
             initial={{ x: '-100%' }}
             animate={{ x: 0 }}
             exit={{ x: '-100%' }}
             transition={{ type: 'tween', duration: 0.3 }}
-            className="fixed top-0 left-0 h-full w-64 z-50 p-6 shadow-xl"
-            style={{
-              background: 'linear-gradient(to right, rgba(0,0,0,0.95), rgba(0,0,0,0.7), rgba(0,0,0,0))',
-            }}
+            className="fixed top-0 left-0 h-full w-64 z-[9999] p-6 shadow-2xl bg-zinc-950 border-r border-white/10"
           >
-            {/* Logo en la misma posición */}
-            <div className="mb-8">
+            <div className="mb-8 flex items-center justify-between">
               <div className="w-12 h-12">
                 <LogoImage opacity={1} size="w-full h-full" />
               </div>
+              <button
+                onClick={() => setIsOpen(false)}
+                className="text-zinc-400 hover:text-white text-xl font-bold p-1"
+              >
+                ✕
+              </button>
             </div>
             <nav>
               <ul className="space-y-4">
@@ -64,16 +75,15 @@ export default function Menu() {
                     Sobre mí
                   </motion.button>
                 </li>
-                <li className="border-t border-gray-700 my-2 pt-2"></li>
+                <li className="border-t border-zinc-800 my-2 pt-2"></li>
                 {lettersData.map((item) => (
                   <li key={item.index}>
                     <motion.button
                       whileHover={{ textShadow: "0 0 12px rgba(255,255,255,1)" }}
-                      onClick={(e) => handleItemClick(`/category/${item.category}`, e)}
-                      className="text-white hover:text-white transition-colors text-lg font-trajan text-left w-full"
-                      style={{ textShadow: "0 0 5px rgba(255,255,255,0.6)" }}
+                      onClick={(e) => handleCategoryClick(item.category, e)}
+                      className="text-zinc-300 hover:text-white transition-colors text-base font-trajan text-left w-full"
                     >
-                      {item.category}
+                      {item.letter} - {item.category}
                     </motion.button>
                   </li>
                 ))}

@@ -3,6 +3,7 @@ import { useState } from 'react';
 import LogoImage from '../components/ui/LogoImage';
 import { useMenu } from '../contexts/MenuContext';
 import ConstellationWater from '../components/ui/ConstellationWater';
+import Menu from '../components/ui/Menu';
 
 export default function About() {
   const { setIsOpen } = useMenu();
@@ -112,14 +113,14 @@ export default function About() {
               download
               className="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-lg border border-white/60 text-white font-semibold transition-all duration-300 hover:border-white hover:shadow-[0_0_12px_rgba(255,255,255,0.5)]"
             >
-              📄 CV Estilizado
+              CV Estilizado (PDF)
             </a>
             <a
               href="/cv-ats.pdf"
               download
               className="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-lg border border-white/60 text-white font-semibold transition-all duration-300 hover:border-white hover:shadow-[0_0_12px_rgba(255,255,255,0.5)]"
             >
-              📄 CV ATS (Legible)
+              CV ATS Legible (PDF)
             </a>
           </div>
           <p className="text-gray-400 text-sm mt-4">*Ambos en formato PDF, una página cada uno.</p>
@@ -165,6 +166,7 @@ export default function About() {
           <p>“Construyo puentes entre la lógica y la emoción”</p>
         </motion.div>
       </motion.div>
+      <Menu />
     </div>
   );
 }

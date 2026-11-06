@@ -1,79 +1,85 @@
-import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { useState, useEffect, Suspense } from 'react';
+import { Canvas } from '@react-three/fiber';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useSearchParams } from 'react-router-dom';
+import HubScene from '../components/3d/hub/HubScene';
+import CategoryMiniWorld from '../components/3d/miniworlds/CategoryMiniWorld';
 import LogoImage from '../components/ui/LogoImage';
-import { lettersData } from '../constants/categories';
-import { projects } from '../constants/projects'; // ← Importar proyectos
 import LetterExplosion from '../components/ui/LetterExplosion';
-import ConstellationWater from '../components/ui/ConstellationWater';
-import { useNavigation } from '../contexts/NavigationContext';
+import QuickAccessModal from '../components/ui/QuickAccessModal';
+import ProjectDetailModal from '../components/ui/ProjectDetailModal';
+import Menu from '../components/ui/Menu';
 import { useMenu } from '../contexts/MenuContext';
+import { projects } from '../constants/projects';
 
 export default function Home() {
-  const { navigateWithDarkness } = useNavigation();
-  const { setIsOpen } = useMenu();
-  const [breakingIndex, setBreakingIndex] = useState(null);
+  const { isOpen: isMenuOpen, setIsOpen: setIsMenuOpen } = useMenu();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [activeView, setActiveView] = useState('HUB');
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedProject, setSelectedProject] = useState(null);
+  const [quickAccessOpen, setQuickAccessOpen] = useState(false);
   const [explosion, setExplosion] = useState({ active: false, position: { x: 0, y: 0 } });
-  const [clickPosition, setClickPosition] = useState(null);
-  const [clickCount, setClickCount] = useState(0);
 
-  // Función para verificar si una categoría tiene proyectos
-  const categoryHasProjects = (category) => {
-    return projects.some(project => project.category === category);
+  // Detectar si hay un parámetro de búsqueda ?category=Nombre en la URL
+  useEffect(() => {
+    const catParam = searchParams.get('category');
+    if (catParam) {
+      setSelectedCategory(catParam);
+      setActiveView('MINI_WORLD');
+    }
+  }, [searchParams]);
+
+  const handleEnterCategory = (item) => {
+    setExplosion({
+      active: true,
+      position: { x: window.innerWidth / 2, y: window.innerHeight / 2 },
+    });
+
+    setSelectedCategory(item.category);
+    setActiveView('MINI_WORLD');
   };
 
-  const handleLetterClick = (item, event) => {
-    event.stopPropagation();
-    const { clientX, clientY } = event;
-    setBreakingIndex(item.index);
-    setExplosion({ active: true, position: { x: clientX, y: clientY } });
-    navigateWithDarkness(`/category/${item.category}`, event);
-  };
-
-  const handleLogoClick = (event) => {
-    event.stopPropagation();
-    setIsOpen(true);
-  };
-
-  const handleBackgroundClick = (event) => {
-    const { clientX, clientY } = event;
-    setClickPosition({ x: clientX, y: clientY });
-    setClickCount(prev => prev + 1);
+  const handleReturnToHub = () => {
+    setActiveView('HUB');
+    setSelectedCategory(null);
+    if (searchParams.has('category')) {
+      setSearchParams({});
+    }
   };
 
   const handleExplosionComplete = () => {
     setExplosion({ active: false, position: { x: 0, y: 0 } });
   };
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.2,
-      },
-    },
+  const handleMenuSelectCategory = (category) => {
+    setSelectedCategory(category);
+    setActiveView('MINI_WORLD');
   };
 
-  const letterVariants = {
-    hidden: { opacity: 0, y: 20, filter: 'blur(5px)' },
-    visible: {
-      opacity: 1,
-      y: 0,
-      filter: 'blur(0px)',
-      transition: { duration: 0.6, ease: 'easeOut' },
-    },
-  };
+  // Determinar si algún modal 2D está abierto para ocultar los badges 3D HTML
+  const isModalOpen = quickAccessOpen || selectedProject !== null || isMenuOpen;
 
   return (
-    <div
-      className="relative w-full h-screen flex items-center justify-center bg-black overflow-hidden"
-      onClick={handleBackgroundClick}
-    >
-      <div className="absolute inset-0 z-0 pointer-events-none">
-        <ConstellationWater clickPosition={clickPosition} clickId={clickCount} />
-      </div>
+    <div className="relative w-full h-screen bg-black overflow-hidden select-none">
+      {/* Escena R3F 3D */}
+      <Canvas camera={{ position: [0, 14, 22], fov: 45 }} shadows gl={{ antialias: true, alpha: false }}>
+        <color attach="background" args={['#030308']} />
+        <Suspense fallback={null}>
+          {activeView === 'HUB' ? (
+            <HubScene onEnterCategory={handleEnterCategory} isModalOpen={isModalOpen} />
+          ) : (
+            <CategoryMiniWorld
+              category={selectedCategory}
+              onSelectProject={setSelectedProject}
+              onReturnToHub={handleReturnToHub}
+              hideHtml={isModalOpen}
+            />
+          )}
+        </Suspense>
+      </Canvas>
 
+      {/* Explosión Mágica al Entrar a Portal */}
       {explosion.active && (
         <LetterExplosion
           position={explosion.position}
@@ -81,63 +87,82 @@ export default function Home() {
         />
       )}
 
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1, delay: 0.8 }}
-        className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none"
-      >
-        <div className="relative w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 lg:w-[500px] lg:h-[500px] pointer-events-auto">
-          <LogoImage opacity={0.15} size="w-full h-full" />
-          <div
-            className="absolute w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 rounded-full bg-white/30 cursor-pointer animate-pulse"
-            style={{
-              top: '65.2%',
-              left: '65.5%',
-              transform: 'translate(-50%, -50%)',
-              boxShadow: '0 0 15px rgba(255,255,255,0.8)',
-            }}
-            onClick={handleLogoClick}
-            title="Abrir menú"
-          />
+      {/* Header UI Izquierdo: Logo + Menú */}
+      <div className="absolute top-4 left-4 z-30 flex items-center gap-3">
+        <div
+          className="w-10 h-10 sm:w-12 sm:h-12 cursor-pointer hover:scale-105 transition-transform"
+          onClick={() => setIsMenuOpen(true)}
+          title="Abrir Menú Principal"
+        >
+          <LogoImage opacity={1} size="w-full h-full" />
         </div>
-      </motion.div>
+        <div className="hidden sm:flex flex-col">
+          <span className="font-trajan text-white text-lg font-bold tracking-wider leading-none">
+            ALEKXANDER
+          </span>
+          <span className="text-blue-400 text-xs tracking-widest uppercase font-semibold">
+            {activeView === 'HUB' ? 'Hub del Mago' : `Dimensión: ${selectedCategory}`}
+          </span>
+        </div>
+      </div>
 
-      <motion.div
-        className="flex gap-1 sm:gap-2 md:gap-3 lg:gap-4 z-20 flex-nowrap overflow-x-auto justify-center px-2 sm:px-4"
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-        style={{ scrollbarWidth: 'none' }}
-      >
-        {lettersData.map((item) => {
-          const hasProjects = categoryHasProjects(item.category);
-          return (
-            <motion.span
-              key={item.index}
-              className={`cursor-pointer inline-block font-trajan text-[clamp(1.8rem,7vw,3.5rem)] sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-9xl ${
-                hasProjects ? 'pulse-glow' : ''
-              }`}
-              variants={letterVariants}
-              whileHover={{
-                textShadow: '0 0 20px rgba(255,255,255,0.9), 0 0 40px rgba(100,150,255,0.7)',
-                scale: 1.1,
-                transition: { duration: 0.2 },
-              }}
-              animate={breakingIndex === item.index ? { opacity: 0, transition: { duration: 0.1 } } : {}}
-              onClick={(e) => handleLetterClick(item, e)}
-              style={{
-                textShadow: hasProjects
-                  ? '0 0 8px rgba(255,255,255,0.8), 0 0 15px rgba(255,255,255,0.5)'
-                  : '0 0 2px rgba(255,255,255,0.2)',
-                color: hasProjects ? '#ffffff' : '#777777',
-              }}
-            >
-              {item.letter}
-            </motion.span>
-          );
-        })}
-      </motion.div>
+      {/* Header UI Derecho: Botón Modo Lista Directo */}
+      <div className="absolute top-4 right-4 z-30 flex items-center gap-2">
+        {activeView === 'MINI_WORLD' && (
+          <button
+            onClick={handleReturnToHub}
+            className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-indigo-950/80 border border-indigo-400 text-white font-trajan text-xs sm:text-sm font-semibold hover:bg-indigo-900 transition-all active:scale-95 shadow-[0_0_15px_rgba(99,102,241,0.6)]"
+          >
+            <span>Volver al Hub</span>
+          </button>
+        )}
+
+        <button
+          onClick={() => setQuickAccessOpen(true)}
+          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-black/70 backdrop-blur-md border border-white/20 text-white font-trajan text-xs sm:text-sm font-semibold hover:border-blue-400 hover:shadow-[0_0_20px_rgba(59,130,246,0.6)] transition-all active:scale-95"
+        >
+          <span>Ver Todo Directo</span>
+        </button>
+      </div>
+
+      {/* Pie de Pantalla: Instrucciones de Control del Mago */}
+      <AnimatePresence>
+        {activeView === 'HUB' && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            transition={{ duration: 0.5 }}
+            className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 pointer-events-none text-center"
+          >
+            <div className="px-5 py-2.5 rounded-full bg-black/80 backdrop-blur-md border border-blue-500/30 text-zinc-200 text-xs sm:text-sm font-sans flex items-center gap-3 shadow-[0_0_25px_rgba(0,0,0,0.8)]">
+              <span className="text-blue-400 font-bold">Teclas W, A, S, D</span>
+              <span>o Flechas para Mover al Mago</span>
+              <span className="text-zinc-600">|</span>
+              <span>Camina hacia un Portal Mágico</span>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Menú Principal Desplegable */}
+      <Menu onSelectCategory={handleMenuSelectCategory} />
+
+      {/* Modal de Acceso Rápido */}
+      <QuickAccessModal
+        isOpen={quickAccessOpen}
+        onClose={() => setQuickAccessOpen(false)}
+        onSelectCategory={handleMenuSelectCategory}
+        onSelectProject={setSelectedProject}
+      />
+
+      {/* Modal de Detalle de Proyecto Seleccionado */}
+      {selectedProject && (
+        <ProjectDetailModal
+          project={selectedProject}
+          onClose={() => setSelectedProject(null)}
+        />
+      )}
     </div>
   );
 }
