@@ -210,10 +210,17 @@ export default function ManoMesa() {
   return (
     <group>
       {/* El mazo: un taco de cartas boca abajo */}
-      <mesh ref={mazoRef} position={[MAZO.desk[0], 0.008, MAZO.desk[1]]} rotation-y={0.08} visible={false}>
-        <boxGeometry args={[ANCHO_CARTA, 0.012, LARGO_CARTA]} />
-        <meshStandardMaterial color="#e8dfcc" roughness={0.8} />
-      </mesh>
+      <group ref={mazoRef} position={[MAZO.desk[0], 0.008, MAZO.desk[1]]} rotation-y={0.08} visible={false}>
+        <mesh>
+          <boxGeometry args={[ANCHO_CARTA * 0.99, 0.012, LARGO_CARTA * 0.99]} />
+          <meshStandardMaterial color="#e8dfcc" roughness={0.8} />
+        </mesh>
+        {/* La carta de arriba del taco, boca abajo: que se vea un mazo y no un bloque. */}
+        <mesh rotation-x={-Math.PI / 2} position-y={0.0065}>
+          <planeGeometry args={[ANCHO_CARTA, LARGO_CARTA]} />
+          <meshStandardMaterial map={reverso} transparent alphaTest={0.5} roughness={0.7} />
+        </mesh>
+      </group>
       {proyectos.map((p, i) => (
         <Carta key={p.id} p={p} indice={i} reverso={reverso} frente={frentes[p.id]} estado={estados[p.id]} onAbrir={abrirDesde} />
       ))}
