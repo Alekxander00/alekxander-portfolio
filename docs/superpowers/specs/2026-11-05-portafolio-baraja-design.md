@@ -31,8 +31,7 @@ Lectura de diseño: portafolio de desarrollador de videojuegos y web interactiva
    - Sargazo: barco sobre agua que ondula; se arrastra el viento, la vela reacciona y hay zona muerta de frente.
    - Museo: la cápsula de blocking sobre plataformas; las acciones (saltar, dash, pared, planear) cambian el estado y el grafo de estados se ve debajo, en HTML.
    - The Others: un nivel 2.5D de verdad (tres capas: fondo, juego, frente). Visto desde la cámara del juego parece 2D; al arrastrar se gira y aparecen las capas. El personaje solo se mueve en el plano XY.
-   - Kinet: las líneas del fondo de Kinet en 3D, con su paleta, reaccionando al puntero y a pulsos.
-   - Sistemas para salud: una tablet 3D con el recuadro de firma en su pantalla; al firmar sale el PDF.
+   - Kinet y Sistemas para salud: se quedan como en la v1 (líneas en canvas 2D y recuadro de firma con PDF). Decisión de Alekxander: así están bien.
    - Cadence y Eclipse: sin escena (no tienen una mecánica propia que mostrar); imágenes y enlaces.
    - Slider antes/después en el reverso cuando haya pares de imágenes reales.
 4. **La Máquina.** La cámara levanta la vista: la Máquina (modelo .bbmodel original con Idle/Hit/Random) está enfrente. Clic = golpe. Si lleva un rato sin que nadie la toque, dice "¡Golpéame!". Al tercer golpe reparte: las cartas salen de su boca y se deslizan por el paño. "Otra carta" / "Me planto" en HTML. Si le ganas, escupe la carta secreta sobre cómo está hecha. Nada importante depende de ganar.
