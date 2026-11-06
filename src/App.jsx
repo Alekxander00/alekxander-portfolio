@@ -16,6 +16,7 @@ import Maquina from './components/maquina/Maquina'
 import Joker from './components/joker/Joker'
 import Escena from './escena/Escena'
 import ManoHTML from './components/mesa/ManoHTML'
+import MaquinaHTML from './components/maquina/MaquinaHTML'
 import { useEscena } from './escena/estado'
 import { Con3DProvider } from './lib/con3D'
 
@@ -90,7 +91,7 @@ export default function App() {
       <main id="top">
         {con3D ? <EntradaMesa /> : <Entrada />}
         {con3D ? <ManoHTML onAbrir={abrir} /> : <Mesa onAbrir={abrir} />}
-        <Maquina onAbrirSecreta={() => abrir('secreta')} />
+        {con3D ? <MaquinaHTML onAbrirSecreta={() => abrir('secreta')} /> : <Maquina onAbrirSecreta={() => abrir('secreta')} />}
         <Joker />
       </main>
       <footer className="pie">

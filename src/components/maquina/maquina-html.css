@@ -1,0 +1,69 @@
+/* La sección deja ver la Máquina y las cartas de la escena; encima solo flotan
+   el letrero (arriba) y el panel del blackjack (abajo). */
+.maquina-html {
+  position: relative;
+  min-height: 130svh;
+}
+
+.maquina-html__fija {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+}
+
+.maquina-html__letrero {
+  top: 14svh;
+}
+
+.maquina-html__panel {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 24px;
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: rgba(12, 10, 9, 0.8);
+  box-shadow: inset 0 0 0 1px var(--linea);
+}
+
+.maquina-html__totales {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 0 10px;
+  color: var(--texto-2);
+}
+
+.maquina-html__totales strong {
+  font-family: var(--f-titulo);
+  font-weight: 400;
+  font-size: 1.5rem;
+  color: var(--texto);
+  margin-left: 6px;
+}
+
+.maquina-html__secreta {
+  border-color: var(--dorado);
+  color: var(--letrero);
+  font-family: var(--f-maquina);
+  font-weight: 700;
+}
+
+.maquina-html__golpe:focus {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: auto;
+  height: auto;
+  margin: 0;
+  padding: 8px 14px;
+  clip: auto;
+  overflow: visible;
+  white-space: nowrap;
+  transform: translate(-50%, -50%);
+  border: 1px dashed var(--dorado);
+  border-radius: var(--r-ui);
+  background: rgba(12, 10, 8, 0.85);
+  color: var(--letrero);
+}

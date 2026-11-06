@@ -19,6 +19,10 @@ export const useEscena = create((set, get) => ({
   resaltada: null,
   abierta: null,
   abrir: () => {},
+  // La Máquina y el blackjack
+  golpesMaquina: 0,
+  bj: null,
+  secretaFuera: false,
 
   setVolteada: (v) => set({ volteada: v }),
   descubrir: (clave) => {
@@ -36,6 +40,9 @@ export const useEscena = create((set, get) => ({
   setResaltada: (id) => set({ resaltada: id }),
   setAbierta: (id) => set({ abierta: id }),
   registrarAbrir: (fn) => set({ abrir: fn }),
+  golpear: () => set((s) => ({ golpesMaquina: s.golpesMaquina + 1 })),
+  setBJ: (bj) => set({ bj }),
+  setSecretaFuera: (v) => set({ secretaFuera: v }),
 }))
 
 // DEV: el estado de la escena a mano en la consola y en las pruebas.
