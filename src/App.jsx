@@ -11,6 +11,7 @@ import Mesa from './components/mesa/Mesa'
 import Caso from './components/caso/Caso'
 import Maquina from './components/maquina/Maquina'
 import Joker from './components/joker/Joker'
+import Escena from './escena/Escena'
 
 const SECRETA = { id: 'secreta', valor: '★', palo: null, titulo: cartaSecreta.titulo }
 
@@ -63,6 +64,7 @@ export default function App() {
 
   return (
     <>
+      <Escena />
       <Barra />
       <main id="top">
         <Entrada />

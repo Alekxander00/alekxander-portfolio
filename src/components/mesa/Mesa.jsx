@@ -65,7 +65,7 @@ export default function Mesa({ onAbrir, extra }) {
   }, [palo])
 
   return (
-    <section className="mesa" id="mano" aria-labelledby="mano-titulo">
+    <section className="mesa" id="mano" data-parada="mano" aria-labelledby="mano-titulo">
       <div className="mesa__cabeza">
         <h2 id="mano-titulo" className="mesa__titulo">
           {t(T.mano)}

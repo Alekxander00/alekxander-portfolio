@@ -1,0 +1,34 @@
+.escena {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+}
+
+/* Con la mesa 3D, el paño plano de la v1 sobra. */
+.con-mesa body::before {
+  display: none;
+}
+
+.con-mesa body {
+  background: #0c0a09;
+}
+
+.con-mesa main,
+.con-mesa .pie,
+.con-mesa .barra {
+  position: relative;
+  z-index: 1;
+}
+
+.con-mesa .barra {
+  position: absolute;
+}
+
+/* Las paradas dejan pasar el puntero a la mesa, salvo en lo que se toca. */
+.parada {
+  pointer-events: none;
+}
+
+.parada :is(a, button, input, [role='slider'], .interactivo) {
+  pointer-events: auto;
+}

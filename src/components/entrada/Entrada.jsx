@@ -394,7 +394,7 @@ export default function Entrada({ onRevelar }) {
   const principio = aviso ? PRINCIPIOS[aviso] : null
 
   return (
-    <section className="entrada" ref={zonaRef} aria-labelledby="entrada-titulo">
+    <section className="entrada" data-parada="entrada" ref={zonaRef} aria-labelledby="entrada-titulo">
       <div className="entrada__escena" ref={escenaRef}>
         <canvas className="entrada__fichas" ref={lienzoRef} aria-hidden="true" />
         <button

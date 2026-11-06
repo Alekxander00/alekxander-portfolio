@@ -114,7 +114,7 @@ export default function Maquina({ onAbrirSecreta }) {
   )
 
   return (
-    <section ref={seccion} className={`casa ${abierta ? 'is-abierta' : ''}`} aria-labelledby="casa-titulo">
+    <section ref={seccion} data-parada="maquina" className={`casa ${abierta ? 'is-abierta' : ''}`} aria-labelledby="casa-titulo">
       <h2 id="casa-titulo" className="solo-lector">
         {t(T.casa)}
       </h2>

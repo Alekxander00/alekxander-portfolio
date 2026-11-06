@@ -19,7 +19,7 @@ export default function Joker() {
   }
 
   return (
-    <section className="joker-sec" id="joker" aria-labelledby="joker-titulo">
+    <section className="joker-sec" id="joker" data-parada="joker" aria-labelledby="joker-titulo">
       <div className="joker-sec__carta" aria-hidden="true">
         <span className="joker-sec__palo">JOKER</span>
         <span className="joker-sec__tela" />
