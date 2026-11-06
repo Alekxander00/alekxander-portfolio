@@ -1,0 +1,193 @@
+.casa {
+  position: relative;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: clamp(40px, 8vw, 100px) 16px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  justify-items: center;
+  gap: 24px;
+}
+
+@media (min-width: 900px) {
+  .casa.is-abierta {
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    justify-items: stretch;
+    align-items: center;
+  }
+
+  .casa.is-abierta .casa__mesa {
+    grid-row: 1;
+    grid-column: 1;
+  }
+}
+
+.casa__maquina {
+  position: relative;
+  width: min(380px, 100%);
+  justify-self: center;
+}
+
+.casa__escena {
+  position: relative;
+  aspect-ratio: 4 / 5;
+}
+
+.casa__escena canvas {
+  position: relative;
+  z-index: 1;
+}
+
+.casa__estado {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  margin: 0;
+  padding: 24px;
+  text-align: center;
+  color: var(--texto-2);
+  font-family: var(--f-maquina);
+}
+
+/* Botón invisible encima del modelo: la Máquina se golpea con clic o teclado. */
+.casa__golpe {
+  position: absolute;
+  inset: 8% 22% 6%;
+  z-index: 2;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+}
+
+.casa__golpe:focus-visible {
+  outline: 2px dashed var(--dorado);
+  outline-offset: 4px;
+}
+
+.casa__golpe:disabled {
+  display: none;
+}
+
+.casa__sombra {
+  position: absolute;
+  left: 22%;
+  right: 22%;
+  bottom: 5%;
+  height: 7%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(0, 0, 0, 0.6), transparent);
+  z-index: 0;
+}
+
+/* El letrero de la Máquina: su tipografía y su dorado, sobre un fondo oscuro
+   para que se lea siempre (como los letreros con fondo de Baluarte). */
+.casa__letrero {
+  position: absolute;
+  left: 50%;
+  top: -6px;
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: min(340px, 92vw);
+  z-index: 3;
+  pointer-events: none;
+}
+
+.casa__letrero p {
+  margin: 0;
+  padding: 8px 14px;
+  border-radius: 6px;
+  background: rgba(12, 10, 8, 0.85);
+  color: var(--letrero);
+  font-family: var(--f-maquina);
+  font-weight: 700;
+  font-size: clamp(1.05rem, 3.6vw, 1.35rem);
+  line-height: 1.25;
+  text-align: center;
+}
+
+.casa__secreta {
+  position: absolute;
+  right: -6px;
+  bottom: 4%;
+  z-index: 4;
+  width: 92px;
+  padding: 0;
+  border: 0;
+  background: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.casa__secreta .naipe {
+  --ancho: 92px;
+}
+
+.casa__secreta:hover .naipe {
+  transform: translateY(-4px);
+  transition: transform 0.2s;
+}
+
+.casa__secreta-texto {
+  white-space: nowrap;
+  font-family: var(--f-maquina);
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--letrero);
+  background: rgba(12, 10, 8, 0.85);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+/* La mesa del blackjack: un paño un poco más claro que la mesa. */
+.casa__mesa {
+  width: 100%;
+  max-width: 560px;
+  justify-self: center;
+  padding: clamp(18px, 4vw, 32px);
+  border-radius: 18px;
+  background: #1f1b17;
+  box-shadow: inset 0 0 0 1px var(--linea), inset 0 0 60px rgba(0, 0, 0, 0.45);
+}
+
+.bj {
+  display: grid;
+  gap: 22px;
+}
+
+.bj__etiqueta {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin: 0 0 10px;
+  color: var(--texto-2);
+}
+
+.bj__total {
+  font-family: var(--f-titulo);
+  font-size: 1.6rem;
+  color: var(--texto);
+}
+
+.bj__cartas {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-height: 112px;
+}
+
+.bj__carta .naipe {
+  --ancho: clamp(72px, 19vw, 96px);
+  font-size: clamp(11px, 2.8vw, 14px);
+}
+
+.bj__acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}

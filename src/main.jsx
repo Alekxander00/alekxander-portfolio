@@ -1,10 +1,14 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.jsx'
+import { IdiomaProvider } from './lib/idioma'
+import App from './App'
+import './styles/base.css'
+import './styles/pie.css'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <App />
+    <IdiomaProvider>
+      <App />
+    </IdiomaProvider>
   </StrictMode>,
 )

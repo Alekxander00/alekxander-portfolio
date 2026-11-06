@@ -1,0 +1,62 @@
+.barra {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+}
+
+.barra__saltar {
+  position: absolute;
+  left: 16px;
+  top: -100px;
+  padding: 10px 14px;
+  background: var(--marfil);
+  color: var(--carta-tinta);
+  border-radius: var(--r-ui);
+  z-index: 20;
+}
+
+.barra__saltar:focus {
+  top: 10px;
+}
+
+.barra__marca {
+  display: inline-grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+}
+
+.barra__tela {
+  width: 30px;
+  height: 30px;
+  background: var(--texto);
+  -webkit-mask: url('/images/telarana.png') center / contain no-repeat;
+  mask: url('/images/telarana.png') center / contain no-repeat;
+}
+
+.barra__acciones {
+  display: flex;
+  gap: 4px;
+}
+
+.barra__boton {
+  min-height: 44px;
+  padding: 6px 12px;
+  border: 1px solid transparent;
+  border-radius: var(--r-ui);
+  background: none;
+  color: var(--texto-2);
+  font-size: 0.9rem;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.barra__boton:hover {
+  color: var(--texto);
+  border-color: var(--linea);
+}

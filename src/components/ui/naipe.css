@@ -1,0 +1,129 @@
+/* Un naipe se dimensiona por su ancho; todo lo demás va en em para escalar. */
+.naipe {
+  --ancho: 200px;
+  position: relative;
+  width: var(--ancho);
+  aspect-ratio: 5 / 7;
+  border-radius: calc(var(--ancho) * 0.07);
+  font-size: calc(var(--ancho) * 0.1);
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.naipe--cara {
+  background: var(--marfil);
+  color: var(--carta-tinta);
+  box-shadow: var(--sombra-carta), inset 0 0 0 1px rgba(0, 0, 0, 0.08);
+}
+
+.naipe--rojo {
+  color: var(--rojo);
+}
+
+.naipe__indice {
+  position: absolute;
+  top: 0.45em;
+  left: 0.45em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 0.95;
+  font-family: var(--f-titulo);
+}
+
+.naipe__indice--abajo {
+  top: auto;
+  left: auto;
+  bottom: 0.45em;
+  right: 0.45em;
+  transform: rotate(180deg);
+}
+
+.naipe__valor {
+  font-size: 1.15em;
+  letter-spacing: -0.04em;
+}
+
+.naipe__palo {
+  font-size: 0.85em;
+}
+
+.naipe__centro {
+  position: absolute;
+  inset: 14% 17%;
+  display: grid;
+  place-items: center;
+}
+
+.naipe__as {
+  font-size: 3.6em;
+  line-height: 1;
+}
+
+.naipe__pips {
+  position: absolute;
+  inset: 0;
+}
+
+.naipe__pip {
+  position: absolute;
+  font-size: 1.25em;
+  line-height: 1;
+}
+
+.naipe__figura {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  border: 1px solid currentColor;
+  border-radius: 0.2em;
+  opacity: 0.92;
+}
+
+.naipe__figura-letra {
+  font-family: var(--f-titulo);
+  font-size: 3em;
+  line-height: 1;
+}
+
+.naipe__figura-palo {
+  font-size: 1.3em;
+  margin-top: -0.6em;
+}
+
+/* Reverso: marco marfil, paño rojo oscuro y la telaraña del logo. */
+.naipe--reverso {
+  background: var(--marfil);
+  box-shadow: var(--sombra-carta);
+  padding: calc(var(--ancho) * 0.05);
+}
+
+.naipe__marco {
+  position: relative;
+  height: 100%;
+  border-radius: calc(var(--ancho) * 0.04);
+  background: #5e1c18;
+  overflow: hidden;
+}
+
+.naipe__tela {
+  position: absolute;
+  top: 6%;
+  left: 6%;
+  width: 70%;
+  aspect-ratio: 1;
+  background: var(--marfil);
+  opacity: 0.9;
+  -webkit-mask: url('/images/telarana.png') center / contain no-repeat;
+  mask: url('/images/telarana.png') center / contain no-repeat;
+}
+
+.naipe__tela--b {
+  top: auto;
+  left: auto;
+  bottom: 6%;
+  right: 6%;
+  transform: rotate(180deg);
+  opacity: 0.35;
+}

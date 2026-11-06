@@ -1,0 +1,229 @@
+.entrada {
+  position: relative;
+  height: 100svh;
+  min-height: 520px;
+  overflow: hidden;
+}
+
+.entrada__escena {
+  position: absolute;
+  inset: 0;
+}
+
+.entrada__fichas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.entrada__carta {
+  --ancho: clamp(170px, 46vw, 260px);
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--ancho);
+  aspect-ratio: 5 / 7;
+  padding: 0;
+  border: 0;
+  background: none;
+  touch-action: none;
+  cursor: grab;
+  perspective: 1200px;
+  transform: translate(-50%, -50%);
+  will-change: transform;
+  z-index: 1;
+}
+
+.entrada__carta:active {
+  cursor: grabbing;
+}
+
+.entrada__carta:focus-visible {
+  outline: none;
+}
+
+.entrada__carta:focus-visible .entrada__giro {
+  outline: 2px solid var(--marfil);
+  outline-offset: 6px;
+  border-radius: 16px;
+}
+
+.entrada__giro {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  display: block;
+}
+
+.entrada__cara {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.entrada__cara .naipe {
+  --ancho: 100%;
+  width: 100%;
+  height: 100%;
+  font-size: calc(var(--ancho-px, 240px) * 0.1);
+}
+
+.entrada__cara--frente {
+  transform: rotateY(180deg);
+}
+
+/* La cara del Joker. */
+.joker {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 1.6rem 1.4rem;
+  text-align: center;
+  border-radius: 16px;
+}
+
+.joker__esquina {
+  position: absolute;
+  top: 0.7rem;
+  left: 0.65rem;
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+  font-family: var(--f-titulo);
+  font-size: 0.72rem;
+  letter-spacing: -0.12em;
+  color: var(--rojo);
+  line-height: 1;
+}
+
+.joker__esquina--abajo {
+  top: auto;
+  left: auto;
+  bottom: 0.7rem;
+  right: 0.65rem;
+  transform: rotate(180deg);
+}
+
+.joker__tela {
+  width: 38%;
+  aspect-ratio: 1;
+  background: var(--carta-tinta);
+  -webkit-mask: url('/images/telarana.png') center / contain no-repeat;
+  mask: url('/images/telarana.png') center / contain no-repeat;
+}
+
+.joker__nombre {
+  font-family: var(--f-titulo);
+  font-size: clamp(1.45rem, 6.5vw, 2rem);
+  line-height: 1;
+  color: var(--carta-tinta);
+}
+
+.joker__oficio {
+  font-size: clamp(0.8rem, 3.2vw, 0.95rem);
+  line-height: 1.35;
+  color: var(--carta-tinta-2);
+}
+
+/* Contador de principios: cinco marcas pequeñas abajo a la izquierda. */
+.entrada__principios {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.entrada__marcas {
+  display: flex;
+  gap: 6px;
+}
+
+.entrada__marca {
+  width: 10px;
+  height: 14px;
+  border-radius: 2px;
+  border: 1px solid var(--linea);
+  transition: background 0.3s, border-color 0.3s;
+}
+
+.entrada__marca.is-on {
+  background: var(--marfil);
+  border-color: var(--marfil);
+}
+
+.entrada__aviso {
+  display: flex;
+  flex-direction: column;
+  /* Deja sitio al enlace de la mano, abajo a la derecha. */
+  max-width: min(340px, calc(100vw - 150px));
+  padding: 10px 14px;
+  border-left: 2px solid var(--rojo-claro);
+  background: rgba(18, 16, 14, 0.82);
+  animation: aviso-entra 0.35s ease-out both, aviso-sale 0.5s ease-in 4.7s forwards;
+}
+
+.entrada__aviso strong {
+  font-family: var(--f-titulo);
+  font-weight: 400;
+  font-size: 1.15rem;
+}
+
+.entrada__aviso span {
+  font-size: 0.92rem;
+  color: var(--texto-2);
+  line-height: 1.4;
+}
+
+@keyframes aviso-entra {
+  from { opacity: 0; transform: translateY(8px); }
+}
+
+@keyframes aviso-sale {
+  to { opacity: 0; }
+}
+
+.entrada__bajar {
+  position: absolute;
+  right: 16px;
+  bottom: 20px;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  min-height: 44px;
+  padding: 6px 4px;
+  text-decoration: none;
+  color: var(--texto-2);
+  font-size: 0.9rem;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.5s 0.6s, transform 0.5s 0.6s, color 0.2s;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.entrada__bajar span:first-child {
+  letter-spacing: 0.2em;
+  color: var(--texto);
+}
+
+.entrada__bajar.is-visible {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+
+.entrada__bajar:hover {
+  color: var(--texto);
+}
