@@ -1,5 +1,16 @@
 import { describe, expect, it } from 'vitest'
 import { posicionesMano, ANCHO_CARTA, LARGO_CARTA } from './disposicion'
+import { PANO } from '../medidas'
+
+// Esquinas de una carta en el paño, con su giro en Y y su escala (como en three.js).
+function esquinas(c) {
+  const w = (ANCHO_CARTA * c.escala) / 2
+  const l = (LARGO_CARTA * c.escala) / 2
+  const cos = Math.cos(c.rotY)
+  const sin = Math.sin(c.rotY)
+  return [[-w, -l], [w, -l], [w, l], [-w, l]].map(([x, z]) => [c.x + x * cos + z * sin, c.z - x * sin + z * cos])
+}
+const dentroDelPano = ([x, z], margen) => (x / (PANO.rx - margen)) ** 2 + (z / (PANO.rz - margen)) ** 2 <= 1
 
 describe('posicionesMano', () => {
   it('da una posición por carta', () => expect(posicionesMano(8, false)).toHaveLength(8))
@@ -23,6 +34,16 @@ describe('posicionesMano', () => {
     const filas = [...new Set(p.map((c) => c.z))].sort((a, b) => a - b)
     for (let i = 1; i < filas.length; i++) expect(filas[i] - filas[i - 1]).toBeGreaterThanOrEqual(LARGO_CARTA * 0.75)
     expect(filas.at(-1) + (LARGO_CARTA * 0.75) / 2).toBeLessThan(0.5)
+  })
+  it('en escritorio ninguna esquina cruza el borde de la mesa', () => {
+    for (const c of posicionesMano(8, false)) for (const e of esquinas(c)) expect(dentroDelPano(e, 0.03)).toBe(true)
+  })
+  it('en escritorio el abanico sigue la curva del borde: los extremos quedan más atrás y giran hacia el centro', () => {
+    const p = posicionesMano(8, false)
+    expect(p[0].z).toBeLessThan(p[3].z)
+    expect(p[7].z).toBeLessThan(p[4].z)
+    expect(p[7].rotY).toBeGreaterThan(0)
+    expect(p[0].rotY).toBeLessThan(0)
   })
   it('el As es más grande', () => expect(posicionesMano(8, false)[0].escala).toBeGreaterThan(1))
   it('con un filtro de 1 carta, queda en el centro', () => expect(posicionesMano(1, false)[0].x).toBe(0))

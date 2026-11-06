@@ -63,21 +63,21 @@ export function paso(c, dt, ahora, limites) {
     c.w *= Math.exp(-3 * dt)
   }
 
-  // Bordes del paño (también corrige si los límites encogieron).
-  const bordes = [
-    ['x', 'vx', limites.x, [1, 0]],
-    ['z', 'vz', limites.z, [0, 1]],
-  ]
-  for (const [eje, vel, lim, normal] of bordes) {
-    if (Math.abs(c[eje]) > lim) {
-      c[eje] = Math.sign(c[eje]) * lim
-      const impacto = Math.abs(c[vel])
-      c[vel] = -c[vel] * REBOTE
-      if (impacto > IMPACTO_REBOTE) {
-        c.q = Math.min(0.3, impacto / 12)
-        c.angQ = Math.atan2(normal[1], normal[0])
-      }
-      eventos.push({ tipo: 'rebote', impacto, normal, punto: [c.x, c.z] })
+  // Bordes (también corrige si los límites encogieron).
+  for (const pl of planosDe(limites)) {
+    const exceso = pl.nx * c.x + pl.nz * c.z - pl.d
+    if (exceso > 0) rebotar(c, pl.nx, pl.nz, c.x - pl.nx * exceso, c.z - pl.nz * exceso, eventos)
+  }
+  const el = limites.elipse
+  if (el) {
+    const dz = c.z - el.cz
+    const s = (c.x / el.rx) ** 2 + (dz / el.rz) ** 2
+    if (s > 1) {
+      const k = 1 / Math.sqrt(s)
+      const nx = (c.x * k) / el.rx ** 2
+      const nz = (dz * k) / el.rz ** 2
+      const largo = Math.hypot(nx, nz) || 1
+      rebotar(c, nx / largo, nz / largo, c.x * k, el.cz + dz * k, eventos)
     }
   }
   if (c.vx === 0 && c.vz === 0) c.lanzada = false
@@ -89,6 +89,32 @@ export function paso(c, dt, ahora, limites) {
   if (vel > 0.02) c.angK = Math.atan2(c.vz, c.vx)
   c.q *= Math.exp(-9 * dt)
   return eventos
+}
+
+// Límites: { x, z } es el rectángulo de siempre; { elipse: { rx, rz, cz }, planos:
+// [{ nx, nz, d }] } es la forma de la mesa más los semiplanos n·p <= d.
+function planosDe(limites) {
+  if (limites.planos || limites.elipse) return limites.planos || []
+  return [
+    { nx: 1, nz: 0, d: limites.x },
+    { nx: -1, nz: 0, d: limites.x },
+    { nx: 0, nz: 1, d: limites.z },
+    { nx: 0, nz: -1, d: limites.z },
+  ]
+}
+
+// Lleva la carta al punto (x, z) del borde y refleja la velocidad que iba hacia fuera.
+function rebotar(c, nx, nz, x, z, eventos) {
+  c.x = x
+  c.z = z
+  const impacto = Math.max(0, c.vx * nx + c.vz * nz)
+  c.vx -= (1 + REBOTE) * impacto * nx
+  c.vz -= (1 + REBOTE) * impacto * nz
+  if (impacto > IMPACTO_REBOTE) {
+    c.q = Math.min(0.3, impacto / 12)
+    c.angQ = Math.atan2(nz, nx)
+  }
+  eventos.push({ tipo: 'rebote', impacto, normal: [nx, nz], punto: [c.x, c.z] })
 }
 
 export function principiosDe(eventos, c) {

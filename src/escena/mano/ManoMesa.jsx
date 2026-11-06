@@ -12,8 +12,10 @@ import { texturaProyecto } from '../carta/naipe'
 import { texturaReverso } from '../carta/texturas'
 import { posicionesMano, ANCHO_CARTA, LARGO_CARTA } from './disposicion'
 
-const MAZO = { desk: [0.66, 0.55], movil: [0.16, 0.66] }
+const MAZO = { desk: [0.66, -0.15], movil: [0.16, 0.66] }
 const REPARTO_DESDE = 0.55 // progreso del scroll a partir del cual se reparte
+const RECOGER_BAJO = 0.4 // al volver por debajo, la mano regresa al mazo
+const OCULTA_BAJO = 0.3 // y por debajo de esto ya no se ve
 const ENTRE_CARTAS = 0.07 // s
 const VUELO = 0.35 // s antes de abrir el caso
 
@@ -81,6 +83,7 @@ export default function ManoMesa() {
     [],
   )
   const reparto = useRef({ inicio: -1 })
+  const mazoRef = useRef(null)
   const vuelo = useRef(null)
 
   useEffect(() => {
@@ -126,7 +129,10 @@ export default function ManoMesa() {
     const visibles = proyectos.filter((p) => !palo || p.palo === palo)
     const sitios = posicionesMano(visibles.length, movil)
     const r = reparto.current
+    const enSuTramo = vivo.progreso > OCULTA_BAJO && vivo.progreso <= 1.6
+    if (mazoRef.current) mazoRef.current.visible = enSuTramo && !movil
     if (r.inicio < 0 && vivo.progreso > REPARTO_DESDE) r.inicio = ahora
+    if (r.inicio >= 0 && vivo.progreso < RECOGER_BAJO && !vuelo.current) r.inicio = -1
     const { resaltada } = useEscena.getState()
     const k = reducido ? 1 : 1 - Math.exp(-10 * dt)
 
@@ -181,8 +187,9 @@ export default function ManoMesa() {
       // Y se inclina hacia la cámara (giro en X) hasta quedar casi de frente.
       e.giro.rotation.set(m * 1.2, 0, e.flip)
       e.grupo.scale.setScalar(e.escala * (1 + e.levantar * 0.05))
-      // En el blackjack la mano quedaría asomando detrás de sus cartas y del panel.
-      e.grupo.visible = vivo.progreso <= 1.6
+      // Solo se ve en su tramo: antes estorbaría a la carta de entrada y en el
+      // blackjack asomaría detrás de sus cartas y del panel.
+      e.grupo.visible = enSuTramo
     })
   })
 
@@ -191,7 +198,7 @@ export default function ManoMesa() {
   return (
     <group>
       {/* El mazo: un taco de cartas boca abajo */}
-      <mesh position={[MAZO.desk[0], 0.008, MAZO.desk[1]]} rotation-y={0.08} visible={!vivo.movil}>
+      <mesh ref={mazoRef} position={[MAZO.desk[0], 0.008, MAZO.desk[1]]} rotation-y={0.08} visible={false}>
         <boxGeometry args={[ANCHO_CARTA, 0.012, LARGO_CARTA]} />
         <meshStandardMaterial color="#e8dfcc" roughness={0.8} />
       </mesh>

@@ -18,17 +18,38 @@ const Z0 = 0.15 // donde reposa la carta, delante del jugador
 const ALTURA = 0.003
 const plano = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0)
 
-// Límites del paño, recortados a lo que la cámara ve (en celular vertical se ve poco ancho).
+// Límites: todo el paño (su elipse, menos media carta) recortado a lo que la
+// cámara ve, para que la carta no se salga de la pantalla (en celular se ve poco ancho).
+const MARGEN_PANTALLA = 0.11
+const rayoLimites = new THREE.Raycaster()
+const ESQUINAS = [[-0.94, -0.88], [0.94, -0.88], [0.94, 0.86], [-0.94, 0.86]]
 function limitesVisibles(camera) {
-  const d = camera.position.distanceTo(new THREE.Vector3(0, 0, Z0))
-  // El paño alcanza hasta rz por delante y por detrás del centro; la carta reposa en Z0.
-  const fondoPano = PANO.rz * 0.72 - Math.abs(Z0)
-  const medioAlto = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * d
-  const medioAncho = medioAlto * camera.aspect
-  return {
-    x: Math.max(0.02, Math.min(PANO.rx * 0.8 - ANCHO / 2, medioAncho * 0.92 - ANCHO / 2)),
-    z: Math.max(0.02, Math.min(fondoPano - LARGO / 2, medioAlto * 0.8 - LARGO / 2)),
+  const elipse = { rx: PANO.rx - ANCHO / 2 - 0.02, rz: PANO.rz - LARGO / 2 - 0.02, cz: -Z0 }
+  const puntos = []
+  for (const [x, y] of ESQUINAS) {
+    rayoLimites.setFromCamera(new THREE.Vector2(x, y), camera)
+    const p = new THREE.Vector3()
+    // Una esquina de arriba que mira por encima del horizonte no limita.
+    if (rayoLimites.ray.intersectPlane(plano, p)) puntos.push([p.x, p.z - Z0])
   }
+  if (puntos.length < 3) return { elipse }
+  const cx = puntos.reduce((t, p) => t + p[0], 0) / puntos.length
+  const cz = puntos.reduce((t, p) => t + p[1], 0) / puntos.length
+  const planos = []
+  puntos.forEach((a, i) => {
+    const b = puntos[(i + 1) % puntos.length]
+    let nx = b[1] - a[1]
+    let nz = a[0] - b[0]
+    const largo = Math.hypot(nx, nz) || 1
+    nx /= largo
+    nz /= largo
+    if (nx * (a[0] - cx) + nz * (a[1] - cz) < 0) {
+      nx = -nx
+      nz = -nz
+    }
+    planos.push({ nx, nz, d: nx * a[0] + nz * a[1] - MARGEN_PANTALLA })
+  })
+  return { elipse, planos }
 }
 
 export default function CartaEntrada() {
