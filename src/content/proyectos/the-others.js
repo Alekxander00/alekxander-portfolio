@@ -5,24 +5,27 @@ export default {
   titulo: 'The Others',
   imagen: null,
   linea: {
-    es: 'Metroidvania 2.5D: escenarios en 3D y movimiento atado al plano XY, repartido en tres capas de juego.',
-    en: 'A 2.5D metroidvania: 3D environments with movement locked to the XY plane, spread across three gameplay layers.',
+    es: 'Un metroidvania 2.5D con escenarios en 3D y movimiento en un solo plano, repartido en tres capas. Entré como programador junior y me tocó la parte que se siente en las manos: el combate.',
+    en: 'A 2.5D metroidvania with 3D environments and movement on a single plane, spread across three layers. I joined as a junior programmer and got the part you feel in your hands: the combat.',
   },
-  rol: { es: 'Programación de la arquitectura y los sistemas.', en: 'Architecture and systems programming.' },
+  rol: {
+    es: 'Programador junior. La base y la arquitectura del juego son de mi jefe; yo hice el sistema de combate.',
+    en: 'Junior programmer. The game’s foundations and architecture are my boss’s work; I built the combat system.',
+  },
   ficha: [
     { k: { es: 'Motor', en: 'Engine' }, v: 'Unity' },
-    { k: { es: 'Estado', en: 'Status' }, v: { es: 'Arquitectura base', en: 'Base architecture' } },
+    { k: { es: 'Estado', en: 'Status' }, v: { es: 'En desarrollo', en: 'In development' } },
   ],
   resolvio: {
     es: [
-      'Módulos repartidos como en Unreal: un manager por responsabilidad, comunicados por eventos e interfaces, nunca buscándose componentes.',
-      'Todo el ajuste vive en datos: habilidades, perfiles de vida, estados alterados, karma y lo que puede hacer cada enemigo.',
-      'Enemigos separados en cuerpo (caminar, volar, atacar) y cerebro (patrullar, investigar, huir), combinables entre sí.',
+      'El sistema de combate del personaje, construido sobre la base que armó mi jefe.',
+      'Pogo: golpear hacia abajo sobre un enemigo para rebotar y seguir en el aire.',
+      'Parry: frenar un ataque si lo bloqueas justo a tiempo.',
     ],
     en: [
-      'Modules split the way an Unreal project is: one manager per concern, talking through events and interfaces, never by looking up components.',
-      'All tuning lives in data: abilities, health profiles, status effects, karma and what each enemy can do.',
-      'Enemies split into body (walk, fly, attack) and brain (patrol, investigate, flee), mixable with each other.',
+      'The character’s combat system, built on the foundations my boss laid.',
+      'Pogo: strike downwards on an enemy to bounce off it and stay in the air.',
+      'Parry: stop an attack by blocking it at exactly the right moment.',
     ],
   },
   widget: 'plano',

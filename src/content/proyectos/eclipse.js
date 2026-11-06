@@ -7,8 +7,8 @@ export default {
   imagenEncaje: { ajuste: 'contain', fondo: '#000000' },
   imagenAlt: { es: 'Portada del artbook Eclipse: una luna eclipsada sobre negro.', en: 'Cover of the Eclipse artbook: an eclipsed moon on black.' },
   linea: {
-    es: 'Artbook de fantasía oscura bajo un eclipse perpetuo: personajes, objetos y lugares, del boceto a la versión final.',
-    en: 'A dark-fantasy artbook under a perpetual eclipse: characters, props and places, from sketch to final.',
+    es: 'Un artbook de fantasía oscura en un mundo donde el eclipse nunca termina. Personajes, objetos y lugares, con los bocetos a la vista junto a la versión final.',
+    en: 'A dark-fantasy artbook set in a world where the eclipse never ends. Characters, props and places, with the sketches shown alongside the finished art.',
   },
   rol: { es: 'Concepto, ilustración y maquetación. Proyecto de cuarto semestre.', en: 'Concept, illustration and layout. Fourth-semester project.' },
   ficha: [{ k: { es: 'Hecho con', en: 'Made with' }, v: 'Illustrator · Photoshop' }],

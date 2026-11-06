@@ -5,8 +5,8 @@ export default {
   titulo: 'Cadence of Shadows',
   imagen: null,
   linea: {
-    es: 'Noir 2.5D en la Colombia de los años 70. Un detective investiga el asesinato de un candidato presidencial.',
-    en: 'A 2.5D noir set in 1970s Colombia. A detective investigates the murder of a presidential candidate.',
+    es: 'Noir en la Colombia de los años 70: matan a un candidato presidencial y un detective sale a la calle a buscar quién fue. Sprites 2D caminando por escenarios 3D, en Unreal.',
+    en: 'Noir in 1970s Colombia: a presidential candidate is murdered and a detective takes to the streets to find out who did it. 2D sprites walking through 3D environments, in Unreal.',
   },
   rol: {
     es: 'Programación, en equipo. Proyecto final de Arquitectura de Videojuegos.',
@@ -17,8 +17,8 @@ export default {
     { k: { es: 'Estado', en: 'Status' }, v: { es: 'Prototipo funcional', en: 'Working prototype' } },
   ],
   resolvio: {
-    es: ['Exploración urbana, combate cuerpo a cuerpo y recolección de pistas, con sprites 2D dentro de escenarios 3D.'],
-    en: ['Urban exploration, melee combat and clue gathering, with 2D sprites inside 3D environments.'],
+    es: ['Recorrer la ciudad, pelear cuerpo a cuerpo y juntar pistas, con personajes en sprites 2D dentro de escenarios 3D.'],
+    en: ['Exploring the city, fighting hand to hand and gathering clues, with 2D sprite characters inside 3D environments.'],
   },
   widget: null,
   antesDespues: null,

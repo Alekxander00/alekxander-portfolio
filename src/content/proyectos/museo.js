@@ -9,8 +9,8 @@ export default {
     en: 'Museum test scene: the blocking character, a capsule, on a grey floor.',
   },
   linea: {
-    es: 'Metroidvania 3D. Nicol, restauradora de arte, cae en un museo de mundos literarios que el Olvido Gris se está comiendo.',
-    en: 'A 3D metroidvania. Nicol, an art restorer, falls into a museum of literary worlds being eaten by the Grey Oblivion.',
+    es: 'Un metroidvania 3D. Nicol, restauradora de arte, cae en un museo de mundos literarios que el Olvido Gris se está comiendo, y para salir salta, corre por las paredes, planea y pelea con tinta.',
+    en: 'A 3D metroidvania. Nicol, an art restorer, falls into a museum of literary worlds being eaten by the Grey Oblivion, and to get out she jumps, runs along walls, glides and fights with ink.',
   },
   rol: { es: 'Proyecto personal. Diseño, GDD y programación.', en: 'Personal project. Design, GDD and programming.' },
   ficha: [

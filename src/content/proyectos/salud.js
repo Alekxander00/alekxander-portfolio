@@ -9,8 +9,8 @@ export default {
     en: 'Helpdesk dashboard showing the user’s recent tickets.',
   },
   linea: {
-    es: 'Dos sistemas web para entornos clínicos: una mesa de ayuda con tickets y la firma digital de consentimientos informados.',
-    en: 'Two web systems for clinical settings: a ticket helpdesk and digital signing of informed consent forms.',
+    es: 'Dos sistemas web para entornos clínicos, hechos de punta a punta: una mesa de ayuda con tickets y consentimientos informados que el paciente firma con el dedo en una tablet.',
+    en: 'Two web systems for clinical settings, built end to end: a ticket helpdesk and informed consent forms that patients sign with a finger on a tablet.',
   },
   rol: { es: 'Full stack, de la base de datos a la interfaz.', en: 'Full stack, from the database to the interface.' },
   ficha: [

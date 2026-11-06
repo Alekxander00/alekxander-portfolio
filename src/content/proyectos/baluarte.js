@@ -9,8 +9,8 @@ export default {
     en: 'The Baluarte Arena at dusk: the Core of Light glows in the centre and the Machine waits on the left.',
   },
   linea: {
-    es: 'Musou roguelite en primera persona con tower defense. Las hordas salen de la niebla y todo se resuelve a golpes.',
-    en: 'A first-person musou roguelite with tower defence. Hordes pour out of the fog and everything is settled by hitting it.',
+    es: 'Un musou roguelite en primera persona con tower defense. Cientos de enemigos salen de la niebla y todo, hasta el menú de pausa, se resuelve a golpes.',
+    en: 'A first-person musou roguelite with tower defence. Hundreds of enemies pour out of the fog, and everything, even the pause menu, is settled by hitting it.',
   },
   rol: {
     es: 'Todo: diseño, programación, modelos en Blockbench y música en BandLab.',

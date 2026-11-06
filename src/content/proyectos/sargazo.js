@@ -5,8 +5,8 @@ export default {
   titulo: 'Sargazo',
   imagen: null,
   linea: {
-    es: 'Juego de piratas en 3D: navegar, abordar y pelear a espada. La meta es que llevar el barco sea de lo mejor del juego.',
-    en: 'A 3D pirate game: sail, board and fight with a sword. The goal is for steering the ship to be one of the best parts.',
+    es: 'Un juego de piratas en 3D donde llevar el timón tiene que sentirse tan bien como abordar y pelear a espada. El barco ya navega: las olas lo mecen y el viento lo empuja según cómo pongas la vela.',
+    en: 'A 3D pirate game where taking the helm should feel as good as boarding and sword fighting. The ship already sails: the waves rock it and the wind pushes it depending on how you set the sail.',
   },
   rol: { es: 'Proyecto personal. Diseño y programación.', en: 'Personal project. Design and programming.' },
   ficha: [

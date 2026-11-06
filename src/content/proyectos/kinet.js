@@ -7,8 +7,8 @@ export default {
   imagenEncaje: { ajuste: 'contain', fondo: '#180F2A' },
   imagenAlt: { es: 'Logotipo de Kinet en verde lima sobre morado oscuro.', en: 'The Kinet logo in lime green on dark purple.' },
   linea: {
-    es: 'Web de marca para un estudio ficticio de comunicación interactiva. Una pieza que se recorre como una instalación.',
-    en: 'A brand site for a fictional interactive studio. A piece you walk through like an installation.',
+    es: 'La web de un estudio de comunicación interactiva que no existe. Se recorre como una instalación: las líneas del fondo siguen al ratón y se mueven con una música que se compone sola.',
+    en: 'The website of an interactive studio that does not exist. You walk through it like an installation: the background lines follow the mouse and move to music that composes itself.',
   },
   rol: { es: 'Diseño y desarrollo frontend.', en: 'Design and front-end development.' },
   ficha: [
