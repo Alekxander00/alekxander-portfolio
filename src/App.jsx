@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { lazy, Suspense, useCallback, useEffect, useState } from 'react'
 import { AnimatePresence } from 'framer-motion'
 import { useIdioma } from './lib/idioma'
 import { despertarAudio } from './lib/sonido'
@@ -14,11 +14,15 @@ import Mesa from './components/mesa/Mesa'
 import Caso from './components/caso/Caso'
 import Maquina from './components/maquina/Maquina'
 import Joker from './components/joker/Joker'
-import Escena from './escena/Escena'
 import ManoHTML from './components/mesa/ManoHTML'
 import MaquinaHTML from './components/maquina/MaquinaHTML'
 import { useEscena } from './escena/estado'
 import { Con3DProvider } from './lib/con3D'
+
+// three.js (~220 KB comprimido) llega en su propio paquete: el texto se pinta
+// enseguida y la mesa aparece en cuanto se descarga. Si falla, LimiteError deja
+// la versión plana.
+const Escena = lazy(() => import('./escena/Escena'))
 
 const SECRETA = { id: 'secreta', valor: '★', palo: null, titulo: cartaSecreta.titulo }
 
@@ -84,7 +88,9 @@ export default function App() {
     <Con3DProvider value={con3D}>
       {con3D && (
         <LimiteError onError={() => setCon3D(false)}>
-          <Escena onPerdida={() => setCon3D(false)} />
+          <Suspense fallback={null}>
+            <Escena onPerdida={() => setCon3D(false)} />
+          </Suspense>
         </LimiteError>
       )}
       <Barra />

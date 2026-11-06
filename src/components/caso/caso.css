@@ -326,3 +326,11 @@
   font-size: 0.88rem;
   color: #c9bea9;
 }
+
+/* En pantallas estrechas el índice (valor y palo apilados) mide ~76 px: el
+   contenido empieza debajo para no pisarlo. */
+@media (max-width: 640px) {
+  .caso {
+    padding-top: 84px;
+  }
+}

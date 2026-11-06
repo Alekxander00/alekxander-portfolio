@@ -14,7 +14,7 @@ const GIRO = 0.6 // fracción del giro de la normal del borde
 // mano quepa dentro del paño sin pisarse. La última fila incompleta se centra.
 const COLUMNAS_MOVIL = 3
 const COLUMNA_MOVIL = 0.14
-const Z_MOVIL = -0.14
+const Z_MOVIL = -0.085 // bajo el panel del título y los palos
 const FILA_MOVIL = 0.22
 const ESCALA_MOVIL = 0.75
 
