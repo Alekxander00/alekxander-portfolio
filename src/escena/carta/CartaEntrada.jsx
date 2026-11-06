@@ -137,9 +137,20 @@ export default function CartaEntrada() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gl, c])
 
+  // Un solo arrastre a la vez: un segundo dedo se ignora y los listeners de la
+  // ventana se quitan siempre por la misma vía (también al desmontar).
+  const limpiarArrastre = useRef(() => {})
+  useEffect(
+    () => () => {
+      limpiarArrastre.current()
+      document.body.style.cursor = ''
+    },
+    [],
+  )
+
   const alBajar = (e) => {
     e.stopPropagation()
-    if (e.nativeEvent.button > 0) return
+    if (e.nativeEvent.button > 0 || puntero.current) return
     despertarAudio()
     sonar('recoger', { volumen: 0.6 })
     const ahora = performance.now() / 1000
@@ -181,9 +192,7 @@ export default function CartaEntrada() {
     const soltar = (ev) => {
       const pt = puntero.current
       if (!pt || ev.pointerId !== pt.id) return
-      window.removeEventListener('pointermove', mover)
-      window.removeEventListener('pointerup', soltar)
-      window.removeEventListener('pointercancel', soltar)
+      limpiarArrastre.current()
       const accion = clasificarSoltar(performance.now() / 1000 - pt.inicio, c.arrastrando, c.sostener?.fase)
       const quieto = performance.now() / 1000 - pt.ultT > 0.08
       puntero.current = null
@@ -203,6 +212,12 @@ export default function CartaEntrada() {
     window.addEventListener('pointermove', mover)
     window.addEventListener('pointerup', soltar)
     window.addEventListener('pointercancel', soltar)
+    limpiarArrastre.current = () => {
+      window.removeEventListener('pointermove', mover)
+      window.removeEventListener('pointerup', soltar)
+      window.removeEventListener('pointercancel', soltar)
+      limpiarArrastre.current = () => {}
+    }
   }
 
   useFrame((state, dtReal) => {

@@ -19,12 +19,8 @@ export default function EntradaMesa() {
   const setFoco = useEscena((s) => s.setFoco)
   const principio = aviso ? PRINCIPIOS[aviso] : null
 
+  // Enter y Espacio ya disparan el clic del botón; aquí solo van las flechas.
   const tecla = (e) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault()
-      ordenar('voltear')
-      return
-    }
     const d = EMPUJES[e.key]
     if (d) {
       e.preventDefault()
@@ -41,13 +37,17 @@ export default function EntradaMesa() {
       <button
         type="button"
         className="entrada-mesa__carta solo-lector"
-        aria-pressed={volteada}
+        aria-describedby="entrada-pista"
+        onClick={() => ordenar('voltear')}
         onKeyDown={tecla}
         onFocus={() => setFoco(true)}
         onBlur={() => setFoco(false)}
       >
         {volteada ? t(T.cartaEntradaVolteada) : t(T.cartaEntrada)}
       </button>
+      <span id="entrada-pista" className="solo-lector">
+        {t(T.pistaFlechas)}
+      </span>
 
       <div className="entrada__principios" role="status" aria-live="polite">
         <span className="solo-lector">

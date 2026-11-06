@@ -9,6 +9,7 @@ import Barra from './components/ui/Barra'
 import EntradaMesa from './components/entrada/EntradaMesa'
 import Entrada from './components/entrada/Entrada'
 import { tieneWebGL } from './escena/webgl'
+import LimiteError from './escena/LimiteError'
 import Mesa from './components/mesa/Mesa'
 import Caso from './components/caso/Caso'
 import Maquina from './components/maquina/Maquina'
@@ -68,7 +69,11 @@ export default function App() {
 
   return (
     <>
-      {con3D && <Escena onPerdida={() => setCon3D(false)} />}
+      {con3D && (
+        <LimiteError onError={() => setCon3D(false)}>
+          <Escena onPerdida={() => setCon3D(false)} />
+        </LimiteError>
+      )}
       <Barra />
       <main id="top">
         {con3D ? <EntradaMesa /> : <Entrada />}

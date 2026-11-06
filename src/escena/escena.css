@@ -43,3 +43,8 @@
 .parada :is(a, button, input, [role='slider'], .interactivo) {
   pointer-events: auto;
 }
+
+/* Mientras no se ve, el enlace a la mano tampoco se toca. */
+.parada .entrada__bajar:not(.is-visible) {
+  pointer-events: none;
+}

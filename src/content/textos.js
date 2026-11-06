@@ -7,6 +7,7 @@ export const T = {
   sonidoOff: { es: 'Activar sonido', en: 'Turn sound on' },
   cartaEntrada: { es: 'Una carta boca abajo', en: 'A face-down card' },
   cartaEntradaVolteada: { es: 'La carta del Joker: Alekxander', en: 'The Joker card: Alekxander' },
+  pistaFlechas: { es: 'Las flechas la empujan por la mesa; con Mayúsculas, más fuerte.', en: 'The arrow keys push it across the table; hold Shift to push harder.' },
   principios: { es: 'Principios encontrados', en: 'Principles found' },
   mano: { es: 'La mano', en: 'The hand' },
   filtro: { es: 'Filtrar por palo', en: 'Filter by suit' },

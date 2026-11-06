@@ -32,7 +32,20 @@ export default function Escena({ children, onPerdida }) {
         dpr={[1, tactil ? 1.5 : 2]}
         frameloop={oculta || pausada ? 'never' : 'always'}
         camera={{ fov: 45, near: 0.05, far: 20, position: [0, 0.62, 0.62] }}
-        gl={{ antialias: true, powerPreference: 'high-performance' }}
+        gl={(base) => {
+          // Si el navegador no acepta estos atributos se reintenta con los básicos;
+          // si tampoco, la página vuelve a la versión plana en vez de quedarse negra.
+          try {
+            return new THREE.WebGLRenderer({ ...base, antialias: true, powerPreference: 'high-performance' })
+          } catch {
+            try {
+              return new THREE.WebGLRenderer({ canvas: base.canvas })
+            } catch (error) {
+              onPerdida?.()
+              throw error
+            }
+          }
+        }}
         onCreated={({ scene, gl }) => {
           gl.domElement.addEventListener('webglcontextlost', () => onPerdida?.(), { once: true })
           scene.background = new THREE.Color(FONDO)
