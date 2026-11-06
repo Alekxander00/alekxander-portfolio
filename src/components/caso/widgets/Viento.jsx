@@ -3,17 +3,7 @@ import { useIdioma } from '../../../lib/idioma'
 
 // La vela de Sargazo: empuja según el ángulo con el viento y tiene una zona
 // muerta de frente. El barco apunta siempre arriba; lo que se gira es el viento.
-const ZONA_MUERTA = 40
-
-function empuje(rel) {
-  const a = Math.abs(rel)
-  if (a < ZONA_MUERTA) return 0
-  if (a < 90) return (a - ZONA_MUERTA) / (90 - ZONA_MUERTA)
-  if (a <= 135) return 1
-  return 1 - ((a - 135) / 45) * 0.35
-}
-
-const norm = (g) => ((((g + 180) % 360) + 360) % 360) - 180
+import { ZONA_MUERTA, aperturaBotavara, empuje, norm } from '../logica/vela'
 
 export default function Viento() {
   const { t } = useIdioma()
@@ -24,7 +14,7 @@ export default function Viento() {
   const enZona = Math.abs(rel) < ZONA_MUERTA
   // La botavara se abre hacia el lado contrario al viento, la mitad del ángulo.
   const lado = rel >= 0 ? -1 : 1
-  const apertura = enZona ? 0 : Math.max(8, Math.min(80, Math.abs(rel) / 2))
+  const apertura = aperturaBotavara(rel)
   const botavara = 180 + lado * apertura
 
   const desdePuntero = (e) => {

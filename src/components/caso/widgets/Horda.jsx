@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useIdioma } from '../../../lib/idioma'
 import { despertarAudio, sonar } from '../../../lib/sonido'
+import { MAX_ENEMIGOS, ritmoHorda } from '../logica/horda'
 
 // Baluarte en miniatura: la niebla suelta enemigos hacia el Núcleo y la noche
 // los multiplica. Se les pega con clic, como en el juego todo se resuelve a golpes.
@@ -43,9 +44,9 @@ export default function Horda() {
       const m = mundo.current
       const h = horaRef.current / 100
       // La noche multiplica la horda.
-      const ritmo = 0.5 + 5 * h * h
+      const ritmo = ritmoHorda(h)
       m.acumulado += ritmo * dt
-      while (m.acumulado > 1 && m.enemigos.length < 70) {
+      while (m.acumulado > 1 && m.enemigos.length < MAX_ENEMIGOS) {
         m.acumulado -= 1
         const a = Math.random() * Math.PI * 2
         const r = Math.max(W, H) * 0.62

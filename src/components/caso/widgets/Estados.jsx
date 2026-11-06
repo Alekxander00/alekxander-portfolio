@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useIdioma } from '../../../lib/idioma'
 import { despertarAudio, sonar } from '../../../lib/sonido'
+import { SOLO, transicion } from '../logica/estadosMuseo'
 
 // La máquina de estados del movimiento del Museo, en pequeño.
 // Cada acción solo vale desde ciertos estados; las demás rebotan.
@@ -18,18 +19,6 @@ const ACCIONES = [
   { id: 'pared', tecla: 'KeyW', etiqueta: { es: 'Pared', en: 'Wall' }, kbd: 'W' },
   { id: 'planear', tecla: 'KeyG', etiqueta: { es: 'Planear', en: 'Glide' }, kbd: 'G' },
 ]
-
-// Transiciones válidas: estado -> acción -> nuevo estado
-const REGLAS = {
-  suelo: { saltar: 'aire', dash: 'dash' },
-  aire: { dash: 'dash', pared: 'pared', planear: 'planeo' },
-  dash: {},
-  pared: { saltar: 'aire' },
-  planeo: { planear: 'aire', dash: 'dash' },
-}
-
-// Lo que pasa solo si no haces nada.
-const SOLO = { aire: ['suelo', 1300], dash: [null, 320], pared: ['aire', 1600], planeo: ['suelo', 2400] }
 
 const ARISTAS = [
   ['suelo', 'aire'], ['suelo', 'dash'], ['aire', 'dash'], ['aire', 'pared'], ['aire', 'planeo'],
@@ -60,7 +49,7 @@ export default function Estados() {
   const actuar = useCallback(
     (accion) => {
       despertarAudio()
-      const destino = REGLAS[estado][accion]
+      const destino = transicion(estado, accion)
       if (!destino) {
         setRechazo(accion + Date.now())
         return
