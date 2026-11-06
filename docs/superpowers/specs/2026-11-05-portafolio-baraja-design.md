@@ -26,15 +26,15 @@ Lectura de diseño: portafolio de desarrollador de videojuegos y web interactiva
    - Clic: se levanta, se encoge y se voltea (anticipación). La cara es el Joker.
    - El nombre del principio aparece después de hacerlo; contador "n/5" en HTML.
 2. **La mano.** Al bajar, un mazo a tu lado reparte las ocho cartas en abanico delante de ti. Pasar o tocar una carta la levanta. Los palos filtran (botones HTML). Valores: A♠ Baluarte, K♠ Sargazo, Q♠ Museo, J♠ The Others, 10♠ Cadence, K♦ Kinet, K♣ Sistemas para salud, Q♥ Eclipse.
-3. **El caso de estudio.** Clic en una carta: vuela hacia la cámara, gira y la cámara baja a la zona de casos de la mesa. Allí se arma un **diorama 3D** del proyecto. El texto del caso va en un panel HTML (al lado en escritorio, hoja que sube desde abajo en celular). Escape o Atrás cierran; enlazable con `#carta/<id>`.
+3. **El caso de estudio.** Clic en una carta: vuela hacia la cámara y se voltea; su reverso es el caso de estudio (la carta marfil grande de la v1, HTML, con scroll propio). Escape o Atrás cierran; enlazable con `#carta/<id>`. La sección "Cómo funciona" de cada reverso es una **escena 3D pequeña** en lugar del dibujo plano de la v1:
    - Baluarte: arena en miniatura con el Núcleo; la niebla suelta enemigos, la noche los multiplica, se les golpea con clic.
    - Sargazo: barco sobre agua que ondula; se arrastra el viento, la vela reacciona y hay zona muerta de frente.
-   - Museo: la cápsula de blocking sobre plataformas; las acciones (saltar, dash, pared, planear) cambian el estado y el grafo de estados se ve en el panel.
+   - Museo: la cápsula de blocking sobre plataformas; las acciones (saltar, dash, pared, planear) cambian el estado y el grafo de estados se ve debajo, en HTML.
    - The Others: un nivel 2.5D de verdad (tres capas: fondo, juego, frente). Visto desde la cámara del juego parece 2D; al arrastrar se gira y aparecen las capas. El personaje solo se mueve en el plano XY.
    - Kinet: las líneas del fondo de Kinet en 3D, con su paleta, reaccionando al puntero y a pulsos.
-   - Sistemas para salud: una tablet sobre la mesa con el recuadro de firma; al firmar sale el PDF.
-   - Cadence y Eclipse: sin diorama; la carta queda sobre la mesa y el panel muestra imágenes y enlaces.
-   - Slider antes/después en el panel cuando haya pares de imágenes reales.
+   - Sistemas para salud: una tablet 3D con el recuadro de firma en su pantalla; al firmar sale el PDF.
+   - Cadence y Eclipse: sin escena (no tienen una mecánica propia que mostrar); imágenes y enlaces.
+   - Slider antes/después en el reverso cuando haya pares de imágenes reales.
 4. **La Máquina.** La cámara levanta la vista: la Máquina (modelo .bbmodel original con Idle/Hit/Random) está enfrente. Clic = golpe. Si lleva un rato sin que nadie la toque, dice "¡Golpéame!". Al tercer golpe reparte: las cartas salen de su boca y se deslizan por el paño. "Otra carta" / "Me planto" en HTML. Si le ganas, escupe la carta secreta sobre cómo está hecha. Nada importante depende de ganar.
 5. **El Joker.** La cámara baja a tu lado de la mesa; panel HTML con sobre mí, CV, correo y redes.
 
@@ -54,14 +54,15 @@ Lectura de diseño: portafolio de desarrollador de videojuegos y web interactiva
 ## Técnica
 
 - Se reutiliza: contenido (`src/content/`), paneles de caso, reglas del blackjack, cargador .bbmodel, sonidos, idioma, versión plana como plan B.
-- Nuevo: `escena/` (canvas, mesa, lámpara, cámara por scroll), `Carta3D` (textura generada desde el naipe), física de la carta en el plano del paño, mano 3D, dioramas por proyecto, blackjack 3D.
-- Un solo `<Canvas>`; cada parada monta su contenido 3D cuando se acerca y lo suelta al alejarse.
+- Nuevo: `escena/` (canvas, mesa, lámpara, cámara por scroll), `Carta3D` (textura generada desde el naipe), física de la carta en el plano del paño, mano 3D, escenas 3D de "Cómo funciona", blackjack 3D.
+- Un canvas para la mesa; cada parada monta su contenido 3D cuando se acerca y lo suelta al alejarse.
+- Con un reverso abierto, la mesa se pausa y la escena de "Cómo funciona" usa su propio canvas pequeño (solo hay uno abierto a la vez), que se destruye al cerrar.
 
 ## Fases (cada una se revisa antes de la siguiente)
 
 1. Mesa, lámpara, cámara por scroll y carta de entrada 3D con los cinco principios.
-2. Mano 3D y apertura de casos (panel HTML + viaje de cámara), sin dioramas aún.
-3. Dioramas 3D de los casos.
+2. Mano 3D y apertura de casos (la carta vuela y se voltea al reverso), con las pruebas planas de la v1 aún.
+3. Escenas 3D de "Cómo funciona".
 4. Blackjack 3D con la Máquina de crupier.
 5. Joker, plan B sin WebGL y pulido en celular.
 
