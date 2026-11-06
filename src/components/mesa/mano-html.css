@@ -1,0 +1,64 @@
+/* La sección deja pasar el puntero a las cartas 3D; solo el título y los palos
+   quedan arriba, sobre un velo para que se lean encima de la mesa. */
+.mano-html {
+  position: relative;
+  min-height: 150svh;
+  padding: 72px 16px 0;
+}
+
+.mano-html__cabeza {
+  position: sticky;
+  top: 12px;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: rgba(12, 10, 9, 0.72);
+}
+
+@media (max-width: 640px) {
+  .mano-html__cabeza {
+    padding: 8px 10px;
+  }
+
+  .mano-html__cabeza .mesa__titulo {
+    font-size: 1.8rem;
+  }
+
+  .mano-html__cabeza .palos__boton {
+    min-height: 44px;
+    padding: 4px 8px 4px 4px;
+  }
+
+  .mano-html__cabeza .palos__nombre {
+    font-size: 0.8rem;
+  }
+}
+
+.mano-html__lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Con el foco, el botón de la carta aparece abajo para saber qué se está eligiendo. */
+.mano-html__carta:focus {
+  position: fixed;
+  left: 16px;
+  right: 16px;
+  bottom: 20px;
+  width: auto;
+  height: auto;
+  margin: 0 auto;
+  max-width: 560px;
+  padding: 10px 14px;
+  clip: auto;
+  overflow: visible;
+  white-space: normal;
+  border: 1px solid var(--marfil);
+  border-radius: var(--r-ui);
+  background: rgba(12, 10, 8, 0.9);
+  color: var(--texto);
+  font-size: 0.95rem;
+  text-align: left;
+}

@@ -8,6 +8,7 @@ import { useMovimientoReducido } from '../../lib/useMovimientoReducido'
 import { perfil } from '../../content/perfil'
 import { useEscena } from '../estado'
 import { PANO } from '../medidas'
+import { vivo } from '../vivo'
 import { crearCarta, paso, principiosDe, clasificarSoltar, IMPACTO_SACUDIDA } from './fisica'
 import { texturaJoker, texturaReverso } from './texturas'
 
@@ -222,6 +223,10 @@ export default function CartaEntrada() {
 
   useFrame((state, dtReal) => {
     if (!raiz.current) return
+    // Al bajar a la mano la carta de entrada deja el sitio libre.
+    const fuera = vivo.progreso > 0.6
+    raiz.current.visible = !fuera
+    sombra.current.visible = !fuera
     const ahora = performance.now() / 1000
     const dt = Math.min(dtReal, 0.033)
     const e = extra.current

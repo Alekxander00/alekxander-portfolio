@@ -2,7 +2,7 @@
 // el jugador en z positivo y la Máquina en z negativo.
 export const PARADAS = [
   { id: 'entrada', pos: [0, 0.62, 0.62], mira: [0, 0, 0.12], posMovil: [0, 0.82, 0.5], miraMovil: [0, 0, 0.12] },
-  { id: 'mano', pos: [0, 0.95, 1.2], mira: [0, 0, 0.35], posMovil: [0, 1.25, 1.15], miraMovil: [0, 0, 0.4] },
+  { id: 'mano', pos: [0, 1.0, 0.98], mira: [0, 0, 0.24], posMovil: [0, 1.0, 0.6], miraMovil: [0, 0, 0.0] },
   { id: 'maquina', pos: [0, 0.75, 1.0], mira: [0, 0.55, -0.9], posMovil: [0, 0.9, 1.25], miraMovil: [0, 0.5, -0.9] },
   { id: 'joker', pos: [0.35, 0.9, 1.05], mira: [0.35, 0, 0.45], posMovil: [0.2, 1.2, 1.1], miraMovil: [0.2, 0, 0.45] },
 ]

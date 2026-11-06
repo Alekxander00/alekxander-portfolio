@@ -3,26 +3,28 @@ export const ANCHO_CARTA = 0.18
 export const LARGO_CARTA = 0.252
 
 const SEPARACION = 0.155
-const Z_ABANICO = 0.42
+const Z_ABANICO = 0.3
 const GIRO = 0.06
 
-// Celular: dos columnas, filas más juntas y cartas algo más pequeñas para que
-// toda la mano quepa dentro del paño.
-const COLUMNA_MOVIL = 0.1
-const Z_MOVIL = -0.12
-const FILA_MOVIL = 0.2
+// Celular: rejilla de tres columnas con cartas más pequeñas, para que toda la
+// mano quepa dentro del paño sin pisarse. La última fila incompleta se centra.
+const COLUMNAS_MOVIL = 3
+const COLUMNA_MOVIL = 0.14
+const Z_MOVIL = -0.14
+const FILA_MOVIL = 0.22
 const ESCALA_MOVIL = 0.75
 
 export function posicionesMano(n, movil) {
   if (movil) {
     return Array.from({ length: n }, (_, i) => {
-      const fila = Math.floor(i / 2)
-      const sola = n % 2 === 1 && i === n - 1
+      const fila = Math.floor(i / COLUMNAS_MOVIL)
+      const enFila = Math.min(COLUMNAS_MOVIL, n - fila * COLUMNAS_MOVIL)
+      const col = i % COLUMNAS_MOVIL
       return {
-        x: sola ? 0 : i % 2 === 0 ? -COLUMNA_MOVIL : COLUMNA_MOVIL,
+        x: (col - (enFila - 1) / 2) * COLUMNA_MOVIL,
         z: Z_MOVIL + fila * FILA_MOVIL,
         rotY: 0,
-        escala: (i === 0 ? 1.2 : 1) * ESCALA_MOVIL,
+        escala: ESCALA_MOVIL,
       }
     })
   }

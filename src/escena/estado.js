@@ -14,6 +14,11 @@ export const useEscena = create((set, get) => ({
   // Órdenes del botón accesible a la carta 3D (la carta las consume).
   orden: null,
   soltarFichas: () => {},
+  // La mano
+  palo: null,
+  resaltada: null,
+  abierta: null,
+  abrir: () => {},
 
   setVolteada: (v) => set({ volteada: v }),
   descubrir: (clave) => {
@@ -27,4 +32,8 @@ export const useEscena = create((set, get) => ({
   setFoco: (v) => set({ foco: v }),
   ordenar: (tipo, datos) => set({ orden: { tipo, datos, id: Math.random() } }),
   registrarFichas: (fn) => set({ soltarFichas: fn }),
+  setPalo: (p) => set({ palo: p }),
+  setResaltada: (id) => set({ resaltada: id }),
+  setAbierta: (id) => set({ abierta: id }),
+  registrarAbrir: (fn) => set({ abrir: fn }),
 }))

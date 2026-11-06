@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
 import { camaraEn, progresoDeScroll } from './recorrido'
 import { useEscena } from './estado'
+import { vivo } from './vivo'
 import { useMovimientoReducido } from '../lib/useMovimientoReducido'
 
 // Mueve la cámara según el scroll: cada [data-parada] es una parada del recorrido.
@@ -31,6 +32,8 @@ export default function Camara() {
   useFrame((_, dt) => {
     const movil = size.width < size.height
     const p = progresoDeScroll(window.scrollY, inicios.current)
+    vivo.progreso = p
+    vivo.movil = movil
     const objetivo = camaraEn(p, movil, reducido)
     if (!actual.current) actual.current = { pos: [...objetivo.pos], mira: [...objetivo.mira] }
     const a = actual.current

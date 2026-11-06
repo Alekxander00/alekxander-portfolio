@@ -15,6 +15,9 @@ import Caso from './components/caso/Caso'
 import Maquina from './components/maquina/Maquina'
 import Joker from './components/joker/Joker'
 import Escena from './escena/Escena'
+import ManoHTML from './components/mesa/ManoHTML'
+import { useEscena } from './escena/estado'
+import { Con3DProvider } from './lib/con3D'
 
 const SECRETA = { id: 'secreta', valor: '★', palo: null, titulo: cartaSecreta.titulo }
 
@@ -65,10 +68,19 @@ export default function App() {
     }
   }, [])
 
+  // La mesa sabe qué caso está abierto, se pausa mientras tanto y puede abrir casos.
+  useEffect(() => {
+    useEscena.getState().registrarAbrir(abrir)
+  }, [abrir])
+  useEffect(() => {
+    useEscena.getState().setAbierta(abierta)
+    useEscena.getState().setPausada(con3D && Boolean(abierta))
+  }, [abierta, con3D])
+
   const proyecto = abierta === 'secreta' ? SECRETA : proyectos.find((p) => p.id === abierta)
 
   return (
-    <>
+    <Con3DProvider value={con3D}>
       {con3D && (
         <LimiteError onError={() => setCon3D(false)}>
           <Escena onPerdida={() => setCon3D(false)} />
@@ -77,7 +89,7 @@ export default function App() {
       <Barra />
       <main id="top">
         {con3D ? <EntradaMesa /> : <Entrada />}
-        <Mesa onAbrir={abrir} />
+        {con3D ? <ManoHTML onAbrir={abrir} /> : <Mesa onAbrir={abrir} />}
         <Maquina onAbrirSecreta={() => abrir('secreta')} />
         <Joker />
       </main>
@@ -94,6 +106,6 @@ export default function App() {
           />
         )}
       </AnimatePresence>
-    </>
+    </Con3DProvider>
   )
 }
