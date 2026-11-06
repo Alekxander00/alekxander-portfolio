@@ -31,7 +31,7 @@ export default function Camara() {
 
   useFrame((_, dt) => {
     const movil = size.width < size.height
-    const p = progresoDeScroll(window.scrollY, inicios.current)
+    const p = progresoDeScroll(window.scrollY, inicios.current, document.documentElement.scrollHeight - window.innerHeight)
     vivo.progreso = p
     vivo.movil = movil
     const objetivo = camaraEn(p, movil, reducido)

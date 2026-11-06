@@ -9,6 +9,7 @@ import CartaEntrada from './carta/CartaEntrada'
 import ManoMesa from './mano/ManoMesa'
 import MaquinaMesa from './maquina/MaquinaMesa'
 import CartasBlackjack from './maquina/CartasBlackjack'
+import JokerMesa from './JokerMesa'
 import './escena.css'
 
 const FONDO = '#0c0a09'
@@ -62,6 +63,7 @@ export default function Escena({ children, onPerdida }) {
         <ManoMesa />
         <MaquinaMesa />
         <CartasBlackjack />
+        <JokerMesa />
         {children}
       </Canvas>
     </div>

@@ -15,4 +15,13 @@ describe('tieneWebGL', () => {
     })
     expect(tieneWebGL(roto)).toBe(false)
   })
+  it('libera el contexto de prueba para no gastar uno de los pocos que da el navegador', () => {
+    let liberado = false
+    const lienzo = () => ({
+      getContext: (tipo) =>
+        tipo === 'webgl2' ? { getExtension: (n) => (n === 'WEBGL_lose_context' ? { loseContext: () => (liberado = true) } : null) } : null,
+    })
+    expect(tieneWebGL(lienzo)).toBe(true)
+    expect(liberado).toBe(true)
+  })
 })

@@ -191,3 +191,16 @@
   flex-wrap: wrap;
   gap: 10px;
 }
+
+/* Sin WebGL no hay Máquina que golpear: el golpe es un botón normal en el centro. */
+.casa__golpe--visible {
+  inset: auto;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  border: 1px dashed var(--dorado);
+  border-radius: var(--r-ui);
+  background: rgba(12, 10, 8, 0.85);
+  color: var(--letrero);
+  white-space: nowrap;
+}

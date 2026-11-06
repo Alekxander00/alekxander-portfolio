@@ -1,5 +1,5 @@
  
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
 import * as THREE from 'three'
 import { useIdioma } from '../../lib/idioma'
@@ -11,6 +11,7 @@ import { PANO } from '../medidas'
 import { vivo } from '../vivo'
 import { crearCarta, paso, principiosDe, clasificarSoltar, IMPACTO_SACUDIDA } from './fisica'
 import { texturaJoker, texturaReverso } from './texturas'
+import { useTextura } from './useTextura'
 
 const ANCHO = 0.18
 const LARGO = 0.252
@@ -57,9 +58,9 @@ export default function CartaEntrada() {
   const reducido = useMovimientoReducido()
   const camera = useThree((s) => s.camera)
   const gl = useThree((s) => s.gl)
-  const [reverso, setReverso] = useState(null)
-  const [joker, setJoker] = useState(null)
   const oficio = t(perfil.oficio)
+  const reverso = useTextura(texturaReverso, [])
+  const joker = useTextura(() => texturaJoker(perfil.nombre, oficio), [oficio])
 
   const raiz = useRef(null)
   const ejeK = useRef(null)
@@ -83,22 +84,6 @@ export default function CartaEntrada() {
   useEffect(() => {
     if (import.meta.env.DEV) window.__carta = c
   }, [c])
-
-  useEffect(() => {
-    let vivo = true
-    texturaReverso().then((tx) => vivo && setReverso(tx))
-    return () => {
-      vivo = false
-    }
-  }, [])
-
-  useEffect(() => {
-    let vivo = true
-    texturaJoker(perfil.nombre, oficio).then((tx) => vivo && setJoker(tx))
-    return () => {
-      vivo = false
-    }
-  }, [oficio])
 
   const descubrir = (lista) => lista.forEach((p) => useEscena.getState().descubrir(p))
 
@@ -151,7 +136,16 @@ export default function CartaEntrada() {
     const alTocar = (e) => {
       const toque = e.touches[0]
       const p = toque && puntoEnMesa(toque.clientX, toque.clientY)
-      if (p && Math.abs(p.x - c.x) < ANCHO * 0.75 && Math.abs(p.z - Z0 - c.z) < LARGO * 0.65) e.preventDefault()
+      // Solo en la parada de entrada: más abajo la carta está oculta y el dedo debe hacer scroll.
+      if (!p || vivo.progreso >= 0.5) return
+      // El toque, en el sistema de la carta girada (el grupo gira -c.rot en Y).
+      const dx = p.x - c.x
+      const dz = p.z - Z0 - c.z
+      const cos = Math.cos(c.rot)
+      const sin = Math.sin(c.rot)
+      const lx = dx * cos + dz * sin
+      const lz = -dx * sin + dz * cos
+      if (Math.abs(lx) < ANCHO * 0.75 && Math.abs(lz) < LARGO * 0.65) e.preventDefault()
     }
     canvas.addEventListener('touchstart', alTocar, { passive: false })
     return () => canvas.removeEventListener('touchstart', alTocar)

@@ -27,4 +27,8 @@ describe('camaraEn', () => {
     expect(camaraEn(1.4, false, true).pos).toEqual(PARADAS[1].pos)
     expect(camaraEn(1.6, false, true).pos).toEqual(PARADAS[2].pos)
   })
+  it('al fondo de la página llega a la última parada aunque su sección no alcance el borde de arriba', () => {
+    expect(progresoDeScroll(2900, [0, 800, 2400, 3400], 2900)).toBe(3)
+    expect(progresoDeScroll(2000, [0, 800, 2400, 3400], 2900)).toBeLessThan(2)
+  })
 })

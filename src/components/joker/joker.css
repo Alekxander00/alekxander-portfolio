@@ -114,3 +114,16 @@
   font-size: 0.85rem;
   color: var(--texto-2);
 }
+
+/* Con la mesa 3D el Joker está en el paño: la carta HTML deja su hueco vacío
+   para que se vea a través, y el texto lleva un panel para leerse encima. */
+.joker-sec--mesa .joker-sec__carta {
+  visibility: hidden;
+}
+
+.joker-sec--mesa .joker-sec__texto {
+  padding: clamp(18px, 4vw, 32px);
+  border-radius: 12px;
+  background: rgba(12, 10, 9, 0.84);
+  box-shadow: inset 0 0 0 1px var(--linea);
+}

@@ -4,12 +4,15 @@ export const PARADAS = [
   { id: 'entrada', pos: [0, 0.62, 0.62], mira: [0, 0, 0.12], posMovil: [0, 0.82, 0.5], miraMovil: [0, 0, 0.12] },
   { id: 'mano', pos: [0, 1.0, 0.98], mira: [0, 0, 0.24], posMovil: [0, 1.0, 0.6], miraMovil: [0, 0, 0.0] },
   { id: 'maquina', pos: [0, 1.15, 0.95], mira: [0, 0.02, -0.38], posMovil: [0, 1.55, 1.2], miraMovil: [0, -0.05, -0.32] },
-  { id: 'joker', pos: [0.35, 0.9, 1.05], mira: [0.35, 0, 0.45], posMovil: [0.2, 1.2, 1.1], miraMovil: [0.2, 0, 0.45] },
+  { id: 'joker', pos: [0.61, 0.62, 0.66], mira: [0.61, 0, 0.22], posMovil: [0.3, 1.0, 0.95], miraMovil: [0.3, 0, 0.42] },
 ]
 
 // Índice fraccionario de parada según el scroll. inicios[i] = offsetTop de la sección i.
-export function progresoDeScroll(scrollY, inicios) {
-  const n = inicios.length
+// maxScroll: el scroll máximo de la página; si la última sección es corta y nunca
+// llega arriba del todo, su parada empieza donde acaba la página.
+export function progresoDeScroll(scrollY, iniciosMedidos, maxScroll = Infinity) {
+  const n = iniciosMedidos.length
+  const inicios = n > 1 ? [...iniciosMedidos.slice(0, -1), Math.max(iniciosMedidos[n - 2], Math.min(iniciosMedidos[n - 1], maxScroll))] : iniciosMedidos
   if (n === 0 || scrollY <= inicios[0]) return 0
   for (let i = 0; i < n - 1; i++) {
     if (scrollY < inicios[i + 1]) {

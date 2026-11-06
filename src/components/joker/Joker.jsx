@@ -2,10 +2,12 @@ import { useState } from 'react'
 import { useIdioma } from '../../lib/idioma'
 import { perfil } from '../../content/perfil'
 import { T } from '../../content/textos'
+import { useCon3D } from '../../lib/con3D'
 import './joker.css'
 
 export default function Joker() {
   const { t } = useIdioma()
+  const con3D = useCon3D()
   const [copiado, setCopiado] = useState(false)
 
   const copiar = async () => {
@@ -19,7 +21,7 @@ export default function Joker() {
   }
 
   return (
-    <section className="joker-sec" id="joker" data-parada="joker" aria-labelledby="joker-titulo">
+    <section className={con3D ? 'joker-sec parada joker-sec--mesa' : 'joker-sec'} id="joker" data-parada="joker" aria-labelledby="joker-titulo">
       <div className="joker-sec__carta" aria-hidden="true">
         <span className="joker-sec__palo">JOKER</span>
         <span className="joker-sec__tela" />

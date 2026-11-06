@@ -2,7 +2,10 @@
 export function tieneWebGL(crearLienzo = () => document.createElement('canvas')) {
   try {
     const lienzo = crearLienzo()
-    return Boolean(lienzo.getContext('webgl2') || lienzo.getContext('webgl'))
+    const contexto = lienzo.getContext('webgl2') || lienzo.getContext('webgl')
+    // Solo era una prueba: se suelta enseguida, el navegador da pocos contextos.
+    contexto?.getExtension?.('WEBGL_lose_context')?.loseContext()
+    return Boolean(contexto)
   } catch {
     return false
   }

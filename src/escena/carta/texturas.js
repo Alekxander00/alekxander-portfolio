@@ -11,12 +11,13 @@ const TINTA = '#1c1915'
 const TINTA_2 = '#5a5144'
 const ROJO = '#b3302a'
 
+// Si la telaraña no carga, las caras se dibujan sin ella (null).
 let telarana = null
 function cargarTelarana() {
-  telarana ||= new Promise((resolver, fallar) => {
+  telarana ||= new Promise((resolver) => {
     const img = new Image()
     img.onload = () => resolver(img)
-    img.onerror = fallar
+    img.onerror = () => resolver(null)
     img.src = '/images/telarana.png'
   })
   return telarana
@@ -61,14 +62,16 @@ export async function texturaReverso() {
   g.fill()
   g.save()
   g.clip()
-  const lado = (W - m * 2) * 0.7
-  const tela = tenida(img, MARFIL, 512)
-  g.globalAlpha = 0.9
-  g.drawImage(tela, m + W * 0.05, m + W * 0.05, lado, lado)
-  g.globalAlpha = 0.35
-  g.translate(W - m - W * 0.05, H - m - W * 0.05)
-  g.rotate(Math.PI)
-  g.drawImage(tela, 0, 0, lado, lado)
+  if (img) {
+    const lado = (W - m * 2) * 0.7
+    const tela = tenida(img, MARFIL, 512)
+    g.globalAlpha = 0.9
+    g.drawImage(tela, m + W * 0.05, m + W * 0.05, lado, lado)
+    g.globalAlpha = 0.35
+    g.translate(W - m - W * 0.05, H - m - W * 0.05)
+    g.rotate(Math.PI)
+    g.drawImage(tela, 0, 0, lado, lado)
+  }
   g.restore()
   return aTextura(c)
 }
@@ -113,7 +116,7 @@ export async function texturaJoker(nombre, oficio) {
   g.restore()
 
   const lado = W * 0.36
-  g.drawImage(tenida(img, TINTA, 512), (W - lado) / 2, H * 0.2, lado, lado)
+  if (img) g.drawImage(tenida(img, TINTA, 512), (W - lado) / 2, H * 0.2, lado, lado)
 
   g.fillStyle = TINTA
   g.font = '64px Gloock, Georgia, serif'

@@ -6,6 +6,7 @@ import { FRASES, T } from '../../content/textos'
 import { ReversoNaipe } from '../ui/Naipe'
 import Blackjack from './Blackjack'
 import { GANA } from './reglasBlackjack'
+import { tieneWebGL } from '../../escena/webgl'
 import './maquina.css'
 
 const MaquinaEscena = lazy(() => import('./MaquinaEscena'))
@@ -26,7 +27,8 @@ export default function Maquina({ onAbrirSecreta }) {
   const seccion = useRef(null)
   const [cerca, setCerca] = useState(false)
   const [visible, setVisible] = useState(false)
-  const [carga, setCarga] = useState('cargando')
+  // Sin WebGL la Máquina no se dibuja, pero el blackjack se juega igual con el botón.
+  const [carga, setCarga] = useState(() => (tieneWebGL() ? 'cargando' : 'sinDibujo'))
   const [golpes, setGolpes] = useState(0)
   const [frase, setFrase] = useState(null)
   const [abierta, setAbierta] = useState(false)
@@ -62,7 +64,7 @@ export default function Maquina({ onAbrirSecreta }) {
   // Si lleva un rato a la vista y nadie la toca, pide un golpe. Una sola vez.
   const pidio = useRef(false)
   useEffect(() => {
-    if (!visible || carga !== 'lista' || golpes > 0 || pidio.current) return
+    if (!visible || (carga !== 'lista' && carga !== 'sinDibujo') || golpes > 0 || pidio.current) return
     const id = setTimeout(() => {
       pidio.current = true
       decir(FRASES.pide, 4200)
@@ -136,7 +138,7 @@ export default function Maquina({ onAbrirSecreta }) {
         </div>
 
         <div className="casa__escena">
-          {cerca && carga !== 'error' && (
+          {cerca && (carga === 'cargando' || carga === 'lista') && (
             <Suspense fallback={null}>
               <MaquinaEscena
                 golpes={golpes}
@@ -150,11 +152,13 @@ export default function Maquina({ onAbrirSecreta }) {
           {carga === 'error' && <p className="casa__estado">{t(T.errorMaquina)}</p>}
           <button
             type="button"
-            className="casa__golpe"
+            className={carga === 'sinDibujo' ? 'boton casa__golpe casa__golpe--visible' : 'casa__golpe'}
             onClick={golpear}
             disabled={carga === 'error'}
-            aria-label={t(T.golpear)}
-          />
+            aria-label={carga === 'sinDibujo' ? undefined : t(T.golpear)}
+          >
+            {carga === 'sinDibujo' && t(T.golpear)}
+          </button>
           <span className="casa__sombra" aria-hidden="true" />
         </div>
 
