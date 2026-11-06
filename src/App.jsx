@@ -7,6 +7,8 @@ import { cartaSecreta } from './content/perfil'
 import { T } from './content/textos'
 import Barra from './components/ui/Barra'
 import EntradaMesa from './components/entrada/EntradaMesa'
+import Entrada from './components/entrada/Entrada'
+import { tieneWebGL } from './escena/webgl'
 import Mesa from './components/mesa/Mesa'
 import Caso from './components/caso/Caso'
 import Maquina from './components/maquina/Maquina'
@@ -25,6 +27,8 @@ function leerHash() {
 export default function App() {
   const { t } = useIdioma()
   const [abierta, setAbierta] = useState(leerHash)
+  // Sin WebGL (o si se pierde el contexto) se queda la versión plana.
+  const [con3D, setCon3D] = useState(tieneWebGL)
 
   useEffect(() => {
     const alCambiar = () => setAbierta(leerHash())
@@ -64,10 +68,10 @@ export default function App() {
 
   return (
     <>
-      <Escena />
+      {con3D && <Escena onPerdida={() => setCon3D(false)} />}
       <Barra />
       <main id="top">
-        <EntradaMesa />
+        {con3D ? <EntradaMesa /> : <Entrada />}
         <Mesa onAbrir={abrir} />
         <Maquina onAbrirSecreta={() => abrir('secreta')} />
         <Joker />

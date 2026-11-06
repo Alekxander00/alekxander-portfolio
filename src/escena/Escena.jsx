@@ -11,7 +11,7 @@ import './escena.css'
 const FONDO = '#0c0a09'
 
 // El canvas de la mesa: fijo detrás de toda la página.
-export default function Escena({ children }) {
+export default function Escena({ children, onPerdida }) {
   const pausada = useEscena((s) => s.pausada)
   const [oculta, setOculta] = useState(() => document.hidden)
   const [tactil] = useState(() => window.matchMedia('(pointer: coarse)').matches)
@@ -33,7 +33,8 @@ export default function Escena({ children }) {
         frameloop={oculta || pausada ? 'never' : 'always'}
         camera={{ fov: 45, near: 0.05, far: 20, position: [0, 0.62, 0.62] }}
         gl={{ antialias: true, powerPreference: 'high-performance' }}
-        onCreated={({ scene }) => {
+        onCreated={({ scene, gl }) => {
+          gl.domElement.addEventListener('webglcontextlost', () => onPerdida?.(), { once: true })
           scene.background = new THREE.Color(FONDO)
           scene.fog = new THREE.Fog(FONDO, 2.2, 5)
         }}
