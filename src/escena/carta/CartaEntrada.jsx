@@ -7,11 +7,12 @@ import { despertarAudio, fichas as sonarFichas, sonar } from '../../lib/sonido'
 import { useMovimientoReducido } from '../../lib/useMovimientoReducido'
 import { perfil } from '../../content/perfil'
 import { useEscena } from '../estado'
-import { PANO } from '../medidas'
+import { MAZO, PANO } from '../medidas'
 import { vivo } from '../vivo'
 import { crearCarta, paso, principiosDe, clasificarSoltar, IMPACTO_SACUDIDA } from './fisica'
 import { texturaJoker, texturaReverso } from './texturas'
 import { useTextura } from './useTextura'
+import { crearCaida, pasoCaida, soltarDesde } from './caida'
 
 const ANCHO = 0.18
 const LARGO = 0.252
@@ -75,8 +76,10 @@ export default function CartaEntrada() {
 
   // La física trabaja relativa al punto de reposo: z = 0 es Z0 en la mesa.
   const c = useMemo(() => crearCarta(), [])
+  // Al cargar ya está en la mesa; al volver arriba tras irse al mazo, cae del cielo.
+  const caida = useMemo(() => Object.assign(crearCaida(), { fase: 'posada', y: 0 }), [])
   const sombra = useRef(null)
-  const extra = useRef({ giro: 0, vGiro: 0, giroObj: 0, anticipar: -1, tocada: false, inicio: -1, ultimoSalto: 0, saltoInicio: -1 })
+  const extra = useRef({ giro: 0, vGiro: 0, giroObj: 0, anticipar: -1, tocada: false, inicio: -1, ultimoSalto: 0, saltoInicio: -1, salida: 0 })
   const puntero = useRef(null)
   const raycaster = useMemo(() => new THREE.Raycaster(), [])
 
@@ -238,13 +241,29 @@ export default function CartaEntrada() {
 
   useFrame((state, dtReal) => {
     if (!raiz.current) return
-    // Al bajar a la mano la carta de entrada deja el sitio libre.
-    const fuera = vivo.progreso > 0.6
-    raiz.current.visible = !fuera
-    sombra.current.visible = !fuera
     const ahora = performance.now() / 1000
     const dt = Math.min(dtReal, 0.033)
     const e = extra.current
+    // Al bajar a la mano la carta de entrada se va deslizando al mazo (y vuelve de él).
+    const fuera = vivo.progreso > 0.6 ? 1 : 0
+    if (!fuera && e.salida >= 0.999 && !reducido) {
+      // Ya estaba en el mazo: vuelve a empezar en el centro, cayendo del cielo.
+      Object.assign(c, { x: 0, z: 0, vx: 0, vz: 0, w: 0, rot: 0, k: 0, q: 0, lanzada: false })
+      e.salida = 0
+      soltarDesde(caida)
+    }
+    for (const ev of pasoCaida(caida, dt, ahora)) {
+      if (ev.tipo !== 'impacto') continue
+      useEscena.getState().sacudir(Math.min(12, ev.fuerza * 2.5))
+      useEscena.getState().soltarFichas([0, Z0], 14, 1.4)
+      sonarFichas(6)
+      sonar('aterrizar', { volumen: 1 })
+    }
+    e.salida = reducido ? fuera : e.salida + Math.sign(fuera - e.salida) * Math.min(Math.abs(fuera - e.salida), dt * 2)
+    const sal = e.salida * e.salida * (3 - 2 * e.salida)
+    const mazo = vivo.movil ? MAZO.movil : MAZO.desk
+    raiz.current.visible = e.salida < 0.999
+    sombra.current.visible = e.salida < 0.5
     if (e.inicio < 0) e.inicio = ahora
 
     if (!reducido) {
@@ -294,9 +313,9 @@ export default function CartaEntrada() {
     const fraccion = (((e.giro % Math.PI) + Math.PI) % Math.PI) / Math.PI
     const levantar = Math.sin(fraccion * Math.PI) * 0.06
     raiz.current.position.set(
-      c.x + (Math.random() - 0.5) * tiembla,
-      ALTURA + salto + levantar,
-      c.z + Z0 + (Math.random() - 0.5) * tiembla,
+      THREE.MathUtils.lerp(c.x + (Math.random() - 0.5) * tiembla, mazo[0], sal),
+      ALTURA + salto + levantar + Math.sin(sal * Math.PI) * 0.12 + caida.y,
+      THREE.MathUtils.lerp(c.z + Z0 + (Math.random() - 0.5) * tiembla, mazo[1], sal),
     )
     sombra.current.position.set(c.x, 0.0015, c.z + Z0)
     sombra.current.rotation.z = -c.rot
@@ -307,7 +326,8 @@ export default function CartaEntrada() {
     escQ.current.scale.set(1 - c.q, 1, 1 + c.q * 0.5)
     ejeQ2.current.rotation.y = c.angQ
     const s = (e.anticipar >= 0 ? 0.9 : 1) * (congelada ? 1.07 : 1)
-    unif.current.scale.setScalar(s)
+    // Estirada al caer del cielo, aplastada al aterrizar.
+    unif.current.scale.set(s * (1 - caida.k * 0.4 + caida.q), s, s * (1 + caida.k - caida.q * 0.6))
     // Quieta, se endereza despacio hacia la orientación más cercana.
     if (Math.abs(c.w) < 0.1 && !c.arrastrando) c.rot += (Math.round(c.rot / Math.PI) * Math.PI - c.rot) * Math.min(1, dt * 1.2)
     unif.current.rotation.y = -c.rot

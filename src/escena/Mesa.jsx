@@ -4,7 +4,7 @@ import { PANO } from './medidas'
 
 const COLOR_PANO = '#2e1012'
 const COLOR_MADERA = '#3b2416'
-const LUZ = '#ffd9a0'
+const LUZ = '#ffb867' // ámbar de bombilla: más cálida, no lava las caras de las cartas
 
 // Grano del paño: ruido suave en una textura pequeña que se repite.
 function texturaPano() {
@@ -80,7 +80,7 @@ export default function Mesa() {
         position={[0, 1.5, 0.05]}
         angle={0.75}
         penumbra={0.6}
-        intensity={15}
+        intensity={12}
         distance={0}
         decay={2}
         color={LUZ}

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Canvas } from '@react-three/fiber'
+import { Canvas, events } from '@react-three/fiber'
 import * as THREE from 'three'
 import { useEscena } from './estado'
 import Camara from './Camara'
@@ -10,6 +10,7 @@ import ManoMesa from './mano/ManoMesa'
 import MaquinaMesa from './maquina/MaquinaMesa'
 import CartasBlackjack from './maquina/CartasBlackjack'
 import JokerMesa from './JokerMesa'
+import { soloVisibles } from './visibles'
 import './escena.css'
 
 const FONDO = '#0c0a09'
@@ -36,6 +37,7 @@ export default function Escena({ children, onPerdida }) {
         dpr={[1, tactil ? 1.5 : 2]}
         frameloop={oculta || pausada ? 'never' : 'always'}
         camera={{ fov: 45, near: 0.05, far: 20, position: [0, 0.62, 0.62] }}
+        events={(store) => ({ ...events(store), filter: soloVisibles })}
         gl={(base) => {
           // Si el navegador no acepta estos atributos se reintenta con los básicos;
           // si tampoco, la página vuelve a la versión plana en vez de quedarse negra.

@@ -8,14 +8,15 @@ import { useMovimientoReducido } from '../../lib/useMovimientoReducido'
 import { proyectos } from '../../content/proyectos'
 import { useEscena } from '../estado'
 import { vivo } from '../vivo'
+import { MAZO } from '../medidas'
 import { texturaProyecto } from '../carta/naipe'
 import { texturaReverso } from '../carta/texturas'
 import { posicionesMano, ANCHO_CARTA, LARGO_CARTA } from './disposicion'
 
-const MAZO = { desk: [0.66, -0.15], movil: [0.16, 0.66] }
 const REPARTO_DESDE = 0.55 // progreso del scroll a partir del cual se reparte
-const RECOGER_BAJO = 0.4 // al volver por debajo, la mano regresa al mazo
-const OCULTA_BAJO = 0.3 // y por debajo de esto ya no se ve
+// Fuera de su tramo la mano regresa al mazo, carta a carta en orden inverso al
+// reparto, y solo se oculta cuando ya está en él.
+const TRAMO = [0.4, 1.6]
 const ENTRE_CARTAS = 0.07 // s
 const VUELO = 0.35 // s antes de abrir el caso
 
@@ -82,7 +83,7 @@ export default function ManoMesa() {
       ),
     [],
   )
-  const reparto = useRef({ inicio: -1 })
+  const reparto = useRef({ inicio: -1, recogida: -1 })
   const mazoRef = useRef(null)
   const vuelo = useRef(null)
 
@@ -129,10 +130,15 @@ export default function ManoMesa() {
     const visibles = proyectos.filter((p) => !palo || p.palo === palo)
     const sitios = posicionesMano(visibles.length, movil)
     const r = reparto.current
-    const enSuTramo = vivo.progreso > OCULTA_BAJO && vivo.progreso <= 1.6
-    if (mazoRef.current) mazoRef.current.visible = enSuTramo && !movil
-    if (r.inicio < 0 && vivo.progreso > REPARTO_DESDE) r.inicio = ahora
-    if (r.inicio >= 0 && vivo.progreso < RECOGER_BAJO && !vuelo.current) r.inicio = -1
+    const enSuTramo = vivo.progreso > TRAMO[0] && vivo.progreso <= TRAMO[1]
+    if (r.inicio < 0 && enSuTramo && vivo.progreso > REPARTO_DESDE) {
+      r.inicio = ahora
+      r.recogida = -1
+    }
+    if (r.inicio >= 0 && !enSuTramo && !vuelo.current) {
+      r.inicio = -1
+      r.recogida = ahora
+    }
     const { resaltada } = useEscena.getState()
     const k = reducido ? 1 : 1 - Math.exp(-10 * dt)
 
@@ -148,7 +154,10 @@ export default function ManoMesa() {
       const e = estados[p.id]
       if (!e.grupo) return
       const i = visibles.indexOf(p)
-      const repartida = r.inicio >= 0 && (reducido || ahora - r.inicio > i * ENTRE_CARTAS)
+      const repartida =
+        (r.inicio >= 0 && (reducido || ahora - r.inicio > i * ENTRE_CARTAS)) ||
+        // Recogiendo: la última repartida es la primera en volver.
+        (r.recogida >= 0 && e.salida >= 0 && !reducido && ahora - r.recogida <= (visibles.length - 1 - i) * ENTRE_CARTAS)
       let obj
       if (i >= 0 && repartida) {
         const s = sitios[i]
@@ -187,10 +196,13 @@ export default function ManoMesa() {
       // Y se inclina hacia la cámara (giro en X) hasta quedar casi de frente.
       e.giro.rotation.set(m * 1.2, 0, e.flip)
       e.grupo.scale.setScalar(e.escala * (1 + e.levantar * 0.05))
-      // Solo se ve en su tramo: antes estorbaría a la carta de entrada y en el
-      // blackjack asomaría detrás de sus cartas y del panel.
-      e.grupo.visible = enSuTramo
+      // Fuera de su tramo, ya en el mazo, se oculta: estorbaría a la carta de
+      // entrada y en el blackjack asomaría detrás de sus cartas y del panel.
+      const enMazo = Math.hypot(e.x - mazo[0], e.z - mazo[1]) < 0.02
+      e.grupo.visible = enSuTramo || !enMazo
     })
+    // El mazo se queda siempre en la mesa (en celular queda fuera de cuadro).
+    if (mazoRef.current) mazoRef.current.visible = !movil
   })
 
   if (!reverso || !frentes) return null

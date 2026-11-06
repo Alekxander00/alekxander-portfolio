@@ -12,6 +12,8 @@ const ESCALA = 0.72
 const SEPARA = 0.135
 const FILA = { casa: -0.28, jugador: 0.02 }
 const SECRETA = [0.26, 0.004, -0.13]
+// Fuera de la parada de la Máquina las cartas vuelven a su boca y se ocultan.
+const TRAMO = [1.45, 2.5]
 
 function Carta({ textura, reverso, estado }) {
   const grupo = useRef(null)
@@ -77,28 +79,35 @@ export default function CartasBlackjack() {
   useFrame((_, dtReal) => {
     const dt = Math.min(dtReal, 0.05)
     const k = 1 - Math.exp(-9 * dt)
+    const recoger = vivo.progreso < TRAMO[0] || vivo.progreso > TRAMO[1]
+    const [bx, by, bz] = vivo.boca
+    // Visible mientras no haya llegado a la boca.
+    const verSi = (e) => !recoger || Math.hypot(e.x - bx, e.z - bz) > 0.04
     for (const c of cartas) {
       const e = estados.get(c.id)
       if (!e?.grupo) continue
-      const x = (c.i - (c.n - 1) / 2) * SEPARA
-      const z = FILA[c.fila]
-      const y = 0.004 + c.i * 0.001
+      const x = recoger ? bx : (c.i - (c.n - 1) / 2) * SEPARA
+      const z = recoger ? bz : FILA[c.fila]
+      const y = recoger ? by : 0.004 + c.i * 0.001
       e.x += (x - e.x) * k
       e.z += (z - e.z) * k
       // En el aire mientras viaja: arco que baja al llegar.
       const lejos = Math.min(1, Math.hypot(x - e.x, z - e.z) * 2)
       e.y += (y + lejos * 0.12 - e.y) * k
-      e.flip += ((c.oculta ? Math.PI : 0) - e.flip) * (1 - Math.exp(-7 * dt))
+      e.flip += ((c.oculta || recoger ? Math.PI : 0) - e.flip) * (1 - Math.exp(-7 * dt))
       e.grupo.position.set(e.x, e.y + Math.sin(e.flip) * 0.04, e.z)
+      e.grupo.visible = verSi(e)
       e.giro.rotation.z = e.flip
     }
     const s = estados.get('secreta')
     if (s?.grupo) {
-      s.x += (SECRETA[0] - s.x) * k
-      s.z += (SECRETA[2] - s.z) * k
-      const lejos = Math.min(1, Math.hypot(SECRETA[0] - s.x, SECRETA[2] - s.z) * 1.5)
-      s.y += (SECRETA[1] + lejos * 0.35 - s.y) * k
+      const [sx, sy, sz] = recoger ? vivo.boca : SECRETA
+      s.x += (sx - s.x) * k
+      s.z += (sz - s.z) * k
+      const lejos = Math.min(1, Math.hypot(sx - s.x, sz - s.z) * 1.5)
+      s.y += (sy + lejos * 0.35 - s.y) * k
       s.grupo.position.set(s.x, s.y, s.z)
+      s.grupo.visible = verSi(s)
       s.grupo.rotation.y = -0.4
       s.giro.rotation.z = Math.PI
     }

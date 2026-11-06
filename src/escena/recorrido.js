@@ -1,7 +1,7 @@
 // Paradas de la cámara sobre la mesa (metros). La mesa está en y = 0,
 // el jugador en z positivo y la Máquina en z negativo.
 export const PARADAS = [
-  { id: 'entrada', pos: [0, 0.62, 0.62], mira: [0, 0, 0.12], posMovil: [0, 0.82, 0.5], miraMovil: [0, 0, 0.12] },
+  { id: 'entrada', pos: [0, 0.62, 0.62], mira: [0, 0, 0.12], posMovil: [0, 1.3, 0.62], miraMovil: [0, 0, 0.1] },
   { id: 'mano', pos: [0, 1.0, 0.98], mira: [0, 0, 0.24], posMovil: [0, 1.0, 0.6], miraMovil: [0, 0, 0.0] },
   { id: 'maquina', pos: [0, 1.15, 0.95], mira: [0, 0.02, -0.38], posMovil: [0, 1.55, 1.2], miraMovil: [0, -0.05, -0.32] },
   { id: 'joker', pos: [0.61, 0.62, 0.66], mira: [0.61, 0, 0.22], posMovil: [0.3, 1.0, 0.95], miraMovil: [0.3, 0, 0.42] },

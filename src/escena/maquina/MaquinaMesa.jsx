@@ -8,7 +8,7 @@ import { useEscena } from '../estado'
 import { vivo } from '../vivo'
 
 const ALTO = 0.95
-const BASE = [0, -0.45, -0.85]
+const BASE = [0, -0.33, -1.0]
 
 // La Máquina Expendedora de Baluarte, de pie al otro lado de la mesa: la crupier.
 export default function MaquinaMesa() {
