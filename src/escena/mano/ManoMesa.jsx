@@ -181,6 +181,8 @@ export default function ManoMesa() {
       // Y se inclina hacia la cámara (giro en X) hasta quedar casi de frente.
       e.giro.rotation.set(m * 1.2, 0, e.flip)
       e.grupo.scale.setScalar(e.escala * (1 + e.levantar * 0.05))
+      // En el blackjack la mano quedaría asomando detrás de sus cartas y del panel.
+      e.grupo.visible = vivo.progreso <= 1.6
     })
   })
 

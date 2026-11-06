@@ -10,8 +10,8 @@ import { ANCHO_CARTA, LARGO_CARTA } from '../mano/disposicion'
 
 const ESCALA = 0.72
 const SEPARA = 0.135
-const FILA = { casa: -0.25, jugador: 0.2 }
-const SECRETA = [0.34, 0.004, 0.42]
+const FILA = { casa: -0.28, jugador: 0.02 }
+const SECRETA = [0.26, 0.004, -0.13]
 
 function Carta({ textura, reverso, estado }) {
   const grupo = useRef(null)

@@ -7,7 +7,7 @@ import { sonar } from '../../lib/sonido'
 import { useEscena } from '../estado'
 import { vivo } from '../vivo'
 
-const ALTO = 1.25
+const ALTO = 0.95
 const BASE = [0, -0.45, -0.85]
 
 // La Máquina Expendedora de Baluarte, de pie al otro lado de la mesa: la crupier.
