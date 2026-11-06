@@ -1,6 +1,13 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import * as THREE from 'three'
 import { PANO } from './medidas'
+import { cargarBbmodel } from '../components/maquina/bbmodel'
+
+// La mesa modelada en Blockbench. En sus unidades el paño es un polígono de 24
+// lados de radios 14.48 × 11.63 a altura 1, y el borde sube hasta 2. Se escala
+// para que su paño coincida con PANO (todo lo demás está medido sobre él).
+const MODELO = '/Mesa/MesaBlackJack.bbmodel'
+const PANO_MODELO = { rx: 15.23789 * 0.95, rz: 12.24417 * 0.95, y: 1 }
 
 const COLOR_PANO = '#2e1012'
 const COLOR_MADERA = '#3b2416'
@@ -26,7 +33,30 @@ function texturaPano() {
 }
 
 // Mesa ovalada de paño con borde de madera y una lámpara colgante encima.
+// Carga el modelo y lo deja con el paño en y = 0. Mientras tanto (o si falla) null.
+function useMesaModelo() {
+  const [raiz, setRaiz] = useState(null)
+  useEffect(() => {
+    let vigente = true
+    cargarBbmodel(MODELO)
+      .then((m) => {
+        if (!vigente) return
+        const sx = PANO.rx / PANO_MODELO.rx
+        const sz = PANO.rz / PANO_MODELO.rz
+        m.raiz.scale.set(sx, sx, sz)
+        m.raiz.position.y = -PANO_MODELO.y * sx
+        setRaiz(m.raiz)
+      })
+      .catch((e) => console.warn('La mesa de Blockbench no cargó; queda la de respaldo', e))
+    return () => {
+      vigente = false
+    }
+  }, [])
+  return raiz
+}
+
 export default function Mesa() {
+  const modelo = useMesaModelo()
   const { pano, borde, cuerpo, grano } = useMemo(() => {
     const forma = new THREE.Shape()
     forma.absellipse(0, 0, PANO.rx, PANO.rz, 0, Math.PI * 2)
@@ -51,15 +81,22 @@ export default function Mesa() {
   return (
     <group>
       <hemisphereLight args={['#3b2c22', '#050404', 0.35]} />
-      <mesh geometry={pano} position={[0, 0.001, 0]}>
-        <meshStandardMaterial color={COLOR_PANO} map={grano} roughness={1} />
-      </mesh>
-      <mesh geometry={borde}>
-        <meshStandardMaterial color={COLOR_MADERA} roughness={0.55} />
-      </mesh>
-      <mesh geometry={cuerpo}>
-        <meshStandardMaterial color="#24160e" roughness={0.8} />
-      </mesh>
+      {modelo ? (
+        <primitive object={modelo} />
+      ) : (
+        // Mesa de respaldo mientras carga el modelo (o si no carga).
+        <group>
+          <mesh geometry={pano} position={[0, 0.001, 0]}>
+            <meshStandardMaterial color={COLOR_PANO} map={grano} roughness={1} />
+          </mesh>
+          <mesh geometry={borde}>
+            <meshStandardMaterial color={COLOR_MADERA} roughness={0.55} />
+          </mesh>
+          <mesh geometry={cuerpo}>
+            <meshStandardMaterial color="#24160e" roughness={0.8} />
+          </mesh>
+        </group>
+      )}
 
       {/* Lámpara */}
       <group position={[0, 1.6, 0]}>
