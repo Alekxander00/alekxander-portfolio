@@ -142,7 +142,8 @@ export async function cargarBbmodel(url) {
   }
   datos.outliner.forEach((n) => construir(n, raiz, [0, 0, 0]))
 
-  return { raiz, animaciones: prepararAnimaciones(datos.animations || [], huesos), huesos }
+  // materiales: uno por textura del archivo, en su orden (aunque la malla no los use todos).
+  return { raiz, animaciones: prepararAnimaciones(datos.animations || [], huesos), huesos, materiales }
 }
 
 function prepararAnimaciones(lista, huesos) {
