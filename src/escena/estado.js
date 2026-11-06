@@ -37,3 +37,6 @@ export const useEscena = create((set, get) => ({
   setAbierta: (id) => set({ abierta: id }),
   registrarAbrir: (fn) => set({ abrir: fn }),
 }))
+
+// DEV: el estado de la escena a mano en la consola y en las pruebas.
+if (import.meta.env?.DEV && typeof window !== 'undefined') window.__escena = useEscena

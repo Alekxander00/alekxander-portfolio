@@ -1,0 +1,38 @@
+.widget3d__lienzo {
+  position: relative;
+  height: clamp(240px, 56vw, 360px);
+  touch-action: pan-y;
+}
+
+.widget3d__contador {
+  min-width: 2.5em;
+  text-align: right;
+  font-family: var(--f-titulo);
+  font-size: 1.3rem;
+}
+
+.widget3d__leyenda {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  display: flex;
+  gap: 8px;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+
+.widget3d__leyenda span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: rgba(12, 10, 8, 0.75);
+  font-size: 0.8rem;
+}
+
+.widget3d__leyenda i {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+}

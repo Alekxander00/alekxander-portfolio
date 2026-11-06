@@ -25,7 +25,8 @@ const ARISTAS = [
   ['pared', 'aire'], ['planeo', 'aire'], ['planeo', 'dash'], ['aire', 'suelo'], ['planeo', 'suelo'], ['dash', 'suelo'], ['dash', 'aire'],
 ]
 
-export default function Estados() {
+// Lado3D: vista lateral en 3D (la versión de la mesa); sin ella, la vista plana en SVG.
+export default function Estados({ Lado3D }) {
   const { t, idioma } = useIdioma()
   const [estado, setEstado] = useState('suelo')
   const [vengoDe, setVengoDe] = useState('suelo')
@@ -83,8 +84,13 @@ export default function Estados() {
 
   return (
     <div className="widget" onKeyDown={tecla}>
-      <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 3fr) minmax(0, 1.2fr)' }}>
-        <svg viewBox="0 0 480 290" aria-hidden="true">
+      {Lado3D && (
+        <div className="widget3d__lienzo">
+          <Lado3D estado={estado} vengoDe={vengoDe} />
+        </div>
+      )}
+      <div style={{ display: 'grid', gridTemplateColumns: Lado3D ? '1fr' : 'minmax(0, 3fr) minmax(0, 1.2fr)' }}>
+        <svg viewBox="0 0 480 290" aria-hidden="true" style={Lado3D ? { maxHeight: 220 } : undefined}>
           <defs>
             <marker id="punta" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
               <path d="M0 0 L10 5 L0 10 z" fill="rgba(239,231,214,0.5)" />
@@ -127,6 +133,7 @@ export default function Estados() {
           })}
         </svg>
         {/* Vista lateral: la cápsula de blocking del Museo */}
+        {!Lado3D && (
         <svg viewBox="0 0 160 290" aria-hidden="true" style={{ borderLeft: '1px solid rgba(239,231,214,0.12)' }}>
           <rect x="0" y="230" width="160" height="60" fill="#2b2620" />
           <rect x="132" y="80" width="28" height="150" fill="#2b2620" />
@@ -143,6 +150,7 @@ export default function Estados() {
             {estado === 'dash' && <path d="M-20 -14 h-26 M-20 0 h-34 M-20 14 h-22" stroke="#efe7d6" strokeWidth="3" />}
           </g>
         </svg>
+        )}
       </div>
       <div className="widget__barra">
         {ACCIONES.map((a) => (

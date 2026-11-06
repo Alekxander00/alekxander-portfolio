@@ -5,6 +5,7 @@ import { useMovimientoReducido } from '../../lib/useMovimientoReducido'
 import { PALOS } from '../../content/proyectos'
 import { T } from '../../content/textos'
 import AntesDespues from './AntesDespues'
+import { useCon3D } from '../../lib/con3D'
 import './caso.css'
 
 const WIDGETS = {
@@ -14,6 +15,15 @@ const WIDGETS = {
   plano: lazy(() => import('./widgets/Plano')),
   lineas: lazy(() => import('./widgets/Lineas')),
   firma: lazy(() => import('./widgets/Firma')),
+}
+
+// Con la mesa 3D, estas pruebas tienen su versión en 3D; Kinet y la firma se quedan planas.
+const WIDGETS_3D = {
+  ...WIDGETS,
+  horda: lazy(() => import('./widgets3d/Horda3D')),
+  viento: lazy(() => import('./widgets3d/Viento3D')),
+  estados: lazy(() => import('./widgets3d/Estados3D')),
+  plano: lazy(() => import('./widgets3d/Plano3D')),
 }
 
 // Diálogo con foco atrapado. Escape cierra y el foco vuelve a la carta.
@@ -59,7 +69,9 @@ export default function Caso({ proyecto: p, onCerrar, secreto }) {
     }
   }, [onCerrar])
 
-  const Widget = p.widget ? WIDGETS[p.widget] : null
+  const con3D = useCon3D()
+  const mapa = con3D ? WIDGETS_3D : WIDGETS
+  const Widget = p.widget ? mapa[p.widget] : null
   const palo = PALOS[p.palo]
   const rojo = palo?.rojo
 
