@@ -18,7 +18,15 @@ const REPARTO_DESDE = 0.55 // progreso del scroll a partir del cual se reparte
 // reparto, y solo se oculta cuando ya está en él.
 const TRAMO = [0.4, 1.6]
 const ENTRE_CARTAS = 0.07 // s
-const VUELO = 0.35 // s antes de abrir el caso
+// Al tocarla, la carta sube de frente a la cámara, se queda un instante para que
+// se lea y entonces se abre el caso (antes daba vueltas y se abría de canto).
+const VUELO = 0.65 // s antes de abrir el caso: ~0.4 de subida y ~0.25 quieta delante
+const DELANTE = 0.4 // m de la cámara
+const TRAS_CERRAR = 0.3 // s tras cerrar la ventana antes de volver a la mesa
+const DE_PIE = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1, 0, 0), Math.PI / 2)
+const qMesa = new THREE.Quaternion()
+const qCara = new THREE.Quaternion()
+const eMesa = new THREE.Euler()
 
 const suave = (actual, objetivo, k) => actual + (objetivo - actual) * k
 
@@ -148,7 +156,14 @@ export default function ManoMesa() {
       v.abierto = true
       useEscena.getState().abrir(v.id)
     }
-    if (v && v.abierto && !abierta && ahora - v.inicio > VUELO + 0.3) vuelo.current = null
+    // Delante de la cámara hasta que la ventana se haya cerrado del todo (su salida
+    // dura ~0.22 s); solo entonces vuelve a la mesa.
+    // Con la ventana abierta la mesa se pausa y puede que ningún fotograma la vea
+    // abierta: pasado el vuelo con margen, si ya no está abierta es que se cerró.
+    if (v && v.abierto && (abierta === v.id || ahora - v.inicio > VUELO + 0.15)) v.visto = true
+    if (v && v.visto && !abierta && v.cerrada == null) v.cerrada = ahora
+    const volviendo = v && v.cerrada != null && ahora - v.cerrada > TRAS_CERRAR
+    if (volviendo && ahora - v.cerrada > TRAS_CERRAR + 0.4) vuelo.current = null
 
     proyectos.forEach((p) => {
       const e = estados[p.id]
@@ -171,7 +186,7 @@ export default function ManoMesa() {
         e.salida = -1
       }
       const sube = resaltada === p.id ? 1 : 0
-      const volando = v && v.id === p.id && !(v.abierto && !abierta)
+      const volando = v && v.id === p.id && !volviendo
       e.x = suave(e.x, obj.x, k)
       e.z = suave(e.z, obj.z, k)
       e.y = suave(e.y, obj.y, k)
@@ -184,18 +199,20 @@ export default function ManoMesa() {
       // Al volar, la carta se acerca a la cámara y se pone de cara a ella.
       const delante = new THREE.Vector3()
       camera.getWorldDirection(delante)
-      const destino = camera.position.clone().addScaledVector(delante, 0.32)
+      const destino = camera.position.clone().addScaledVector(delante, DELANTE)
       const m = e.mirar
       e.grupo.position.set(
         THREE.MathUtils.lerp(e.x, destino.x, m),
         THREE.MathUtils.lerp(e.y + e.levantar * 0.03 + Math.sin(e.flip) * 0.05, destino.y, m),
         THREE.MathUtils.lerp(e.z, destino.z, m),
       )
-      // Al volar da una vuelta completa sobre sí misma.
-      e.grupo.rotation.set(0, e.rotY * (1 - m) + m * Math.PI * 2, 0)
-      // Y se inclina hacia la cámara (giro en X) hasta quedar casi de frente.
-      e.giro.rotation.set(m * 1.2, 0, e.flip)
-      e.grupo.scale.setScalar(e.escala * (1 + e.levantar * 0.05))
+      // Sin vueltas: de tumbada en la mesa pasa a de pie mirando a la cámara.
+      qMesa.setFromEuler(eMesa.set(0, e.rotY, 0))
+      qCara.copy(camera.quaternion).multiply(DE_PIE)
+      e.grupo.quaternion.slerpQuaternions(qMesa, qCara, m)
+      e.giro.rotation.set(0, 0, e.flip)
+      // Delante de la cámara todas tienen el mismo tamaño (el As y las de celular también).
+      e.grupo.scale.setScalar(THREE.MathUtils.lerp(e.escala * (1 + e.levantar * 0.05), 1, m))
       // Fuera de su tramo, ya en el mazo, se oculta: estorbaría a la carta de
       // entrada y en el blackjack asomaría detrás de sus cartas y del panel.
       const enMazo = Math.hypot(e.x - mazo[0], e.z - mazo[1]) < 0.02

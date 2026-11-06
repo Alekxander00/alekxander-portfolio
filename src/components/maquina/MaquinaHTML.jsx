@@ -237,20 +237,14 @@ export default function MaquinaHTML({ onAbrirSecreta }) {
                   </button>
                 </>
               )}
-              {ganada && (
-                <button type="button" className="boton maquina-html__secreta" onClick={onAbrirSecreta}>
-                  {t(T.secreta)}
-                </button>
-              )}
             </div>
           </div>
         )}
-        {!abierta && ganada && (
-          <div className="maquina-html__panel">
-            <button type="button" className="boton maquina-html__secreta" onClick={onAbrirSecreta}>
-              {t(T.secreta)}
-            </button>
-          </div>
+        {/* La carta secreta se toca en la mesa; este botón es para teclado y lector. */}
+        {ganada && (
+          <button type="button" className="solo-lector maquina-html__golpe" onClick={onAbrirSecreta}>
+            {t(T.secreta)}
+          </button>
         )}
       </div>
     </section>

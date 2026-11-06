@@ -7,6 +7,10 @@ export const PARADAS = [
   { id: 'joker', pos: [0.61, 0.62, 0.66], mira: [0.61, 0, 0.22], posMovil: [0.3, 1.0, 0.95], miraMovil: [0.3, 0, 0.42] },
 ]
 
+// Durante una partida de blackjack la cámara baja y se pone de frente a la Máquina,
+// como quien está sentado a la mesa: la Máquina y las dos filas quedan sobre el panel.
+export const PARTIDA = { pos: [0, 0.7, 1.1], mira: [0, 0.1, -0.35], posMovil: [0, 0.85, 1.35], miraMovil: [0, 0.12, -0.35] }
+
 // Índice fraccionario de parada según el scroll. inicios[i] = offsetTop de la sección i.
 // maxScroll: el scroll máximo de la página; si la última sección es corta y nunca
 // llega arriba del todo, su parada empieza donde acaba la página.
@@ -41,4 +45,14 @@ export function camaraEn(progreso, movil, reducido) {
   if (t === 0) return { pos: a[claves[0]], mira: a[claves[1]] }
   if (t === 1) return { pos: b[claves[0]], mira: b[claves[1]] }
   return { pos: mezclar(a[claves[0]], b[claves[0]], t), mira: mezclar(a[claves[1]], b[claves[1]], t) }
+}
+
+// Mezcla el encuadre del recorrido con el de la partida: pleno en la parada de la
+// Máquina y nada a media parada de distancia.
+export function conPartida(camara, progreso, movil) {
+  const peso = Math.max(0, 1 - Math.abs(progreso - 2) / 0.5)
+  if (peso === 0) return camara
+  const t = suave(peso)
+  const [cp, cm] = movil ? [PARTIDA.posMovil, PARTIDA.miraMovil] : [PARTIDA.pos, PARTIDA.mira]
+  return { pos: mezclar(camara.pos, cp, t), mira: mezclar(camara.mira, cm, t) }
 }

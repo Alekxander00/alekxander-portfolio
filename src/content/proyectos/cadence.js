@@ -1,7 +1,7 @@
 export default {
   id: 'cadence',
   palo: 'picas',
-  valor: '10',
+  valor: '9',
   titulo: 'Cadence of Shadows',
   imagen: null,
   linea: {

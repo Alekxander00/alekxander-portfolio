@@ -1,7 +1,7 @@
 export default {
   id: 'the-others',
   palo: 'picas',
-  valor: 'J',
+  valor: '10',
   titulo: 'The Others',
   imagen: null,
   linea: {

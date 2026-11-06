@@ -11,11 +11,12 @@ import { ANCHO_CARTA, LARGO_CARTA } from '../mano/disposicion'
 const ESCALA = 0.72
 const SEPARA = 0.135
 const FILA = { casa: -0.28, jugador: 0.02 }
-const SECRETA = [0.26, 0.004, -0.13]
+// A la izquierda, simétrica al mazo; en celular más cerca del centro para que se vea.
+const SECRETA = { desk: [-0.66, 0.004, -0.15], movil: [-0.21, 0.004, -0.13] }
 // Fuera de la parada de la Máquina las cartas vuelven a su boca y se ocultan.
 const TRAMO = [1.45, 2.5]
 
-function Carta({ textura, reverso, estado }) {
+function Carta({ textura, reverso, estado, onTocar }) {
   const grupo = useRef(null)
   const giro = useRef(null)
   useEffect(() => {
@@ -23,7 +24,33 @@ function Carta({ textura, reverso, estado }) {
     estado.giro = giro.current
   }, [estado])
   return (
-    <group ref={grupo} position={vivo.boca} scale={ESCALA}>
+    <group
+      ref={grupo}
+      position={vivo.boca}
+      scale={ESCALA}
+      onClick={
+        onTocar &&
+        ((e) => {
+          e.stopPropagation()
+          onTocar()
+        })
+      }
+      onPointerOver={
+        onTocar &&
+        ((e) => {
+          e.stopPropagation()
+          estado.encima = true
+          document.body.style.cursor = 'pointer'
+        })
+      }
+      onPointerOut={
+        onTocar &&
+        (() => {
+          estado.encima = false
+          document.body.style.cursor = ''
+        })
+      }
+    >
       <group ref={giro}>
         <mesh rotation-x={-Math.PI / 2}>
           <planeGeometry args={[ANCHO_CARTA, LARGO_CARTA]} />
@@ -101,14 +128,15 @@ export default function CartasBlackjack() {
     }
     const s = estados.get('secreta')
     if (s?.grupo) {
-      const [sx, sy, sz] = recoger ? vivo.boca : SECRETA
+      const [sx, sy, sz] = recoger ? vivo.boca : vivo.movil ? SECRETA.movil : SECRETA.desk
       s.x += (sx - s.x) * k
       s.z += (sz - s.z) * k
       const lejos = Math.min(1, Math.hypot(sx - s.x, sz - s.z) * 1.5)
-      s.y += (sy + lejos * 0.35 - s.y) * k
+      // Se levanta al pasar el puntero: invita a tocarla.
+      s.y += (sy + lejos * 0.35 + (s.encima && !recoger ? 0.03 : 0) - s.y) * k
       s.grupo.position.set(s.x, s.y, s.z)
       s.grupo.visible = verSi(s)
-      s.grupo.rotation.y = -0.4
+      s.grupo.rotation.y = 0.4
       s.giro.rotation.z = Math.PI
     }
   })
@@ -125,7 +153,7 @@ export default function CartasBlackjack() {
       {cartas.map((c) => (
         <Carta key={c.id} textura={texturaDe(c)} reverso={reverso} estado={estadoDe(c.id)} />
       ))}
-      {secretaFuera && <Carta key="secreta" textura={reverso} reverso={reverso} estado={estadoDe('secreta')} />}
+      {secretaFuera && <Carta key="secreta" textura={reverso} reverso={reverso} estado={estadoDe('secreta')} onTocar={() => useEscena.getState().abrir('secreta')} />}
     </group>
   )
 }

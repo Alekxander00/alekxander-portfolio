@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { PARADAS, camaraEn, progresoDeScroll } from './recorrido'
+import { PARADAS, PARTIDA, camaraEn, conPartida, progresoDeScroll } from './recorrido'
 
 describe('progresoDeScroll', () => {
   const inicios = [0, 800, 2400, 3400]
@@ -30,5 +30,22 @@ describe('camaraEn', () => {
   it('al fondo de la página llega a la última parada aunque su sección no alcance el borde de arriba', () => {
     expect(progresoDeScroll(2900, [0, 800, 2400, 3400], 2900)).toBe(3)
     expect(progresoDeScroll(2000, [0, 800, 2400, 3400], 2900)).toBeLessThan(2)
+  })
+})
+
+describe('conPartida', () => {
+  const base = { pos: [0, 1, 1], mira: [0, 0, 0] }
+  it('en la parada de la Máquina usa el encuadre de partida', () => {
+    expect(conPartida(base, 2, false)).toEqual({ pos: PARTIDA.pos, mira: PARTIDA.mira })
+    expect(conPartida(base, 2, true).pos).toEqual(PARTIDA.posMovil)
+  })
+  it('lejos de la Máquina no cambia nada', () => {
+    expect(conPartida(base, 1.4, false)).toBe(base)
+    expect(conPartida(base, 3, false)).toBe(base)
+  })
+  it('a medio camino mezcla', () => {
+    const y = conPartida(base, 2.25, false).pos[1]
+    expect(y).toBeLessThan(1)
+    expect(y).toBeGreaterThan(PARTIDA.pos[1])
   })
 })

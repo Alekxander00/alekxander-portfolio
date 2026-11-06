@@ -43,12 +43,6 @@
   margin-left: 6px;
 }
 
-.maquina-html__secreta {
-  border-color: var(--dorado);
-  color: var(--letrero);
-  font-family: var(--f-maquina);
-  font-weight: 700;
-}
 
 .maquina-html__golpe:focus {
   position: absolute;
