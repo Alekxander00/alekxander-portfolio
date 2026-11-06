@@ -5,12 +5,12 @@ export const T_TOQUE = 0.22 // s: menos que esto sin moverse es un clic
 export const T_CARGA = 0.45 // s: desde aquí tiembla
 export const T_ESTALLA = 1.3 // s: aquí se congela (hitstop)
 export const PAUSA = 0.15 // s: duración del congelado
-export const IMPACTO_SACUDIDA = 3.2 // m/s contra el borde: tiembla la cámara
-export const IMPACTO_REBOTE = 0.45 // m/s: rebote que se nota
+export const IMPACTO_SACUDIDA = 1.6 // m/s contra el borde: tiembla la cámara (alcanzable con el dedo)
+export const IMPACTO_REBOTE = 0.3 // m/s: rebote que se nota
 export const ROCE = 2.4
 export const REBOTE = 0.55
 export const DT_MAX = 0.033
-const VEL_ESTIRA = 2 // m/s a la que el estirado llega a su máximo
+const VEL_ESTIRA = 1.4 // m/s a la que el estirado llega a su máximo
 const K_MAX = 0.3
 
 export function crearCarta() {

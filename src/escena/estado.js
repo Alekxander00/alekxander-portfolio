@@ -9,6 +9,8 @@ export const useEscena = create((set, get) => ({
   aviso: null,
   sacudida: 0,
   pausada: false,
+  // El botón accesible de la carta tiene el foco: la carta se resalta.
+  foco: false,
   // Órdenes del botón accesible a la carta 3D (la carta las consume).
   orden: null,
   soltarFichas: () => {},
@@ -22,6 +24,7 @@ export const useEscena = create((set, get) => ({
   },
   sacudir: (fuerza) => set((s) => ({ sacudida: Math.max(s.sacudida, fuerza) })),
   setPausada: (v) => set({ pausada: v }),
+  setFoco: (v) => set({ foco: v }),
   ordenar: (tipo, datos) => set({ orden: { tipo, datos, id: Math.random() } }),
   registrarFichas: (fn) => set({ soltarFichas: fn }),
 }))

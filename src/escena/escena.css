@@ -22,6 +22,17 @@
 
 .con-mesa .barra {
   position: absolute;
+  z-index: 2;
+}
+
+/* El main no atrapa el puntero: solo sus secciones normales. Las paradas de la
+   mesa lo dejan pasar al canvas. */
+.con-mesa main {
+  pointer-events: none;
+}
+
+.con-mesa main > :not(.parada) {
+  pointer-events: auto;
 }
 
 /* Las paradas dejan pasar el puntero a la mesa, salvo en lo que se toca. */

@@ -1,0 +1,32 @@
+/* El botón de la carta es invisible pero enfocable; al enfocarlo la carta 3D se
+   resalta y además se ve este marco en el centro de la pantalla. */
+.entrada-mesa__carta:focus {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: auto;
+  height: auto;
+  margin: 0;
+  padding: 8px 14px;
+  clip: auto;
+  overflow: visible;
+  white-space: nowrap;
+  transform: translate(-50%, 140px);
+  border: 1px solid var(--marfil);
+  border-radius: var(--r-ui);
+  background: rgba(12, 10, 8, 0.85);
+  color: var(--texto);
+  font-size: 0.9rem;
+}
+
+/* En celular, contador y aviso arriba: la carta lanzada suele acabar abajo. */
+@media (max-width: 640px) {
+  .entrada__principios {
+    top: 66px;
+    bottom: auto;
+  }
+
+  .entrada__aviso {
+    max-width: min(340px, calc(100vw - 32px));
+  }
+}

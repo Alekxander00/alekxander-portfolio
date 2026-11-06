@@ -4,6 +4,8 @@ import * as THREE from 'three'
 import { useEscena } from './estado'
 import Camara from './Camara'
 import Mesa from './Mesa'
+import Fichas from './Fichas'
+import CartaEntrada from './carta/CartaEntrada'
 import './escena.css'
 
 const FONDO = '#0c0a09'
@@ -29,7 +31,7 @@ export default function Escena({ children }) {
       <Canvas
         dpr={[1, tactil ? 1.5 : 2]}
         frameloop={oculta || pausada ? 'never' : 'always'}
-        camera={{ fov: 45, near: 0.05, far: 20, position: [0, 1.15, 1.35] }}
+        camera={{ fov: 45, near: 0.05, far: 20, position: [0, 0.62, 0.62] }}
         gl={{ antialias: true, powerPreference: 'high-performance' }}
         onCreated={({ scene }) => {
           scene.background = new THREE.Color(FONDO)
@@ -38,6 +40,8 @@ export default function Escena({ children }) {
       >
         <Camara />
         <Mesa />
+        <CartaEntrada />
+        <Fichas />
         {children}
       </Canvas>
     </div>

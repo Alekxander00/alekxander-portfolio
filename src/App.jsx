@@ -6,7 +6,7 @@ import { proyectos } from './content/proyectos'
 import { cartaSecreta } from './content/perfil'
 import { T } from './content/textos'
 import Barra from './components/ui/Barra'
-import Entrada from './components/entrada/Entrada'
+import EntradaMesa from './components/entrada/EntradaMesa'
 import Mesa from './components/mesa/Mesa'
 import Caso from './components/caso/Caso'
 import Maquina from './components/maquina/Maquina'
@@ -67,7 +67,7 @@ export default function App() {
       <Escena />
       <Barra />
       <main id="top">
-        <Entrada />
+        <EntradaMesa />
         <Mesa onAbrir={abrir} />
         <Maquina onAbrirSecreta={() => abrir('secreta')} />
         <Joker />
