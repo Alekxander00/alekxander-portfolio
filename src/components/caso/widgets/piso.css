@@ -1,0 +1,50 @@
+.piso__hab {
+  cursor: pointer;
+  outline: none;
+}
+
+.piso__anillo {
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.piso__hab:hover .piso__anillo {
+  opacity: 0.45;
+}
+
+.piso__hab:focus-visible .piso__anillo {
+  opacity: 1;
+}
+
+.piso__deco {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: piso-deco 0.35s cubic-bezier(0.3, 1.5, 0.5, 1);
+}
+
+@keyframes piso-deco {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .piso__deco {
+    animation: none;
+  }
+}
+
+.piso__ayuda {
+  flex: 1 1 12em;
+  align-self: center;
+  font-size: 0.88rem;
+  color: #c9bea9;
+}
+
+.piso__noche {
+  align-self: center;
+  font-family: var(--f-titulo);
+  font-size: 1.15rem;
+  white-space: nowrap;
+}

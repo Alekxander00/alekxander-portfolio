@@ -30,7 +30,7 @@ export default {
       'A physical HUD: a notebook in your hands and a wristwatch instead of on-screen menus.',
     ],
   },
-  widget: null,
+  widget: 'piso',
   antesDespues: null,
   enlaces: [],
 }

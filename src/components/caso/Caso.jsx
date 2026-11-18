@@ -15,6 +15,7 @@ const WIDGETS = {
   plano: lazy(() => import('./widgets/Plano')),
   lineas: lazy(() => import('./widgets/Lineas')),
   firma: lazy(() => import('./widgets/Firma')),
+  piso: lazy(() => import('./widgets/Piso')),
 }
 
 // Con la mesa 3D, estas pruebas tienen su versión en 3D; Kinet y la firma se quedan planas.
