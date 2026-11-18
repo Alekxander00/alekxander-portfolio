@@ -9,6 +9,7 @@ import CartaEntrada from './carta/CartaEntrada'
 import ManoMesa from './mano/ManoMesa'
 import MaquinaMesa from './maquina/MaquinaMesa'
 import CartasBlackjack from './maquina/CartasBlackjack'
+import CartaTarotMesa from './maquina/CartaTarotMesa'
 import JokerMesa from './JokerMesa'
 import { soloVisibles } from './visibles'
 import './escena.css'
@@ -105,6 +106,7 @@ export default function Escena({ children, onPerdida }) {
         <ManoMesa />
         <MaquinaMesa />
         <CartasBlackjack />
+        <CartaTarotMesa />
         <JokerMesa />
         {children}
       </Canvas>

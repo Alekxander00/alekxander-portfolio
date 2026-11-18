@@ -5,7 +5,7 @@ import { useEffect, useRef } from 'react'
 const ALCANCE = 0.5
 import { useFrame, useThree } from '@react-three/fiber'
 import { camaraEn, conPartida, progresoDeScroll } from './recorrido'
-import { useEscena } from './estado'
+import { enPartida, useEscena } from './estado'
 import { vivo } from './vivo'
 import { useMovimientoReducido } from '../lib/useMovimientoReducido'
 
@@ -41,7 +41,7 @@ export default function Camara() {
     vivo.movil = movil
     const recorrido = camaraEn(p, movil, reducido)
     // Con una partida en marcha, la parada de la Máquina se ve de frente.
-    const objetivo = useEscena.getState().bj ? conPartida(recorrido, p, movil) : recorrido
+    const objetivo = enPartida(useEscena.getState()) ? conPartida(recorrido, p, movil) : recorrido
     if (!actual.current) actual.current = { pos: [...objetivo.pos], mira: [...objetivo.mira] }
     const a = actual.current
     const k = reducido ? 1 : 1 - Math.exp(-8 * Math.min(dt, 0.05))

@@ -61,3 +61,28 @@
   background: rgba(12, 10, 8, 0.85);
   color: var(--letrero);
 }
+
+/* La lectura del tarot: nombre del arcano y su predicción. */
+.maquina-html__lectura {
+  min-height: 4.5em;
+  margin-bottom: 10px;
+}
+
+.maquina-html__arcano {
+  margin: 0 0 4px;
+  font-family: var(--f-titulo);
+  font-size: 1.25rem;
+  color: var(--texto);
+}
+
+.maquina-html__arcano em {
+  font-style: italic;
+  font-size: 0.95rem;
+  color: var(--texto-2);
+}
+
+.maquina-html__prediccion {
+  margin: 0;
+  color: var(--texto-2);
+  line-height: 1.45;
+}

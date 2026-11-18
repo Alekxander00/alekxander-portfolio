@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { useEscena } from './estado'
+import { enPartida, useEscena } from './estado'
 
 afterEach(() => {
   vi.useRealTimers()
@@ -20,5 +20,17 @@ describe('descubrir', () => {
     expect(useEscena.getState().aviso).toBe('hitstop')
     vi.advanceTimersByTime(2)
     expect(useEscena.getState().aviso).toBe(null)
+  })
+})
+
+describe('enPartida', () => {
+  afterEach(() => useEscena.setState({ bj: null, tarot: null }))
+  it('la Máquina está en partida con blackjack o con tarot en la mesa', () => {
+    expect(enPartida(useEscena.getState())).toBe(false)
+    useEscena.getState().setTarot({ arcano: 17, invertida: false, id: 't1' })
+    expect(enPartida(useEscena.getState())).toBe(true)
+    useEscena.getState().setTarot(null)
+    useEscena.getState().setBJ({ jugador: [], casa: [], ocultar: true })
+    expect(enPartida(useEscena.getState())).toBe(true)
   })
 })

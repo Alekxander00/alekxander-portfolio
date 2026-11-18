@@ -23,6 +23,8 @@ export const useEscena = create((set, get) => ({
   golpesMaquina: 0,
   bj: null,
   secretaFuera: false,
+  // La lectura de tarot: { arcano, invertida, id, recoger? }
+  tarot: null,
 
   setVolteada: (v) => set({ volteada: v }),
   descubrir: (clave) => {
@@ -43,7 +45,11 @@ export const useEscena = create((set, get) => ({
   golpear: () => set((s) => ({ golpesMaquina: s.golpesMaquina + 1 })),
   setBJ: (bj) => set({ bj }),
   setSecretaFuera: (v) => set({ secretaFuera: v }),
+  setTarot: (tarot) => set({ tarot }),
 }))
+
+// Con cartas de la Máquina sobre la mesa, la cámara la mira de frente.
+export const enPartida = (s) => Boolean(s.bj || s.tarot)
 
 // DEV: el estado de la escena a mano en la consola y en las pruebas.
 if (import.meta.env?.DEV && typeof window !== 'undefined') window.__escena = useEscena

@@ -7,16 +7,15 @@ import { vivo } from '../vivo'
 import { texturaNaipe } from '../carta/naipe'
 import { texturaReverso } from '../carta/texturas'
 import { ANCHO_CARTA, LARGO_CARTA } from '../mano/disposicion'
+import { TRAMO } from './tramo'
 
 const ESCALA = 0.72
 const SEPARA = 0.135
 const FILA = { casa: -0.28, jugador: 0.02 }
 // A la izquierda, simétrica al mazo; en celular más cerca del centro para que se vea.
 const SECRETA = { desk: [-0.66, 0.004, -0.15], movil: [-0.21, 0.004, -0.13] }
-// Fuera de la parada de la Máquina las cartas vuelven a su boca y se ocultan.
-const TRAMO = [1.45, 2.5]
 
-function Carta({ textura, reverso, estado, onTocar }) {
+export function Carta({ textura, reverso, estado, onTocar, largo = LARGO_CARTA, escala = ESCALA }) {
   const grupo = useRef(null)
   const giro = useRef(null)
   useEffect(() => {
@@ -27,7 +26,7 @@ function Carta({ textura, reverso, estado, onTocar }) {
     <group
       ref={grupo}
       position={vivo.boca}
-      scale={ESCALA}
+      scale={escala}
       onClick={
         onTocar &&
         ((e) => {
@@ -53,11 +52,11 @@ function Carta({ textura, reverso, estado, onTocar }) {
     >
       <group ref={giro}>
         <mesh rotation-x={-Math.PI / 2}>
-          <planeGeometry args={[ANCHO_CARTA, LARGO_CARTA]} />
+          <planeGeometry args={[ANCHO_CARTA, largo]} />
           <meshStandardMaterial map={textura} transparent alphaTest={0.5} roughness={0.7} />
         </mesh>
         <mesh rotation-x={Math.PI / 2}>
-          <planeGeometry args={[ANCHO_CARTA, LARGO_CARTA]} />
+          <planeGeometry args={[ANCHO_CARTA, largo]} />
           <meshStandardMaterial map={reverso} transparent alphaTest={0.5} roughness={0.7} />
         </mesh>
       </group>
@@ -106,7 +105,8 @@ export default function CartasBlackjack() {
   useFrame((_, dtReal) => {
     const dt = Math.min(dtReal, 0.05)
     const k = 1 - Math.exp(-9 * dt)
-    const recoger = vivo.progreso < TRAMO[0] || vivo.progreso > TRAMO[1]
+    // Al cambiar de juego (bj.recoger) o al salir de la parada, vuelven a la boca.
+    const recoger = Boolean(bj?.recoger) || vivo.progreso < TRAMO[0] || vivo.progreso > TRAMO[1]
     const [bx, by, bz] = vivo.boca
     // Visible mientras no haya llegado a la boca.
     const verSi = (e) => !recoger || Math.hypot(e.x - bx, e.z - bz) > 0.04

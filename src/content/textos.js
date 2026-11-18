@@ -36,6 +36,12 @@ export const T = {
   tu: { es: 'Tú', en: 'You' },
   casa: { es: 'La Máquina', en: 'The Machine' },
   secreta: { es: 'Carta secreta', en: 'Secret card' },
+  jugarBJ: { es: 'Jugar blackjack', en: 'Play blackjack' },
+  leerSuerte: { es: 'Leer mi suerte', en: 'Read my fortune' },
+  otraLectura: { es: 'Otra lectura', en: 'Read again' },
+  cambiarJuego: { es: 'Cambiar de juego', en: 'Change game' },
+  invertida: { es: 'invertida', en: 'reversed' },
+  tuSuerte: { es: 'Tu suerte', en: 'Your fortune' },
 }
 
 export const PRINCIPIOS = {
@@ -82,7 +88,7 @@ export const FRASES = {
   golpes: [
     { es: '¡Ay!', en: 'Ow!' },
     { es: '¿Otra vez?', en: 'Again?' },
-    { es: 'Vale, vale. ¿Una partida?', en: 'Right, fine. Fancy a hand?' },
+    { es: 'Vale, vale. ¿Cartas o tu suerte?', en: 'Right, fine. Cards or your fortune?' },
   ],
   insistir: [
     { es: '¡Que ya te reparto!', en: 'I am dealing, I am dealing!' },
@@ -106,4 +112,10 @@ export const FRASES = {
   ],
   tePasaste: [{ es: '¡Te pasaste!', en: 'Bust!' }],
   empate: [{ es: 'Empate. Qué aburrido.', en: 'A draw. How dull.' }],
+  pregunta: { es: '¿Cartas o tu suerte?', en: 'Cards or your fortune?' },
+  leer: [
+    { es: 'Veamos qué dicen las cartas…', en: 'Let us see what the cards say…' },
+    { es: 'Concéntrate. Yo me encargo del resto.', en: 'Concentrate. I will see to the rest.' },
+    { es: 'Las cartas no mienten. Yo a veces.', en: 'The cards never lie. I do, now and then.' },
+  ],
 }
