@@ -4,7 +4,7 @@ import { PANO } from '../medidas'
 export const ANCHO_CARTA = 0.18
 export const LARGO_CARTA = 0.252
 
-const SEPARACION = 0.155
+const SEPARACION = 0.15 // con 9 cartas, 0.155 ya saca la última del paño
 // Escritorio: el abanico sigue el borde cercano de la mesa, a esta distancia
 // de él, y cada carta gira hacia el centro como las agujas de un reloj.
 const DESDE_BORDE = 0.25

@@ -3,12 +3,13 @@ import sargazo from './sargazo'
 import museo from './museo'
 import theOthers from './the-others'
 import cadence from './cadence'
+import hotelInsomnio from './hotel-insomnio'
 import kinet from './kinet'
 import salud from './salud'
 import eclipse from './eclipse'
 
 // El orden es el de la mano. El valor de la carta dice cuánto pesa el proyecto.
-export const proyectos = [baluarte, sargazo, museo, theOthers, cadence, kinet, salud, eclipse]
+export const proyectos = [baluarte, sargazo, museo, theOthers, cadence, hotelInsomnio, kinet, salud, eclipse]
 
 export const PALOS = {
   picas: { simbolo: '♠', rojo: false, nombre: { es: 'Videojuegos', en: 'Games' } },
