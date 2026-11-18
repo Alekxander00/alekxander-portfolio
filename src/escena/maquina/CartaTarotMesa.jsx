@@ -8,7 +8,7 @@ import { useIdioma } from '../../lib/idioma'
 import { canvasReversoTarot, canvasTarot, TAROT } from '../../lib/caraTarot'
 import { ANCHO_CARTA } from '../mano/disposicion'
 import { Carta } from './CartasBlackjack'
-import { TRAMO } from './tramo'
+import { recogerMano } from './tramo'
 
 const LARGO = (ANCHO_CARTA * TAROT.H) / TAROT.W
 // En celular el panel de la lectura tapa el centro del paño: la carta va más al fondo.
@@ -64,7 +64,7 @@ export default function CartaTarotMesa() {
     if (!estado.grupo) return
     const dt = Math.min(dtReal, 0.05)
     const k = 1 - Math.exp(-9 * dt)
-    const recoger = !tarot || tarot.recoger || vivo.progreso < TRAMO[0] || vivo.progreso > TRAMO[1]
+    const recoger = !tarot || recogerMano(tarot, vivo.progreso)
     const [bx, by, bz] = vivo.boca
     const [x, y, z] = recoger ? [bx, by, bz] : vivo.movil ? DESTINO.movil : DESTINO.desk
     estado.grupo.scale.setScalar(vivo.movil ? ESCALA.movil : ESCALA.desk)

@@ -7,7 +7,7 @@ import { vivo } from '../vivo'
 import { texturaNaipe } from '../carta/naipe'
 import { texturaReverso } from '../carta/texturas'
 import { ANCHO_CARTA, LARGO_CARTA } from '../mano/disposicion'
-import { TRAMO } from './tramo'
+import { recogerMano, recogerSecreta } from './tramo'
 
 const ESCALA = 0.72
 const SEPARA = 0.135
@@ -105,8 +105,8 @@ export default function CartasBlackjack() {
   useFrame((_, dtReal) => {
     const dt = Math.min(dtReal, 0.05)
     const k = 1 - Math.exp(-9 * dt)
-    // Al cambiar de juego (bj.recoger) o al salir de la parada, vuelven a la boca.
-    const recoger = Boolean(bj?.recoger) || vivo.progreso < TRAMO[0] || vivo.progreso > TRAMO[1]
+    const recoger = recogerMano(bj, vivo.progreso)
+    const recogerS = recogerSecreta(vivo.progreso)
     const [bx, by, bz] = vivo.boca
     // Visible mientras no haya llegado a la boca.
     const verSi = (e) => !recoger || Math.hypot(e.x - bx, e.z - bz) > 0.04
@@ -128,14 +128,14 @@ export default function CartasBlackjack() {
     }
     const s = estados.get('secreta')
     if (s?.grupo) {
-      const [sx, sy, sz] = recoger ? vivo.boca : vivo.movil ? SECRETA.movil : SECRETA.desk
+      const [sx, sy, sz] = recogerS ? vivo.boca : vivo.movil ? SECRETA.movil : SECRETA.desk
       s.x += (sx - s.x) * k
       s.z += (sz - s.z) * k
       const lejos = Math.min(1, Math.hypot(sx - s.x, sz - s.z) * 1.5)
       // Se levanta al pasar el puntero: invita a tocarla.
-      s.y += (sy + lejos * 0.35 + (s.encima && !recoger ? 0.03 : 0) - s.y) * k
+      s.y += (sy + lejos * 0.35 + (s.encima && !recogerS ? 0.03 : 0) - s.y) * k
       s.grupo.position.set(s.x, s.y, s.z)
-      s.grupo.visible = verSi(s)
+      s.grupo.visible = !recogerS || Math.hypot(s.x - bx, s.z - bz) > 0.04
       s.grupo.rotation.y = 0.4
       s.giro.rotation.z = Math.PI
     }

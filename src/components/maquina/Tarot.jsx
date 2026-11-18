@@ -56,12 +56,17 @@ export default function Tarot() {
           )}
         </AnimatePresence>
       </div>
+      {/* Nace vacía y se llena con la carta: así el lector anuncia también la primera. */}
       <div className="maquina-html__lectura" aria-live="polite">
-        <p className="maquina-html__arcano">
-          {a.romano} · {t(a.nombre)}
-          {lectura.invertida && <em> ({t(T.invertida)})</em>}
-        </p>
-        <p className="maquina-html__prediccion">{t(lectura.invertida ? a.invertido : a.derecho)}</p>
+        {lista && (
+          <>
+            <p className="maquina-html__arcano">
+              {a.romano} · {t(a.nombre)}
+              {lectura.invertida && <em> ({t(T.invertida)})</em>}
+            </p>
+            <p className="maquina-html__prediccion">{t(lectura.invertida ? a.invertido : a.derecho)}</p>
+          </>
+        )}
       </div>
       <div className="bj__acciones">
         <button type="button" className="boton boton--marfil" onClick={otra}>

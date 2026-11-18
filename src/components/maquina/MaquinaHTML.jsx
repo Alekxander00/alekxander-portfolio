@@ -45,10 +45,14 @@ export default function MaquinaHTML({ onAbrirSecreta }) {
   // Las cartas de la mesa vuelven por la boca antes de cambiar de juego o de lectura.
   const [recogiendo, setRecogiendo] = useState(false)
   const leyendo = useRef(false)
+  // Tras elegir o cambiar de juego, el foco del teclado pasa al panel nuevo.
+  const fija = useRef(null)
+  const moverFoco = useRef(false)
   const [ganada, setGanada] = useState(leerGanada)
   const [visible, setVisible] = useState(false)
   const timerFrase = useRef(0)
   const timers = useRef([])
+  const timerPremio = useRef(0)
   const ocupada = useRef(false) // la casa está jugando: nada de pedir ni plantarse
   const ultimoPedido = useRef(0) // un doble toque accidental no pide dos cartas
   const pidio = useRef(false)
@@ -61,6 +65,7 @@ export default function MaquinaHTML({ onAbrirSecreta }) {
   useEffect(
     () => () => {
       clearTimeout(timerFrase.current)
+      clearTimeout(timerPremio.current)
       timers.current.forEach(clearTimeout)
       useEscena.getState().setTarot(null)
     },
@@ -114,15 +119,16 @@ export default function MaquinaHTML({ onAbrirSecreta }) {
       if (GANA.has(r)) {
         if (!ganada) {
           decir(r === 'blackjack' ? FRASES.blackjack[0] : FRASES.ganas[0], 4200)
-          despues(900, () => {
+          // El premio no se cancela al cambiar de juego: ya te lo ganaste.
+          try {
+            localStorage.setItem('maquina-ganada', '1')
+          } catch {
+            /* sin almacenamiento: la carta dura lo que dure la visita */
+          }
+          timerPremio.current = setTimeout(() => {
             sonar('eyeccion', { volumen: 0.8 })
             setGanada(true)
-            try {
-              localStorage.setItem('maquina-ganada', '1')
-            } catch {
-              /* sin almacenamiento: la carta dura lo que dure la visita */
-            }
-          })
+          }, 900)
         } else decir(r === 'blackjack' ? FRASES.blackjack[0] : r === 'mePase' ? FRASES.mePase[0] : FRASES.ganasOtraVez[0])
       } else if (r === 'tePasaste') decir(FRASES.tePasaste[0])
       else if (r === 'empate') decir(FRASES.empate[0])
@@ -167,7 +173,14 @@ export default function MaquinaHTML({ onAbrirSecreta }) {
     } else sacar()
   }
 
+  useEffect(() => {
+    if (!moverFoco.current) return
+    moverFoco.current = false
+    fija.current?.querySelector('.maquina-html__panel button:not(:disabled)')?.focus()
+  }, [modo])
+
   const elegir = (m) => {
+    moverFoco.current = true
     setModo(m)
     if (m === 'blackjack') repartir()
     else leer()
@@ -184,6 +197,7 @@ export default function MaquinaHTML({ onAbrirSecreta }) {
       setLectura(null)
       setRevelada(false)
       setRecogiendo(false)
+      moverFoco.current = true
       setModo(null)
       ocupada.current = false
       leyendo.current = false
@@ -263,7 +277,7 @@ export default function MaquinaHTML({ onAbrirSecreta }) {
       <h2 id="casa-titulo" className="solo-lector">
         {t(T.casa)}
       </h2>
-      <div className="maquina-html__fija">
+      <div ref={fija} className="maquina-html__fija">
         <div className="casa__letrero maquina-html__letrero" aria-live="polite">
           <AnimatePresence mode="wait">
             {frase && (
@@ -304,7 +318,7 @@ export default function MaquinaHTML({ onAbrirSecreta }) {
               )}
             </div>
             <div className="bj__acciones">
-              <button type="button" className="boton boton--marfil" onClick={leer} disabled={!revelada || recogiendo}>
+              <button type="button" className="boton boton--marfil" onClick={leer}>
                 {t(T.otraLectura)}
               </button>
               <button type="button" className="boton" onClick={cambiar} disabled={recogiendo}>

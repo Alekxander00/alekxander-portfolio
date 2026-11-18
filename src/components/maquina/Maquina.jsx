@@ -35,6 +35,18 @@ export default function Maquina({ onAbrirSecreta }) {
   const [abierta, setAbierta] = useState(false)
   // Despierta, pregunta: null hasta que eliges; luego 'blackjack' o 'tarot'.
   const [modo, setModo] = useState(null)
+  // Tras elegir o cambiar de juego, el foco del teclado pasa a la mesa nueva.
+  const mesaRef = useRef(null)
+  const moverFoco = useRef(false)
+  useEffect(() => {
+    if (!moverFoco.current) return
+    moverFoco.current = false
+    mesaRef.current?.querySelector('button:not(:disabled)')?.focus()
+  }, [modo])
+  const elegir = (m) => {
+    moverFoco.current = true
+    setModo(m)
+  }
   const [ganada, setGanada] = useState(leerGanada)
   const [recienGanada, setRecienGanada] = useState(false)
   const timerFrase = useRef(0)
@@ -185,6 +197,7 @@ export default function Maquina({ onAbrirSecreta }) {
       <AnimatePresence>
         {abierta && (
           <motion.div
+            ref={mesaRef}
             className="casa__mesa"
             initial={{ opacity: 0, x: -40 }}
             animate={{ opacity: 1, x: 0 }}
@@ -192,14 +205,14 @@ export default function Maquina({ onAbrirSecreta }) {
           >
             {!modo && (
               <div className="bj__acciones">
-                <button type="button" className="boton boton--marfil" onClick={() => setModo('blackjack')}>
+                <button type="button" className="boton boton--marfil" onClick={() => elegir('blackjack')}>
                   {t(T.jugarBJ)}
                 </button>
                 <button
                   type="button"
                   className="boton boton--marfil"
                   onClick={() => {
-                    setModo('tarot')
+                    elegir('tarot')
                     decir(azar(FRASES.leer), 2400)
                   }}
                 >
@@ -215,7 +228,7 @@ export default function Maquina({ onAbrirSecreta }) {
                   type="button"
                   className="boton"
                   onClick={() => {
-                    setModo(null)
+                    elegir(null)
                     decir(FRASES.pregunta)
                   }}
                 >
