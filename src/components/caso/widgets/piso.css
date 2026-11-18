@@ -48,3 +48,8 @@
   font-size: 1.15rem;
   white-space: nowrap;
 }
+
+/* El piso es apaisado: en pantallas estrechas el lienzo 3D es más bajo para no dejar franjas vacías. */
+.widget3d__lienzo.piso__lienzo {
+  height: clamp(180px, 42vw, 360px);
+}

@@ -115,7 +115,7 @@ export default function Piso({ Lado3D }) {
   return (
     <div className="widget" onKeyDown={tecla}>
       {Lado3D && (
-        <div className="widget3d__lienzo">
+        <div className="widget3d__lienzo piso__lienzo">
           <Lado3D orden={orden} deco={piso.deco} reducido={reducido} onTocar={tocar} />
         </div>
       )}

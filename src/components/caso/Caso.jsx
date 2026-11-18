@@ -25,6 +25,7 @@ const WIDGETS_3D = {
   viento: lazy(() => import('./widgets3d/Viento3D')),
   estados: lazy(() => import('./widgets3d/Estados3D')),
   plano: lazy(() => import('./widgets3d/Plano3D')),
+  piso: lazy(() => import('./widgets3d/Piso3D')),
 }
 
 // Diálogo con foco atrapado. Escape cierra y el foco vuelve a la carta.
