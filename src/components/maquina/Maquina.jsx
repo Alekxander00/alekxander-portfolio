@@ -5,6 +5,7 @@ import { despertarAudio, hablar, sonar } from '../../lib/sonido'
 import { FRASES, T } from '../../content/textos'
 import { ReversoNaipe } from '../ui/Naipe'
 import Blackjack from './Blackjack'
+import Tarot from './Tarot'
 import { GANA } from './reglasBlackjack'
 import { tieneWebGL } from '../../escena/webgl'
 import './maquina.css'
@@ -32,6 +33,8 @@ export default function Maquina({ onAbrirSecreta }) {
   const [golpes, setGolpes] = useState(0)
   const [frase, setFrase] = useState(null)
   const [abierta, setAbierta] = useState(false)
+  // Despierta, pregunta: null hasta que eliges; luego 'blackjack' o 'tarot'.
+  const [modo, setModo] = useState(null)
   const [ganada, setGanada] = useState(leerGanada)
   const [recienGanada, setRecienGanada] = useState(false)
   const timerFrase = useRef(0)
@@ -187,7 +190,39 @@ export default function Maquina({ onAbrirSecreta }) {
             animate={{ opacity: 1, x: 0 }}
             transition={{ type: 'spring', stiffness: 120, damping: 18 }}
           >
-            <Blackjack onResultado={alResultado} />
+            {!modo && (
+              <div className="bj__acciones">
+                <button type="button" className="boton boton--marfil" onClick={() => setModo('blackjack')}>
+                  {t(T.jugarBJ)}
+                </button>
+                <button
+                  type="button"
+                  className="boton boton--marfil"
+                  onClick={() => {
+                    setModo('tarot')
+                    decir(azar(FRASES.leer), 2400)
+                  }}
+                >
+                  {t(T.leerSuerte)}
+                </button>
+              </div>
+            )}
+            {modo === 'blackjack' && <Blackjack onResultado={alResultado} />}
+            {modo === 'tarot' && <Tarot />}
+            {modo && (
+              <div className="bj__acciones casa__cambiar">
+                <button
+                  type="button"
+                  className="boton"
+                  onClick={() => {
+                    setModo(null)
+                    decir(FRASES.pregunta)
+                  }}
+                >
+                  {t(T.cambiarJuego)}
+                </button>
+              </div>
+            )}
           </motion.div>
         )}
       </AnimatePresence>

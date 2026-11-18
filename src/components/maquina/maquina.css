@@ -204,3 +204,44 @@
   color: var(--letrero);
   white-space: nowrap;
 }
+
+/* La lectura del tarot: nombre del arcano y su predicción. */
+.maquina-html__lectura {
+  min-height: 4.5em;
+  margin-bottom: 10px;
+}
+
+.maquina-html__arcano {
+  margin: 0 0 4px;
+  font-family: var(--f-titulo);
+  font-size: 1.25rem;
+  color: var(--texto);
+}
+
+.maquina-html__arcano em {
+  font-style: italic;
+  font-size: 0.95rem;
+  color: var(--texto-2);
+}
+
+.maquina-html__prediccion {
+  margin: 0;
+  color: var(--texto-2);
+  line-height: 1.45;
+}
+
+/* Versión plana: la carta de tarot, girada si sale invertida. */
+.tarot-plano__carta {
+  min-height: calc(clamp(96px, 26vw, 128px) * 1.7);
+}
+
+.tarot-plano__carta img {
+  display: block;
+  width: clamp(96px, 26vw, 128px);
+  border-radius: 8px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+}
+
+.casa__cambiar {
+  margin-top: 12px;
+}
